@@ -12,7 +12,10 @@ namespace Experilous.Examples.Asteroids
 		public float MaximumAsteroidScale = 2.0f;
 		public float MinimumAsteroidSpeed = 1.0f;
 		public float MaximumAsteroidSpeed = 2.0f;
+		public float MinimumAsteroidRotation = -90.0f;
+		public float MaximumAsteroidRotation = +90.0f;
 		public Transform AsteroidContainer;
+		public int RandomSeed = 0;
 
 		private struct AsteroidDefinition
 		{
@@ -29,11 +32,25 @@ namespace Experilous.Examples.Asteroids
 		protected void Awake()
 		{
 			Physics.gravity = new Vector3(0f, 0f, 0f);
+			Time.timeScale = 0f;
 
-			var randomEngine = new NativeRandomEngine(1);
+			var randomEngine = new NativeRandomEngine(RandomSeed);
 			List<AsteroidDefinition> asteroids = new List<AsteroidDefinition>();
 
-			var prefabRadius = AsteroidPrefab.GetComponent<SphereCollider>().radius;
+			float prefabRadius = 0;
+			var sphereCollider = AsteroidPrefab.GetComponent<SphereCollider>();
+			if (sphereCollider != null)
+			{
+				prefabRadius = sphereCollider.radius;
+			}
+			else
+			{
+				var boxCollider = AsteroidPrefab.GetComponent<BoxCollider>();
+				if (boxCollider != null)
+				{
+					prefabRadius = boxCollider.size.magnitude * 0.5f;
+				}
+			}
 
 			int tries = 0;
 			while (asteroids.Count < AsteroidCount && tries < AsteroidCount * 10)
@@ -76,12 +93,24 @@ namespace Experilous.Examples.Asteroids
 				var direction = Random.UnitVector2(randomEngine);
 				var speed = Random.ClosedRange(MinimumAsteroidSpeed, MaximumAsteroidSpeed, randomEngine);
 				rigidBody.velocity = new Vector3(direction.x * speed, direction.y * speed, 0f);
+				rigidBody.angularVelocity = new Vector3(
+					Random.ClosedRange(MinimumAsteroidRotation, MaximumAsteroidRotation, randomEngine),
+					Random.ClosedRange(MinimumAsteroidRotation, MaximumAsteroidRotation, randomEngine),
+					Random.ClosedRange(MinimumAsteroidRotation, MaximumAsteroidRotation, randomEngine));
 
 				var meshRenderer = asteroid.GetComponent<MeshRenderer>();
 				meshRenderer.material.color = new Color(
 					Random.ClosedFloatUnit(randomEngine),
 					Random.ClosedFloatUnit(randomEngine),
 					Random.ClosedFloatUnit(randomEngine));
+			}
+		}
+
+		protected void Update()
+		{
+			if (Time.timeScale == 0f && Time.realtimeSinceStartup > 2f)
+			{
+				Time.timeScale = 1f;
 			}
 		}
 	}
