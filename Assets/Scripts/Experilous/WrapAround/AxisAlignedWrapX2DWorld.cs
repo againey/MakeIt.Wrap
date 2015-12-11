@@ -31,8 +31,8 @@ namespace Experilous.WrapAround
 		{
 			var worldWidth = width;
 
-			var viewportMinX = viewport.min.x;
-			var viewportMaxX = viewport.max.x;
+			var viewportMinX = viewport.bufferMin.x;
+			var viewportMaxX = viewport.bufferMax.x;
 
 			int xIndexMin = Mathf.FloorToInt((viewportMinX - minX) / worldWidth);
 			int xIndexMax = Mathf.CeilToInt((viewportMaxX - maxX) / worldWidth);

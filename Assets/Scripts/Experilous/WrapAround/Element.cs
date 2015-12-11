@@ -5,6 +5,7 @@ namespace Experilous.WrapAround
 	public abstract class Element : MonoBehaviour
 	{
 		public World World;
+		public bool InteractsAcrossEdges = false;
 
 		[SerializeField, HideInInspector]
 		private bool _isGhost = false;
@@ -23,7 +24,8 @@ namespace Experilous.WrapAround
 		{
 			if (!_isGhost)
 			{
-				foreach (var ghostRegion in World.Viewport.visibleGhostRegions)
+				var cameraViewport = World.CameraViewport;
+				foreach (var ghostRegion in cameraViewport.visibleGhostRegions)
 				{
 					if (!ghostRegion.HasGhost(this))
 					{
@@ -31,16 +33,35 @@ namespace Experilous.WrapAround
 						Quaternion rotation = transform.rotation;
 						ghostRegion.Transform(ref position, ref rotation);
 
-						if (IsVisible(position, rotation))
+						if (IsVisible(cameraViewport, position, rotation))
 						{
 							CreateGhost(ghostRegion, position, rotation);
+						}
+					}
+				}
+
+				if (InteractsAcrossEdges)
+				{
+					var physicsViewport = World.PhysicsViewport;
+					foreach (var ghostRegion in physicsViewport.visibleGhostRegions)
+					{
+						if (!ghostRegion.HasGhost(this))
+						{
+							Vector3 position = transform.position;
+							Quaternion rotation = transform.rotation;
+							ghostRegion.Transform(ref position, ref rotation);
+
+							if (IsVisible(physicsViewport, position, rotation))
+							{
+								CreateGhost(ghostRegion, position, rotation);
+							}
 						}
 					}
 				}
 			}
 		}
 
-		public abstract bool IsVisible(Vector3 position, Quaternion rotation);
+		public abstract bool IsVisible(Viewport viewport, Vector3 position, Quaternion rotation);
 
 		protected virtual void CreateGhost(GhostRegion region, Vector3 position, Quaternion rotation)
 		{

@@ -48,10 +48,10 @@ namespace Experilous.WrapAround
 			var worldWidth = width;
 			var worldHeight = height;
 
-			var viewportMinX = viewport.min.x;
-			var viewportMaxX = viewport.max.x;
-			var viewportMinY = viewport.min.y;
-			var viewportMaxY = viewport.max.y;
+			var viewportMinX = viewport.bufferMin.x;
+			var viewportMaxX = viewport.bufferMax.x;
+			var viewportMinY = viewport.bufferMin.y;
+			var viewportMaxY = viewport.bufferMax.y;
 
 			int xIndexMin = Mathf.FloorToInt((viewportMinX - minX) / worldWidth);
 			int xIndexMax = Mathf.CeilToInt((viewportMaxX - maxX) / worldWidth);
@@ -73,10 +73,10 @@ namespace Experilous.WrapAround
 
 		private void ExpandGhostRegions(int xIndexMin, int xIndexMax, int yIndexMin, int yIndexMax)
 		{
-			var leftExpansion = Mathf.Min(_ghostRegionsXIndexOffset - xIndexMin, 0);
-			var rightExpansion = Mathf.Max(_ghostRegionsWidth + _ghostRegionsXIndexOffset - xIndexMax - 1, 0);
-			var bottomExpansion = Mathf.Min(_ghostRegionsYIndexOffset - yIndexMin, 0);
-			var topExpansion = Mathf.Max(_ghostRegionsHeight + _ghostRegionsYIndexOffset - yIndexMax - 1, 0);
+			var leftExpansion = Mathf.Max(_ghostRegionsXIndexOffset - xIndexMin, 0);
+			var rightExpansion = Mathf.Max(xIndexMax + 1 - _ghostRegionsWidth - _ghostRegionsXIndexOffset, 0);
+			var bottomExpansion = Mathf.Max(_ghostRegionsYIndexOffset - yIndexMin, 0);
+			var topExpansion = Mathf.Max(yIndexMax + 1 - _ghostRegionsHeight - _ghostRegionsYIndexOffset, 0);
 
 			if (leftExpansion == 0 && rightExpansion == 0 && bottomExpansion == 0 && topExpansion == 0) return;
 
@@ -100,6 +100,7 @@ namespace Experilous.WrapAround
 
 				for (int y = 0; y < _ghostRegionsHeight; ++y)
 				{
+					Debug.LogFormat("{0}, {1}, {2}, {3}, {4}", bottomExpansion, y, newWidth, leftExpansion, (bottomExpansion + y) * newWidth + leftExpansion);
 					Array.Copy(_ghostRegions, y * _ghostRegionsWidth, newGhostRegions, (bottomExpansion + y) * newWidth + leftExpansion, _ghostRegionsWidth);
 				}
 

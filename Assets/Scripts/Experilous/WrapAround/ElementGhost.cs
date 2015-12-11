@@ -21,7 +21,9 @@ namespace Experilous.WrapAround
 		{
 			get
 			{
-				return !Original.IsVisible(transform.position, transform.rotation);
+				return
+					!Original.IsVisible(Original.World.CameraViewport, transform.position, transform.rotation) &&
+					(!Original.InteractsAcrossEdges || !Original.IsVisible(Original.World.PhysicsViewport, transform.position, transform.rotation));
 			}
 		}
 

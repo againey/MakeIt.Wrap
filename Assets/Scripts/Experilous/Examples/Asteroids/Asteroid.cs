@@ -3,7 +3,7 @@ using Experilous.WrapAround;
 
 namespace Experilous.Examples.Asteroids
 {
-	public class Asteroid : RigidBodyPointElement
+	public class Asteroid : RigidBodySphereElement
 	{
 	}
 }
