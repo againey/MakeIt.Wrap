@@ -100,8 +100,8 @@ namespace Experilous.Examples.Asteroids
 				asteroid.transform.position = new Vector3(definition.position.x, definition.position.y, 0f);
 				asteroid.transform.localScale = new Vector3(definition.scale, definition.scale, definition.scale);
 				asteroid.transform.SetParent(PhysicalAsteroidContainer, false);
-				asteroid.World = World;
-				asteroid.InteractsAcrossEdges = true;
+				asteroid.world = World;
+				asteroid.interactsAcrossEdges = true;
 
 				var rigidBody = asteroid.GetComponent<Rigidbody>();
 				var direction = Random.UnitVector2(randomEngine);
@@ -134,8 +134,8 @@ namespace Experilous.Examples.Asteroids
 				asteroid.transform.position = new Vector3(definition.position.x, definition.position.y, 0f);
 				asteroid.transform.localScale = new Vector3(definition.scale, definition.scale, definition.scale);
 				asteroid.transform.SetParent(VirtualAsteroidContainer, false);
-				asteroid.World = World;
-				asteroid.InteractsAcrossEdges = false;
+				asteroid.world = World;
+				asteroid.interactsAcrossEdges = false;
 
 				var rigidBody = asteroid.GetComponent<Rigidbody>();
 				var direction = Random.UnitVector2(randomEngine);

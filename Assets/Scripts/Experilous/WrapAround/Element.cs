@@ -4,8 +4,8 @@ namespace Experilous.WrapAround
 {
 	public abstract class Element : MonoBehaviour
 	{
-		public World World;
-		public bool InteractsAcrossEdges = false;
+		public World world;
+		public bool interactsAcrossEdges = false;
 
 		[SerializeField, HideInInspector]
 		private bool _isGhost = false;
@@ -16,7 +16,7 @@ namespace Experilous.WrapAround
 		{
 			if (!_isGhost)
 			{
-				World.Confine(this);
+				world.Confine(this);
 			}
 		}
 
@@ -24,7 +24,7 @@ namespace Experilous.WrapAround
 		{
 			if (!_isGhost)
 			{
-				var cameraViewport = World.CameraViewport;
+				var cameraViewport = world.cameraViewport;
 				foreach (var ghostRegion in cameraViewport.visibleGhostRegions)
 				{
 					if (!ghostRegion.HasGhost(this))
@@ -40,9 +40,9 @@ namespace Experilous.WrapAround
 					}
 				}
 
-				if (InteractsAcrossEdges)
+				if (interactsAcrossEdges)
 				{
-					var physicsViewport = World.PhysicsViewport;
+					var physicsViewport = world.physicsViewport;
 					foreach (var ghostRegion in physicsViewport.visibleGhostRegions)
 					{
 						if (!ghostRegion.HasGhost(this))
@@ -75,8 +75,8 @@ namespace Experilous.WrapAround
 			_isGhost = false;
 			clone.transform.SetParent(transform.parent, false);
 			var ghost = clone.AddComponent<TGhost>();
-			ghost.Original = this;
-			ghost.Region = region;
+			ghost.original = this;
+			ghost.region = region;
 			region.AddElement(this);
 			return ghost;
 		}

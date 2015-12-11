@@ -4,8 +4,8 @@ namespace Experilous.WrapAround
 {
 	public class ElementGhost : MonoBehaviour
 	{
-		public Element Original;
-		public GhostRegion Region;
+		public Element original;
+		public GhostRegion region;
 
 		protected void LateUpdate()
 		{
@@ -13,7 +13,7 @@ namespace Experilous.WrapAround
 
 			if (isStale)
 			{
-				Region.DestroyGhost(this);
+				region.DestroyGhost(this);
 			}
 		}
 
@@ -22,16 +22,16 @@ namespace Experilous.WrapAround
 			get
 			{
 				return
-					!Original.IsVisible(Original.World.CameraViewport, transform.position, transform.rotation) &&
-					(!Original.InteractsAcrossEdges || !Original.IsVisible(Original.World.PhysicsViewport, transform.position, transform.rotation));
+					!original.IsVisible(original.world.cameraViewport, transform.position, transform.rotation) &&
+					(!original.interactsAcrossEdges || !original.IsVisible(original.world.physicsViewport, transform.position, transform.rotation));
 			}
 		}
 
 		protected virtual void UpdateFromOriginal()
 		{
-			Vector3 position = Original.transform.position;
-			Quaternion rotation = Original.transform.rotation;
-			Region.Transform(ref position, ref rotation);
+			Vector3 position = original.transform.position;
+			Quaternion rotation = original.transform.rotation;
+			region.Transform(ref position, ref rotation);
 			transform.position = position;
 			transform.rotation = rotation;
 		}

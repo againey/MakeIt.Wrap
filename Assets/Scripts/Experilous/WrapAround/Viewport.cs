@@ -5,7 +5,7 @@ namespace Experilous.WrapAround
 {
 	public abstract class Viewport : MonoBehaviour
 	{
-		public World World;
+		public World world;
 
 		public abstract bool IsVisible(Vector3 position);
 		public abstract bool IsVisible(Vector3 position, float radius);

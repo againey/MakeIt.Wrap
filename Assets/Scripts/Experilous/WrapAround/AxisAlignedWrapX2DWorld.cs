@@ -10,11 +10,31 @@ namespace Experilous.WrapAround
 		public float minX;
 		public float maxX;
 
+		public float cameraBufferThickness = 0f;
+		public float physicsBufferThickness = 0f;
+
+#pragma warning disable 0649
+		[SerializeField]
+		private Viewport _cameraViewport;
+#pragma warning restore 0649
+
+		private GhostRegionRange _cameraGhostRegionRange;
+		private int _cameraGhostRegionRangeFrame = -1;
+
+		private AxisAligned2DViewport _physicsViewport;
+		private GhostRegionRange _physicsGhostRegionRange;
+		private int _physicsGhostRegionRangeFrame = -1;
+
 		private AxisAlignedWrapX2DGhostRegion[] _ghostRegions = null;
 		private int _ghostRegionsXIndexOffset = 0;
 
 		protected void Start()
 		{
+			_physicsViewport = gameObject.AddComponent<AxisAligned2DViewport>();
+			_physicsViewport.world = this;
+			_physicsViewport.min = new Vector3(minX - physicsBufferThickness, float.NegativeInfinity, float.NegativeInfinity);
+			_physicsViewport.max = new Vector3(maxX + physicsBufferThickness, float.PositiveInfinity, float.PositiveInfinity);
+
 			_ghostRegions = new AxisAlignedWrapX2DGhostRegion[3];
 
 			var worldWidth = width;
@@ -27,12 +47,38 @@ namespace Experilous.WrapAround
 
 		public float width { get { return maxX - minX; } }
 
-		public override IEnumerable<GhostRegion> GetVisibleGhostRegions(AxisAligned2DViewport viewport)
+		public override Viewport cameraViewport { get { return _cameraViewport; } }
+		public override Viewport physicsViewport { get { return _physicsViewport; } }
+
+		public override IEnumerable<GhostRegion> GetGhostRegions(AxisAligned2DViewport viewport)
+		{
+			if (viewport == _cameraViewport) return GetCameraGhostRegions(viewport);
+			else if (viewport == _physicsViewport) return GetPhysicsGhostRegions(viewport);
+			else return GetGhostRegions(viewport, cameraBufferThickness);
+		}
+
+		private GhostRegionRange GetCameraGhostRegions(AxisAligned2DViewport viewport)
+		{
+			if (Time.frameCount == _cameraGhostRegionRangeFrame) return _cameraGhostRegionRange;
+			_cameraGhostRegionRange = GetGhostRegions(viewport, cameraBufferThickness);
+			_cameraGhostRegionRangeFrame = Time.frameCount;
+			return _cameraGhostRegionRange;
+		}
+
+		private GhostRegionRange GetPhysicsGhostRegions(AxisAligned2DViewport viewport)
+		{
+			if (Time.frameCount == _physicsGhostRegionRangeFrame) return _physicsGhostRegionRange;
+			_physicsGhostRegionRange = GetGhostRegions(viewport, physicsBufferThickness);
+			_physicsGhostRegionRangeFrame = Time.frameCount;
+			return _physicsGhostRegionRange;
+		}
+
+		private GhostRegionRange GetGhostRegions(AxisAligned2DViewport viewport, float bufferThickness)
 		{
 			var worldWidth = width;
 
-			var viewportMinX = viewport.bufferMin.x;
-			var viewportMaxX = viewport.bufferMax.x;
+			var viewportMinX = viewport.min.x - bufferThickness;
+			var viewportMaxX = viewport.max.x + bufferThickness;
 
 			int xIndexMin = Mathf.FloorToInt((viewportMinX - minX) / worldWidth);
 			int xIndexMax = Mathf.CeilToInt((viewportMaxX - maxX) / worldWidth);

@@ -31,7 +31,7 @@ namespace Experilous.WrapAround
 
 		public override void DestroyGhost(ElementGhost ghost)
 		{
-			_ghostedElements.Remove(ghost.Original);
+			_ghostedElements.Remove(ghost.original);
 			UnityEngine.Object.Destroy(ghost.gameObject);
 		}
 	}

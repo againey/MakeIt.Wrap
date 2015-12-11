@@ -6,58 +6,37 @@ namespace Experilous.WrapAround
 {
 	public class AxisAligned2DViewport : Viewport
 	{
-		public Transform minimumCorner;
-		public Transform maximumCorner;
-		public float BufferThickness;
-
-		private Vector3 _min;
-		private Vector3 _max;
-
-		public Vector3 min { get { return _min; } }
-		public Vector3 max { get { return _max; } }
-
-		private Vector3 _bufferMin;
-		private Vector3 _bufferMax;
-
-		public Vector3 bufferMin { get { return _bufferMin; } }
-		public Vector3 bufferMax { get { return _bufferMax; } }
+		public Vector3 min;
+		public Vector3 max;
 
 		public override IEnumerable<GhostRegion> visibleGhostRegions
 		{
 			get
 			{
-				return World.GetVisibleGhostRegions(this);
+				return world.GetGhostRegions(this);
 			}
-		}
-
-		protected void Awake()
-		{
-			_min = minimumCorner.position;
-			_max = maximumCorner.position;
-			_bufferMin = _min - new Vector3(BufferThickness, BufferThickness, BufferThickness);
-			_bufferMax = _max + new Vector3(BufferThickness, BufferThickness, BufferThickness);
 		}
 
 		public override bool IsVisible(Vector3 position)
 		{
 			return
-				position.x >= _min.x &&
-				position.y >= _min.y &&
-				position.z >= _min.z &&
-				position.x < _max.x &&
-				position.y < _max.y &&
-				position.z < _max.z;
+				position.x >= min.x &&
+				position.y >= min.y &&
+				position.z >= min.z &&
+				position.x < max.x &&
+				position.y < max.y &&
+				position.z < max.z;
 		}
 
 		public override bool IsVisible(Vector3 position, float radius)
 		{
 			return
-				position.x + radius >= _min.x &&
-				position.y + radius >= _min.y &&
-				position.z + radius >= _min.z &&
-				position.x - radius < _max.x &&
-				position.y - radius < _max.y &&
-				position.z - radius < _max.z;
+				position.x + radius >= min.x &&
+				position.y + radius >= min.y &&
+				position.z + radius >= min.z &&
+				position.x - radius < max.x &&
+				position.y - radius < max.y &&
+				position.z - radius < max.z;
 		}
 
 		public override bool IsVisible(PointElement element)

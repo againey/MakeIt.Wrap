@@ -10,14 +10,14 @@ namespace Experilous.WrapAround
 		protected void Start()
 		{
 			_rigidBody = GetComponent<Rigidbody>();
-			_originalRigidBody = Original.GetComponent<Rigidbody>();
+			_originalRigidBody = original.GetComponent<Rigidbody>();
 		}
 
 		protected override void UpdateFromOriginal()
 		{
 			Vector3 position = _originalRigidBody.position;
 			Quaternion rotation = _originalRigidBody.rotation;
-			Region.Transform(ref position, ref rotation);
+			region.Transform(ref position, ref rotation);
 			_rigidBody.position = position;
 			_rigidBody.rotation = rotation;
 			_rigidBody.angularVelocity = _originalRigidBody.angularVelocity;
