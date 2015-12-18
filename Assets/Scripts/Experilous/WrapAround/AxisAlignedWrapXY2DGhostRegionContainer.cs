@@ -78,7 +78,6 @@ namespace Experilous.WrapAround
 
 				for (int y = 0; y < _ghostRegionsHeight; ++y)
 				{
-					Debug.LogFormat("{0}, {1}, {2}, {3}, {4}", bottomExpansion, y, newWidth, leftExpansion, (bottomExpansion + y) * newWidth + leftExpansion);
 					Array.Copy(_ghostRegions, y * _ghostRegionsWidth, newGhostRegions, (bottomExpansion + y) * newWidth + leftExpansion, _ghostRegionsWidth);
 				}
 

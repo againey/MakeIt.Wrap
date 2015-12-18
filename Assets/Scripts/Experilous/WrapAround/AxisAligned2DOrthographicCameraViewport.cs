@@ -22,6 +22,7 @@ namespace Experilous.WrapAround
 		protected void LateUpdate()
 		{
 			RecalculateBounds();
+			RecalculateVisibleGhostRegions();
 		}
 
 		protected void RecalculateBounds()

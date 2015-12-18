@@ -37,5 +37,7 @@ namespace Experilous.WrapAround
 		{
 			position.x += _xOffset;
 		}
+
+		public override Matrix4x4 transformation { get { return Matrix4x4.TRS(new Vector3(_xOffset, 0f, 0f), Quaternion.identity, new Vector3(1f, 1f, 1f)); } }
 	}
 }
