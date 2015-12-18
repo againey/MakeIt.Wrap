@@ -9,12 +9,16 @@ namespace Experilous.WrapAround
 		private readonly HashSet<Element> _ghostedElements = new HashSet<Element>();
 		private float _xOffset;
 		private float _yOffset;
+		private Viewport _viewport;
 
-		public AxisAlignedWrapXY2DGhostRegion(float xOffset, float yOffset)
+		public AxisAlignedWrapXY2DGhostRegion(float xOffset, float yOffset, Viewport viewport)
 		{
 			_xOffset = xOffset;
 			_yOffset = yOffset;
+			_viewport = viewport;
 		}
+
+		public override Viewport viewport { get { return _viewport; } }
 
 		public override bool HasGhost(Element element)
 		{
@@ -26,16 +30,15 @@ namespace Experilous.WrapAround
 			_ghostedElements.Add(element);
 		}
 
+		public override void RemoveElement(Element element)
+		{
+			_ghostedElements.Remove(element);
+		}
+
 		public override void Transform(ref Vector3 position, ref Quaternion rotation)
 		{
 			position.x += _xOffset;
 			position.y += _yOffset;
-		}
-
-		public override void DestroyGhost(ElementGhost ghost)
-		{
-			_ghostedElements.Remove(ghost.original);
-			UnityEngine.Object.Destroy(ghost.gameObject);
 		}
 	}
 }

@@ -5,11 +5,11 @@ namespace Experilous.WrapAround
 {
 	public abstract class World : MonoBehaviour
 	{
-		public abstract Viewport cameraViewport { get; }
-		public abstract Viewport physicsViewport { get; }
-
-		public abstract IEnumerable<GhostRegion> GetGhostRegions(AxisAligned2DViewport viewport);
+		public abstract IEnumerable<GhostRegion> GetGhostRegions(AxisAlignedViewport viewport, object ghostRegions);
 
 		public abstract void Confine(Element element);
+		public abstract void Confine(Transform transform);
+		public abstract void Confine(Rigidbody rigidbody);
+		public abstract object InstantiateGhostRegions(Viewport viewport);
 	}
 }

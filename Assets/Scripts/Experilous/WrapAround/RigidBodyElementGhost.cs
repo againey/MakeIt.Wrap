@@ -2,26 +2,26 @@
 
 namespace Experilous.WrapAround
 {
-	public class RigidBodyElementGhost : ElementGhost
+	public class RigidbodyElementGhost : MechanicalElementGhost
 	{
-		protected Rigidbody _rigidBody;
-		protected Rigidbody _originalRigidBody;
+		protected Rigidbody _rigidbody;
+		protected Rigidbody _originalRigidbody;
 
 		protected void Start()
 		{
-			_rigidBody = GetComponent<Rigidbody>();
-			_originalRigidBody = original.GetComponent<Rigidbody>();
+			_rigidbody = GetComponent<Rigidbody>();
+			_originalRigidbody = original.GetComponent<Rigidbody>();
 		}
 
-		protected override void UpdateFromOriginal()
+		public override void UpdateFromOriginal()
 		{
-			Vector3 position = _originalRigidBody.position;
-			Quaternion rotation = _originalRigidBody.rotation;
+			Vector3 position = _originalRigidbody.position;
+			Quaternion rotation = _originalRigidbody.rotation;
 			region.Transform(ref position, ref rotation);
-			_rigidBody.position = position;
-			_rigidBody.rotation = rotation;
-			_rigidBody.angularVelocity = _originalRigidBody.angularVelocity;
-			_rigidBody.velocity = _originalRigidBody.velocity;
+			_rigidbody.position = position;
+			_rigidbody.rotation = rotation;
+			_rigidbody.angularVelocity = _originalRigidbody.angularVelocity;
+			_rigidbody.velocity = _originalRigidbody.velocity;
 		}
 	}
 }

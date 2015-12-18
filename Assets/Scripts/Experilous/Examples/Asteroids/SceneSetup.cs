@@ -9,26 +9,28 @@ namespace Experilous.Examples.Asteroids
 		public int RandomSeed = 0;
 
 		[Header("Physical Asteroids")]
-		public Asteroid PhysicalAsteroidPrefab;
-		public int PhysicalAsteroidCount = 10;
-		public float MinimumPhysicalAsteroidScale = 1.0f;
-		public float MaximumPhysicalAsteroidScale = 2.0f;
-		public float MinimumPhysicalAsteroidSpeed = 1.0f;
-		public float MaximumPhysicalAsteroidSpeed = 2.0f;
-		public float MinimumPhysicalAsteroidRotation = -90.0f;
-		public float MaximumPhysicalAsteroidRotation = +90.0f;
-		public Transform PhysicalAsteroidContainer;
+		public WrapAround.Element physicalAsteroidPrefab;
+		public int physicalAsteroidCount = 10;
+		public float minimumPhysicalAsteroidScale = 1.0f;
+		public float maximumPhysicalAsteroidScale = 2.0f;
+		public float minimumPhysicalAsteroidSpeed = 1.0f;
+		public float maximumPhysicalAsteroidSpeed = 2.0f;
+		public float minimumPhysicalAsteroidRotation = -90.0f;
+		public float maximumPhysicalAsteroidRotation = +90.0f;
+		public Transform physicalAsteroidContainer;
+		public WrapAround.Viewport physicalViewport;
 
 		[Header("Virtual Asteroids")]
-		public Asteroid VirtualAsteroidPrefab;
-		public int VirtualAsteroidCount = 10;
-		public float MinimumVirtualAsteroidScale = 1.0f;
-		public float MaximumVirtualAsteroidScale = 2.0f;
-		public float MinimumVirtualAsteroidSpeed = 1.0f;
-		public float MaximumVirtualAsteroidSpeed = 2.0f;
-		public float MinimumVirtualAsteroidRotation = -90.0f;
-		public float MaximumVirtualAsteroidRotation = +90.0f;
-		public Transform VirtualAsteroidContainer;
+		public WrapAround.Element virtualAsteroidPrefab;
+		public int virtualAsteroidCount = 10;
+		public float minimumVirtualAsteroidScale = 1.0f;
+		public float maximumVirtualAsteroidScale = 2.0f;
+		public float minimumVirtualAsteroidSpeed = 1.0f;
+		public float maximumVirtualAsteroidSpeed = 2.0f;
+		public float minimumVirtualAsteroidRotation = -90.0f;
+		public float maximumVirtualAsteroidRotation = +90.0f;
+		public Transform virtualAsteroidContainer;
+		public WrapAround.Viewport visualViewport;
 
 		private struct AsteroidDefinition
 		{
@@ -51,14 +53,14 @@ namespace Experilous.Examples.Asteroids
 			List<AsteroidDefinition> asteroids = new List<AsteroidDefinition>();
 
 			float prefabRadius = 0;
-			var sphereCollider = PhysicalAsteroidPrefab.GetComponent<SphereCollider>();
+			var sphereCollider = physicalAsteroidPrefab.GetComponent<SphereCollider>();
 			if (sphereCollider != null)
 			{
 				prefabRadius = sphereCollider.radius;
 			}
 			else
 			{
-				var boxCollider = PhysicalAsteroidPrefab.GetComponent<BoxCollider>();
+				var boxCollider = physicalAsteroidPrefab.GetComponent<BoxCollider>();
 				if (boxCollider != null)
 				{
 					prefabRadius = boxCollider.size.magnitude * 0.5f;
@@ -66,13 +68,13 @@ namespace Experilous.Examples.Asteroids
 			}
 
 			int tries = 0;
-			while (asteroids.Count < PhysicalAsteroidCount && tries < PhysicalAsteroidCount * 10)
+			while (asteroids.Count < physicalAsteroidCount && tries < physicalAsteroidCount * 10)
 			{
 				++tries;
 
 				var x = Random.HalfOpenRange(World.minX, World.maxX, randomEngine);
 				var y = Random.HalfOpenRange(World.minY, World.maxY, randomEngine);
-				var s = Random.ClosedRange(MinimumPhysicalAsteroidScale, MaximumPhysicalAsteroidScale, randomEngine);
+				var s = Random.ClosedRange(minimumPhysicalAsteroidScale, maximumPhysicalAsteroidScale, randomEngine);
 				var asteroid = new AsteroidDefinition(new Vector2(x, y), s);
 
 				bool collisionFound = false;
@@ -95,22 +97,24 @@ namespace Experilous.Examples.Asteroids
 			for (int i = 0; i < asteroids.Count; ++i)
 			{
 				var definition = asteroids[i];
-				var asteroid = Instantiate(PhysicalAsteroidPrefab);
+				var asteroid = Instantiate(physicalAsteroidPrefab);
 				asteroid.name = string.Format("Physical Asteroid ({0})", i);
 				asteroid.transform.position = new Vector3(definition.position.x, definition.position.y, 0f);
 				asteroid.transform.localScale = new Vector3(definition.scale, definition.scale, definition.scale);
-				asteroid.transform.SetParent(PhysicalAsteroidContainer, false);
+				asteroid.transform.SetParent(physicalAsteroidContainer, false);
 				asteroid.world = World;
-				asteroid.interactsAcrossEdges = true;
+
+				asteroid.GetComponent<WrapAround.RigidbodyGhostSpawner>().viewport = physicalViewport;
+				asteroid.GetComponent<WrapAround.DynamicGhostSpawner>().viewport = visualViewport;
 
 				var rigidBody = asteroid.GetComponent<Rigidbody>();
 				var direction = Random.UnitVector2(randomEngine);
-				var speed = Random.ClosedRange(MinimumPhysicalAsteroidSpeed, MaximumPhysicalAsteroidSpeed, randomEngine);
+				var speed = Random.ClosedRange(minimumPhysicalAsteroidSpeed, maximumPhysicalAsteroidSpeed, randomEngine);
 				rigidBody.velocity = new Vector3(direction.x * speed, direction.y * speed, 0f);
 				rigidBody.angularVelocity = new Vector3(
-					Random.ClosedRange(MinimumPhysicalAsteroidRotation, MaximumPhysicalAsteroidRotation, randomEngine),
-					Random.ClosedRange(MinimumPhysicalAsteroidRotation, MaximumPhysicalAsteroidRotation, randomEngine),
-					Random.ClosedRange(MinimumPhysicalAsteroidRotation, MaximumPhysicalAsteroidRotation, randomEngine));
+					Random.ClosedRange(minimumPhysicalAsteroidRotation, maximumPhysicalAsteroidRotation, randomEngine),
+					Random.ClosedRange(minimumPhysicalAsteroidRotation, maximumPhysicalAsteroidRotation, randomEngine),
+					Random.ClosedRange(minimumPhysicalAsteroidRotation, maximumPhysicalAsteroidRotation, randomEngine));
 
 				var meshRenderer = asteroid.GetComponent<MeshRenderer>();
 				meshRenderer.material.color = new Color(
@@ -122,29 +126,30 @@ namespace Experilous.Examples.Asteroids
 				if (collider != null) collider.isTrigger = false;
 			}
 
-			for (int i = 0; i < VirtualAsteroidCount; ++i)
+			for (int i = 0; i < virtualAsteroidCount; ++i)
 			{
 				var x = Random.HalfOpenRange(World.minX, World.maxX, randomEngine);
 				var y = Random.HalfOpenRange(World.minY, World.maxY, randomEngine);
-				var s = Random.ClosedRange(MinimumVirtualAsteroidScale, MaximumVirtualAsteroidScale, randomEngine);
+				var s = Random.ClosedRange(minimumVirtualAsteroidScale, maximumVirtualAsteroidScale, randomEngine);
 				var definition = new AsteroidDefinition(new Vector2(x, y), s);
 
-				var asteroid = Instantiate(VirtualAsteroidPrefab);
+				var asteroid = Instantiate(virtualAsteroidPrefab);
 				asteroid.name = string.Format("Virtual Asteroid ({0})", i);
 				asteroid.transform.position = new Vector3(definition.position.x, definition.position.y, 0f);
 				asteroid.transform.localScale = new Vector3(definition.scale, definition.scale, definition.scale);
-				asteroid.transform.SetParent(VirtualAsteroidContainer, false);
+				asteroid.transform.SetParent(virtualAsteroidContainer, false);
 				asteroid.world = World;
-				asteroid.interactsAcrossEdges = false;
+
+				asteroid.GetComponent<WrapAround.DynamicGhostSpawner>().viewport = visualViewport;
 
 				var rigidBody = asteroid.GetComponent<Rigidbody>();
 				var direction = Random.UnitVector2(randomEngine);
-				var speed = Random.ClosedRange(MinimumVirtualAsteroidSpeed, MaximumVirtualAsteroidSpeed, randomEngine);
+				var speed = Random.ClosedRange(minimumVirtualAsteroidSpeed, maximumVirtualAsteroidSpeed, randomEngine);
 				rigidBody.velocity = new Vector3(direction.x * speed, direction.y * speed, 0f);
 				rigidBody.angularVelocity = new Vector3(
-					Random.ClosedRange(MinimumVirtualAsteroidRotation, MaximumVirtualAsteroidRotation, randomEngine),
-					Random.ClosedRange(MinimumVirtualAsteroidRotation, MaximumVirtualAsteroidRotation, randomEngine),
-					Random.ClosedRange(MinimumVirtualAsteroidRotation, MaximumVirtualAsteroidRotation, randomEngine));
+					Random.ClosedRange(minimumVirtualAsteroidRotation, maximumVirtualAsteroidRotation, randomEngine),
+					Random.ClosedRange(minimumVirtualAsteroidRotation, maximumVirtualAsteroidRotation, randomEngine),
+					Random.ClosedRange(minimumVirtualAsteroidRotation, maximumVirtualAsteroidRotation, randomEngine));
 
 				var meshRenderer = asteroid.GetComponent<MeshRenderer>();
 				meshRenderer.material.color = new Color(

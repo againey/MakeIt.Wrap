@@ -4,18 +4,13 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
-	public class AxisAligned2DViewport : Viewport
+	public abstract class AxisAligned2DViewport : AxisAlignedViewport
 	{
-		public Vector3 min;
-		public Vector3 max;
+		protected Vector3 _min;
+		protected Vector3 _max;
 
-		public override IEnumerable<GhostRegion> visibleGhostRegions
-		{
-			get
-			{
-				return world.GetGhostRegions(this);
-			}
-		}
+		public override Vector3 min { get { return _min; } }
+		public override Vector3 max { get { return _max; } }
 
 		public override bool IsVisible(Vector3 position)
 		{
@@ -47,6 +42,11 @@ namespace Experilous.WrapAround
 		public override bool IsVisible(SphereElement element)
 		{
 			return IsVisible(element.transform.position, element.radius);
+		}
+
+		protected override IEnumerable<GhostRegion> GetGhostRegions(object ghostRegions)
+		{
+			return world.GetGhostRegions(this, ghostRegions);
 		}
 	}
 }
