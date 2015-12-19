@@ -2,7 +2,7 @@
 
 namespace Experilous.WrapAround
 {
-	public class SphereBoundedElementMeshRenderer : ElementMeshRenderer
+	public class SphereBoundedRenderableElement : RenderableElement
 	{
 		public float radius;
 

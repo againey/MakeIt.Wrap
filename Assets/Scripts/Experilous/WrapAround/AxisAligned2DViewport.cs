@@ -6,11 +6,22 @@ namespace Experilous.WrapAround
 {
 	public abstract class AxisAligned2DViewport : AxisAlignedViewport
 	{
+		private object _ghostRegions;
+		private IEnumerable<GhostRegion> _enumerableGhostRegions;
+
 		protected Vector3 _min;
 		protected Vector3 _max;
 
 		public override Vector3 min { get { return _min; } }
 		public override Vector3 max { get { return _max; } }
+
+		protected void Start()
+		{
+			_ghostRegions = world.InstantiateGhostRegions(this);
+			RecalculateVisibleGhostRegions();
+		}
+
+		public override IEnumerable<GhostRegion> visibleGhostRegions { get { return _enumerableGhostRegions; } }
 
 		public override bool IsVisible(Vector3 position)
 		{
@@ -44,9 +55,22 @@ namespace Experilous.WrapAround
 			return IsVisible(element.transform.position, element.radius);
 		}
 
-		protected override IEnumerable<GhostRegion> GetGhostRegions(object ghostRegions)
+		public override void RecalculateVisibleGhostRegions()
 		{
-			return world.GetGhostRegions(this, ghostRegions);
+			if (_enumerableGhostRegions != null)
+			{
+				foreach (var ghostRegion in _enumerableGhostRegions)
+				{
+					ghostRegion.isActive = false;
+				}
+			}
+
+			_enumerableGhostRegions = world.GetGhostRegions(this, _ghostRegions);
+
+			foreach (var ghostRegion in _enumerableGhostRegions)
+			{
+				ghostRegion.isActive = true;
+			}
 		}
 	}
 }

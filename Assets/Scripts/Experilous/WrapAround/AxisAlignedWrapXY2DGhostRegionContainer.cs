@@ -38,10 +38,7 @@ namespace Experilous.WrapAround
 
 		public GhostRegionRange Range(int xIndexMin, int yIndexMin, int xIndexMax, int yIndexMax)
 		{
-			int first = (yIndexMin - _ghostRegionsYIndexOffset) * _ghostRegionsWidth + (xIndexMin - _ghostRegionsXIndexOffset);
-			int last = (yIndexMax - _ghostRegionsYIndexOffset) * _ghostRegionsWidth + (xIndexMax - _ghostRegionsXIndexOffset) + 1;
-
-			return new GhostRegionRange(this, first, last, xIndexMax - xIndexMin + 1);
+			return new GhostRegionRange(this, xIndexMin, yIndexMin, xIndexMax, yIndexMax);
 		}
 
 		public void Expand(int xIndex, int yIndex, float worldWidth, float worldHeight)
@@ -140,58 +137,105 @@ namespace Experilous.WrapAround
 		public struct GhostRegionRange : IEnumerable<AxisAlignedWrapXY2DGhostRegion>, IEnumerable<GhostRegion>
 		{
 			private AxisAlignedWrapXY2DGhostRegionContainer _container;
-			private int _first;
-			private int _last;
-			private int _width;
+			private int[] _indices;
+			private int _count;
 
-			public GhostRegionRange(AxisAlignedWrapXY2DGhostRegionContainer container, int first, int last, int width)
+			public GhostRegionRange(AxisAlignedWrapXY2DGhostRegionContainer container)
 			{
 				_container = container;
-				_first = first;
-				_last = last;
-				_width = width;
+				_indices = null;
+				_count = 0;
+			}
+
+			public GhostRegionRange(AxisAlignedWrapXY2DGhostRegionContainer container, int xIndex, int yIndex)
+				: this(container)
+			{
+				UpdateRange(xIndex, yIndex);
+			}
+
+			public GhostRegionRange(AxisAlignedWrapXY2DGhostRegionContainer container, int xIndexMin, int yIndexMin, int xIndexMax, int yIndexMax)
+				: this(container)
+			{
+				UpdateRange(xIndexMin, yIndexMin, xIndexMax, yIndexMax);
+			}
+
+			public void UpdateRange(int xIndex, int yIndex)
+			{
+				if (xIndex != 0 || yIndex != 0)
+				{
+					if (_indices == null || _indices.Length < 1)
+					{
+						_indices = new int[1];
+					}
+
+					_indices[0] = (yIndex - _container._ghostRegionsYIndexOffset) * _container._ghostRegionsWidth + (xIndex - _container._ghostRegionsXIndexOffset);
+					_count = 1;
+				}
+				else
+				{
+					_count = 0;
+				}
+			}
+
+			public void UpdateRange(int xIndexMin, int yIndexMin, int xIndexMax, int yIndexMax)
+			{
+				var length = (xIndexMax - xIndexMin + 1) * (yIndexMax - yIndexMin + 1);
+				if (_indices == null || _indices.Length < length)
+				{
+					_indices = new int[length];
+				}
+
+				int index = 0;
+				for (int y = yIndexMin - _container._ghostRegionsYIndexOffset; y <= yIndexMax - _container._ghostRegionsYIndexOffset; ++y)
+				{
+					for (int x = xIndexMin - _container._ghostRegionsXIndexOffset; x <= xIndexMax - _container._ghostRegionsXIndexOffset; ++x)
+					{
+						if (x != -_container._ghostRegionsXIndexOffset || y != -_container._ghostRegionsYIndexOffset)
+						{
+							_indices[index++] = y * _container._ghostRegionsWidth + x;
+						}
+					}
+				}
+
+				_count = index;
 			}
 
 			public IEnumerator<AxisAlignedWrapXY2DGhostRegion> GetEnumerator()
 			{
-				return new GhostRegionEnumerator(_container, _first, _last, _width);
+				return new GhostRegionEnumerator(_container, _indices, _count);
 			}
 
 			IEnumerator IEnumerable.GetEnumerator()
 			{
-				return new GhostRegionEnumerator(_container, _first, _last, _width);
+				return new GhostRegionEnumerator(_container, _indices, _count);
 			}
 
 			IEnumerator<GhostRegion> IEnumerable<GhostRegion>.GetEnumerator()
 			{
-				return new GhostRegionEnumerator(_container, _first, _last, _width);
+				return new GhostRegionEnumerator(_container, _indices, _count);
 			}
 		}
 
 		public struct GhostRegionEnumerator : IEnumerator<AxisAlignedWrapXY2DGhostRegion>, IEnumerator<GhostRegion>
 		{
 			private AxisAlignedWrapXY2DGhostRegionContainer _container;
-			private int _first;
-			private int _last;
-			private int _width;
-			private int _rowFirst;
+			private int[] _indices;
+			private int _count;
 			private int _current;
 
-			public GhostRegionEnumerator(AxisAlignedWrapXY2DGhostRegionContainer container, int first, int last, int width)
+			public GhostRegionEnumerator(AxisAlignedWrapXY2DGhostRegionContainer container, int[] indices, int count)
 			{
 				_container = container;
-				_first = first;
-				_last = last;
-				_width = width;
-				_rowFirst = first;
-				_current = _first - 1;
+				_indices = indices;
+				_count = count;
+				_current = -1;
 			}
 
 			public AxisAlignedWrapXY2DGhostRegion Current
 			{
 				get
 				{
-					return _container._ghostRegions[_current];
+					return _container._ghostRegions[_indices[_current]];
 				}
 			}
 
@@ -199,7 +243,7 @@ namespace Experilous.WrapAround
 			{
 				get
 				{
-					return _container._ghostRegions[_current];
+					return _container._ghostRegions[_indices[_current]];
 				}
 			}
 
@@ -207,7 +251,7 @@ namespace Experilous.WrapAround
 			{
 				get
 				{
-					return _container._ghostRegions[_current];
+					return _container._ghostRegions[_indices[_current]];
 				}
 			}
 
@@ -217,30 +261,12 @@ namespace Experilous.WrapAround
 
 			public bool MoveNext()
 			{
-				if (_current < _last) ++_current;
-				if (_current == _last) return false;
-				if (_current - _rowFirst == _width)
-				{
-					_current = _rowFirst + _container._ghostRegionsWidth;
-					_rowFirst = _current;
-				}
-				if (_current == -_container._ghostRegionsYIndexOffset * _container._ghostRegionsWidth - _container._ghostRegionsXIndexOffset)
-				{
-					if (_current < _last) ++_current;
-					if (_current == _last) return false;
-					if (_current - _rowFirst == _width)
-					{
-						_current = _rowFirst + _container._ghostRegionsWidth;
-						_rowFirst = _current;
-					}
-				}
-				return _current < _last;
+				return ++_current < _count;
 			}
 
 			public void Reset()
 			{
-				_current = _first - 1;
-				_rowFirst = _first;
+				_current = -1;
 			}
 		}
 	}

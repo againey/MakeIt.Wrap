@@ -32,7 +32,7 @@ namespace Experilous.WrapAround
 					{
 						var ghost = Instantiate(ghostPrefab);
 						ghost.transform.SetParent(_element.transform.parent, false);
-						ghost.original = _element;
+						ghost.original = _element.GetComponent<Rigidbody>();
 						ghost.region = ghostRegion;
 						//ghost.UpdateFromOriginal();
 						ghostRegion.AddElement(_element);

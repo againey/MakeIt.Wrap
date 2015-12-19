@@ -104,10 +104,10 @@ namespace Experilous.Examples.Asteroids
 					asteroid.transform.position = new Vector3(definition.position.x, definition.position.y, 0f);
 					asteroid.transform.localScale = new Vector3(definition.scale, definition.scale, definition.scale);
 					asteroid.transform.SetParent(physicalAsteroidContainer, false);
-					//asteroid.world = world;
 
-					asteroid.GetComponent<WrapAround.RigidbodyGhostSpawner>().viewport = physicalViewport;
-					asteroid.GetComponent<WrapAround.DynamicGhostSpawner>().viewport = visualViewport;
+					asteroid.GetComponent<WrapAround.RigidbodyElementWrapper>().world = world;
+					asteroid.GetComponent<WrapAround.RigidbodyElement>().viewport = physicalViewport;
+					asteroid.GetComponent<WrapAround.RenderableElement>().viewport = visualViewport;
 
 					var rigidBody = asteroid.GetComponent<Rigidbody>();
 					var direction = Random.UnitVector2(randomEngine);
@@ -145,8 +145,7 @@ namespace Experilous.Examples.Asteroids
 					asteroid.transform.SetParent(virtualAsteroidContainer, false);
 
 					asteroid.GetComponent<WrapAround.DynamicElementWrapper>().world = world;
-
-					asteroid.GetComponent<WrapAround.ElementMeshRenderer>().viewport = visualViewport;
+					asteroid.GetComponent<WrapAround.RenderableElement>().viewport = visualViewport;
 
 					var rigidBody = asteroid.GetComponent<Rigidbody>();
 					var direction = Random.UnitVector2(randomEngine);

@@ -2,19 +2,13 @@
 
 namespace Experilous.WrapAround
 {
-	[RequireComponent(typeof(Element))]
 	public class MechanicalElementWrapper : MonoBehaviour
 	{
-		protected Element _element;
-
-		protected void Start()
-		{
-			_element = GetComponent<Element>();
-		}
+		public World world;
 
 		protected void FixedUpdate()
 		{
-			_element.world.Confine(_element.transform);
+			world.Confine(transform);
 		}
 	}
 }

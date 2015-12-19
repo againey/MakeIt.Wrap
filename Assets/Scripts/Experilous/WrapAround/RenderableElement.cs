@@ -2,7 +2,7 @@
 
 namespace Experilous.WrapAround
 {
-	public class ElementMeshRenderer : MonoBehaviour
+	public class RenderableElement : MonoBehaviour
 	{
 		public Viewport viewport;
 
