@@ -20,29 +20,14 @@ namespace Experilous.WrapAround
 		public override Viewport viewport { get { return _viewport; } }
 		public override bool isActive { get { return _isActive; } set { _isActive = value; } }
 
-		public override bool HasGhost(Element element)
-		{
-			return HasGhost(element.GetInstanceID());
-		}
-
 		public override bool HasGhost(int instanceId)
 		{
 			return _ghostedElements.Contains(instanceId);
 		}
 
-		public override void AddElement(Element element)
-		{
-			AddElement(element.GetInstanceID());
-		}
-
 		public override void AddElement(int instanceId)
 		{
 			_ghostedElements.Add(instanceId);
-		}
-
-		public override void RemoveElement(Element element)
-		{
-			RemoveElement(element.GetInstanceID());
 		}
 
 		public override void RemoveElement(int instanceId)

@@ -25,10 +25,10 @@ namespace Experilous.WrapAround
 			var worldWidth = width;
 			var worldHeight = height;
 
-			var viewportMinX = viewport.min.x;
-			var viewportMinY = viewport.min.y;
-			var viewportMaxX = viewport.max.x;
-			var viewportMaxY = viewport.max.y;
+			var viewportMinX = viewport.bufferedMin.x;
+			var viewportMinY = viewport.bufferedMin.y;
+			var viewportMaxX = viewport.bufferedMax.x;
+			var viewportMaxY = viewport.bufferedMax.y;
 
 			int xIndexMin = Mathf.FloorToInt((viewportMinX - minX) / worldWidth);
 			int yIndexMin = Mathf.FloorToInt((viewportMinY - minY) / worldHeight);
@@ -37,11 +37,6 @@ namespace Experilous.WrapAround
 
 			ghostRegions.Expand(xIndexMin, yIndexMin, xIndexMax, yIndexMax, worldWidth, worldHeight);
 			return ghostRegions.Range(xIndexMin, yIndexMin, xIndexMax, yIndexMax);
-		}
-
-		public override void Confine(Element element)
-		{
-			Confine(element.transform);
 		}
 
 		public override void Confine(Transform transform)

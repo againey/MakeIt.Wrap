@@ -11,6 +11,9 @@ namespace Experilous.WrapAround
 
 		public float bufferThickness;
 
+		public override Vector3 bufferedMin { get { return _min - new Vector3(bufferThickness, bufferThickness, bufferThickness); } }
+		public override Vector3 bufferedMax { get { return _max + new Vector3(bufferThickness, bufferThickness, bufferThickness); } }
+
 		protected new void Start()
 		{
 			_camera = GetComponent<Camera>();
@@ -37,14 +40,14 @@ namespace Experilous.WrapAround
 			var farTopRight = _camera.ViewportToWorldPoint(new Vector3(1f, 1f, _camera.farClipPlane));
 
 			_min = new Vector3(
-				Mathf.Min(nearBottomLeft.x, nearBottomRight.x, nearTopLeft.x, nearTopRight.x, farBottomLeft.x, farBottomRight.x, farTopLeft.x, farTopRight.x) - bufferThickness,
-				Mathf.Min(nearBottomLeft.y, nearBottomRight.y, nearTopLeft.y, nearTopRight.y, farBottomLeft.y, farBottomRight.y, farTopLeft.y, farTopRight.y) - bufferThickness,
-				Mathf.Min(nearBottomLeft.z, nearBottomRight.z, nearTopLeft.z, nearTopRight.z, farBottomLeft.z, farBottomRight.z, farTopLeft.z, farTopRight.z) - bufferThickness);
+				Mathf.Min(nearBottomLeft.x, nearBottomRight.x, nearTopLeft.x, nearTopRight.x, farBottomLeft.x, farBottomRight.x, farTopLeft.x, farTopRight.x),
+				Mathf.Min(nearBottomLeft.y, nearBottomRight.y, nearTopLeft.y, nearTopRight.y, farBottomLeft.y, farBottomRight.y, farTopLeft.y, farTopRight.y),
+				Mathf.Min(nearBottomLeft.z, nearBottomRight.z, nearTopLeft.z, nearTopRight.z, farBottomLeft.z, farBottomRight.z, farTopLeft.z, farTopRight.z));
 
 			_max = new Vector3(
-				Mathf.Max(nearBottomLeft.x, nearBottomRight.x, nearTopLeft.x, nearTopRight.x, farBottomLeft.x, farBottomRight.x, farTopLeft.x, farTopRight.x) + bufferThickness,
-				Mathf.Max(nearBottomLeft.y, nearBottomRight.y, nearTopLeft.y, nearTopRight.y, farBottomLeft.y, farBottomRight.y, farTopLeft.y, farTopRight.y) + bufferThickness,
-				Mathf.Max(nearBottomLeft.z, nearBottomRight.z, nearTopLeft.z, nearTopRight.z, farBottomLeft.z, farBottomRight.z, farTopLeft.z, farTopRight.z) + bufferThickness);
+				Mathf.Max(nearBottomLeft.x, nearBottomRight.x, nearTopLeft.x, nearTopRight.x, farBottomLeft.x, farBottomRight.x, farTopLeft.x, farTopRight.x),
+				Mathf.Max(nearBottomLeft.y, nearBottomRight.y, nearTopLeft.y, nearTopRight.y, farBottomLeft.y, farBottomRight.y, farTopLeft.y, farTopRight.y),
+				Mathf.Max(nearBottomLeft.z, nearBottomRight.z, nearTopLeft.z, nearTopRight.z, farBottomLeft.z, farBottomRight.z, farTopLeft.z, farTopRight.z));
 		}
 	}
 }

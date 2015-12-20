@@ -21,19 +21,14 @@ namespace Experilous.WrapAround
 		{
 			var worldWidth = width;
 
-			var viewportMinX = viewport.min.x;
-			var viewportMaxX = viewport.max.x;
+			var viewportMinX = viewport.bufferedMin.x;
+			var viewportMaxX = viewport.bufferedMax.x;
 
 			int xIndexMin = Mathf.FloorToInt((viewportMinX - minX) / worldWidth);
 			int xIndexMax = Mathf.CeilToInt((viewportMaxX - maxX) / worldWidth);
 
 			ghostRegions.Expand(xIndexMin, xIndexMax, worldWidth);
 			return ghostRegions.Range(xIndexMin, xIndexMax);
-		}
-
-		public override void Confine(Element element)
-		{
-			Confine(element.transform);
 		}
 
 		public override void Confine(Transform transform)

@@ -3,8 +3,10 @@
 namespace Experilous.WrapAround
 {
 	[RequireComponent(typeof(Rigidbody))]
-	public class RigidbodyElementWrapper : MechanicalElementWrapper
+	public class RigidbodyElementWrapper : MonoBehaviour
 	{
+		public World world;
+
 		protected Rigidbody _rigidbody;
 
 		protected void Start()
@@ -12,7 +14,7 @@ namespace Experilous.WrapAround
 			_rigidbody = GetComponent<Rigidbody>();
 		}
 
-		protected new void FixedUpdate()
+		protected void FixedUpdate()
 		{
 			world.Confine(_rigidbody);
 		}

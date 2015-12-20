@@ -45,16 +45,6 @@ namespace Experilous.WrapAround
 				position.z - radius < max.z;
 		}
 
-		public override bool IsVisible(PointElement element)
-		{
-			return IsVisible(element.transform.position);
-		}
-
-		public override bool IsVisible(SphereElement element)
-		{
-			return IsVisible(element.transform.position, element.radius);
-		}
-
 		public override void RecalculateVisibleGhostRegions()
 		{
 			if (_enumerableGhostRegions != null)

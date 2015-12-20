@@ -4,15 +4,18 @@ using Experilous.WrapAround;
 
 namespace Experilous.Examples.RPG
 {
+	[RequireComponent(typeof(Rigidbody))]
 	public class PlayerController : MonoBehaviour
 	{
-		public Camera viewportCamera;
 		public AxisAligned2DViewport viewport;
 
 		public float walkSpeed = 1f;
 
+		protected Rigidbody _rigidbody;
+
 		protected void Awake()
 		{
+			_rigidbody = GetComponent<Rigidbody>();
 		}
 	
 		protected void Start()
@@ -28,7 +31,7 @@ namespace Experilous.Examples.RPG
 			var horizontal = Input.GetAxis("Horizontal");
 			var vertical = Input.GetAxis("Vertical");
 
-			transform.position += new Vector3(horizontal * walkSpeed, vertical * walkSpeed, 0f);
+			_rigidbody.velocity = new Vector3(horizontal * walkSpeed, vertical * walkSpeed, 0f);
 		}
 	
 		protected void LateUpdate()
