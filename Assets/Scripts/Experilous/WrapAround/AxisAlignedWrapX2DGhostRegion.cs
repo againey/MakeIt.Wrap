@@ -9,7 +9,7 @@ namespace Experilous.WrapAround
 		private readonly HashSet<int> _ghostedElements = new HashSet<int>();
 		private float _xOffset;
 		private Viewport _viewport;
-		private bool _isActive;
+		private bool _isActive = true;
 
 		public AxisAlignedWrapX2DGhostRegion(float xOffset, Viewport viewport)
 		{

@@ -34,7 +34,7 @@ namespace Experilous.WrapAround
 			}
 		}
 
-		protected void FixedUpdate()
+		protected void LateUpdate()
 		{
 			foreach (var ghostRegion in viewport.visibleGhostRegions)
 			{
@@ -52,6 +52,8 @@ namespace Experilous.WrapAround
 
 			ghost.region = ghostRegion;
 			ghost.original = this;
+
+			ghostRegion.Transform(transform, ghost.transform);
 
 			ghostRegion.AddElement(GetInstanceID());
 

@@ -7,7 +7,7 @@ namespace Experilous.WrapAround
 		public LightElement original;
 		public GhostRegion region;
 
-		protected void FixedUpdate()
+		protected void LateUpdate()
 		{
 			region.Transform(original.transform, transform);
 

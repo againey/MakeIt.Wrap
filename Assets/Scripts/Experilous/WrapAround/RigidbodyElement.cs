@@ -56,7 +56,8 @@ namespace Experilous.WrapAround
 			foreach (var ghostComponent in ghostComponents)
 			{
 				ghostComponent.region = ghostRegion;
-				ghostComponent.original = rigidbody;
+				ghostComponent.original = rigidbody; //TODO:  This is the wrong rigidbody!  Needs to be the appropriate child.
+				ghostComponent.transform.localScale = rigidbody.transform.localScale;
 				ghostRegion.Transform(rigidbody, ghostComponent.GetComponent<Rigidbody>());
 			}
 

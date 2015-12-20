@@ -6,7 +6,7 @@ namespace Experilous.WrapAround
 	{
 		public World world;
 
-		protected void Update()
+		protected void LateUpdate()
 		{
 			world.Confine(transform);
 		}

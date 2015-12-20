@@ -10,7 +10,7 @@ namespace Experilous.WrapAround
 		private float _xOffset;
 		private float _yOffset;
 		private Viewport _viewport;
-		private bool _isActive;
+		private bool _isActive = true;
 
 		public AxisAlignedWrapXY2DGhostRegion(float xOffset, float yOffset, Viewport viewport)
 		{

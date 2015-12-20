@@ -15,6 +15,9 @@ namespace Experilous.WrapAround
 		public override Vector3 min { get { return _min; } }
 		public override Vector3 max { get { return _max; } }
 
+		public override Vector3 bufferedMin { get { return _min; } }
+		public override Vector3 bufferedMax { get { return _max; } }
+
 		protected void Start()
 		{
 			_ghostRegions = world.InstantiateGhostRegions(this);
