@@ -49,6 +49,7 @@ namespace Experilous.WrapAround
 		{
 			var ghost = Instantiate(ghostPrefab);
 			ghost.transform.SetParent(transform.parent, false);
+			ghost.name = name + " (Ghost)";
 
 			ghost.region = ghostRegion;
 			ghost.original = this;
