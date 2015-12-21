@@ -31,13 +31,7 @@ namespace Experilous.WrapAround
 		{
 			var path = EditorUtility.SaveFilePanelInProject("Create Ghost Prefab", string.Format("{0} Ghost", element.name), "prefab", "Select where to create the ghost prefab.");
 
-			if (AssetDatabase.LoadAssetAtPath<Object>(path) != null)
-			{
-				if (EditorUtility.DisplayDialog("Create Ghost Prefab", "An asset already exists at this path.  Do you want to overwrite it?", "Yes", "No") == false)
-				{
-					return;
-				}
-			}
+			if (string.IsNullOrEmpty(path)) return;
 
 			var ghostTemplate = CreateGhostTemplate(element);
 			var ghostPrefab = PrefabUtility.CreatePrefab(path, ghostTemplate);
