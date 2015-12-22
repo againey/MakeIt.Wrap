@@ -10,7 +10,21 @@ namespace Experilous.WrapAround
 		public float minX;
 		public float maxX;
 
+		public float maxVisibleObjectRadius;
+		public float maxPhysicsObjectRadius;
+
 		public float width { get { return maxX - minX; } }
+
+		private AxisAlignedWrapX2DGhostRegionContainer _physicsGhostRegions;
+		private IEnumerable<GhostRegion> _enumerablePhysicsGhostRegions;
+
+		protected void Start()
+		{
+			_physicsGhostRegions = new AxisAlignedWrapX2DGhostRegionContainer(width);
+
+			var physicsBuffer = maxPhysicsObjectRadius * 2f;
+			_enumerablePhysicsGhostRegions = GetGhostRegions(minX - physicsBuffer, maxX + physicsBuffer, _physicsGhostRegions);
+		}
 
 		public override IEnumerable<GhostRegion> GetGhostRegions(AxisAlignedViewport viewport, object ghostRegions)
 		{
@@ -19,16 +33,37 @@ namespace Experilous.WrapAround
 
 		private IEnumerable<GhostRegion> GetGhostRegions(AxisAlignedViewport viewport, AxisAlignedWrapX2DGhostRegionContainer ghostRegions)
 		{
+			return GetGhostRegions(
+				viewport.min.x - maxVisibleObjectRadius,
+				viewport.max.x + maxVisibleObjectRadius,
+				ghostRegions);
+		}
+
+		private IEnumerable<GhostRegion> GetGhostRegions(float rangeMinX, float rangeMaxX, AxisAlignedWrapX2DGhostRegionContainer ghostRegions)
+		{
 			var worldWidth = width;
 
-			var viewportMinX = viewport.bufferedMin.x;
-			var viewportMaxX = viewport.bufferedMax.x;
-
-			int xIndexMin = Mathf.FloorToInt((viewportMinX - minX) / worldWidth);
-			int xIndexMax = Mathf.CeilToInt((viewportMaxX - maxX) / worldWidth);
+			int xIndexMin = Mathf.FloorToInt((rangeMinX - minX) / worldWidth);
+			int xIndexMax = Mathf.CeilToInt((rangeMaxX - maxX) / worldWidth);
 
 			ghostRegions.Expand(xIndexMin, xIndexMax, worldWidth);
 			return ghostRegions.Range(xIndexMin, xIndexMax);
+		}
+
+		public override IEnumerable<GhostRegion> physicsGhostRegions { get { return _enumerablePhysicsGhostRegions; } }
+
+		public override bool IsCollidable(Vector3 position)
+		{
+			return
+				position.x >= minX - maxPhysicsObjectRadius &&
+				position.x < maxX + maxPhysicsObjectRadius;
+		}
+
+		public override bool IsCollidable(Vector3 position, float radius)
+		{
+			return
+				position.x + radius >= minX - maxPhysicsObjectRadius &&
+				position.x - radius < maxX + maxPhysicsObjectRadius;
 		}
 
 		public override void Confine(Transform transform)
@@ -52,9 +87,9 @@ namespace Experilous.WrapAround
 			position.x = xOffset - Mathf.Floor(xOffset / worldWidth) * worldWidth + minX;
 		}
 
-		public override object InstantiateGhostRegions(Viewport viewport)
+		public override object InstantiateGhostRegions()
 		{
-			return new AxisAlignedWrapX2DGhostRegionContainer(width, viewport);
+			return new AxisAlignedWrapX2DGhostRegionContainer(width);
 		}
 	}
 }

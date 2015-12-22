@@ -4,7 +4,6 @@ namespace Experilous.WrapAround
 {
 	public abstract class GhostRegion
 	{
-		public abstract Viewport viewport { get; }
 		public abstract bool isActive { get; set; }
 
 		public abstract bool HasGhost(int instanceId);

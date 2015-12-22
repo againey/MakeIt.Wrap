@@ -12,8 +12,22 @@ namespace Experilous.WrapAround
 		public float maxX;
 		public float maxY;
 
+		public float maxVisibleObjectRadius;
+		public float maxPhysicsObjectRadius;
+
 		public float width { get { return maxX - minX; } }
 		public float height { get { return maxY - minY; } }
+
+		private AxisAlignedWrapXY2DGhostRegionContainer _physicsGhostRegions;
+		private IEnumerable<GhostRegion> _enumerablePhysicsGhostRegions;
+
+		protected void Start()
+		{
+			_physicsGhostRegions = new AxisAlignedWrapXY2DGhostRegionContainer(width, height);
+
+			var physicsBuffer = maxPhysicsObjectRadius * 2f;
+			_enumerablePhysicsGhostRegions = GetGhostRegions(minX - physicsBuffer, minY - physicsBuffer, maxX + physicsBuffer, maxY + physicsBuffer, _physicsGhostRegions);
+		}
 
 		public override IEnumerable<GhostRegion> GetGhostRegions(AxisAlignedViewport viewport, object ghostRegions)
 		{
@@ -22,21 +36,46 @@ namespace Experilous.WrapAround
 
 		private IEnumerable<GhostRegion> GetGhostRegions(AxisAlignedViewport viewport, AxisAlignedWrapXY2DGhostRegionContainer ghostRegions)
 		{
+			return GetGhostRegions(
+				viewport.min.x - maxVisibleObjectRadius,
+				viewport.min.y - maxVisibleObjectRadius,
+				viewport.max.x + maxVisibleObjectRadius,
+				viewport.max.y + maxVisibleObjectRadius,
+				ghostRegions);
+		}
+
+		private IEnumerable<GhostRegion> GetGhostRegions(float rangeMinX, float rangeMinY, float rangeMaxX, float rangeMaxY, AxisAlignedWrapXY2DGhostRegionContainer ghostRegions)
+		{
 			var worldWidth = width;
 			var worldHeight = height;
 
-			var viewportMinX = viewport.bufferedMin.x;
-			var viewportMinY = viewport.bufferedMin.y;
-			var viewportMaxX = viewport.bufferedMax.x;
-			var viewportMaxY = viewport.bufferedMax.y;
-
-			int xIndexMin = Mathf.FloorToInt((viewportMinX - minX) / worldWidth);
-			int yIndexMin = Mathf.FloorToInt((viewportMinY - minY) / worldHeight);
-			int xIndexMax = Mathf.CeilToInt((viewportMaxX - maxX) / worldWidth);
-			int yIndexMax = Mathf.CeilToInt((viewportMaxY - maxY) / worldHeight);
+			int xIndexMin = Mathf.FloorToInt((rangeMinX - minX) / worldWidth);
+			int yIndexMin = Mathf.FloorToInt((rangeMinY - minY) / worldHeight);
+			int xIndexMax = Mathf.CeilToInt((rangeMaxX - maxX) / worldWidth);
+			int yIndexMax = Mathf.CeilToInt((rangeMaxY - maxY) / worldHeight);
 
 			ghostRegions.Expand(xIndexMin, yIndexMin, xIndexMax, yIndexMax, worldWidth, worldHeight);
 			return ghostRegions.Range(xIndexMin, yIndexMin, xIndexMax, yIndexMax);
+		}
+
+		public override IEnumerable<GhostRegion> physicsGhostRegions { get { return _enumerablePhysicsGhostRegions; } }
+
+		public override bool IsCollidable(Vector3 position)
+		{
+			return
+				position.x >= minX - maxPhysicsObjectRadius &&
+				position.y >= minY - maxPhysicsObjectRadius &&
+				position.x < maxX + maxPhysicsObjectRadius &&
+				position.y < maxY + maxPhysicsObjectRadius;
+		}
+
+		public override bool IsCollidable(Vector3 position, float radius)
+		{
+			return
+				position.x + radius >= minX - maxPhysicsObjectRadius &&
+				position.y + radius >= minY - maxPhysicsObjectRadius &&
+				position.x - radius < maxX + maxPhysicsObjectRadius &&
+				position.y - radius < maxY + maxPhysicsObjectRadius;
 		}
 
 		public override void Confine(Transform transform)
@@ -63,9 +102,9 @@ namespace Experilous.WrapAround
 			position.y = yOffset - Mathf.Floor(yOffset / worldHeight) * worldHeight + minY;
 		}
 
-		public override object InstantiateGhostRegions(Viewport viewport)
+		public override object InstantiateGhostRegions()
 		{
-			return new AxisAlignedWrapXY2DGhostRegionContainer(width, height, viewport);
+			return new AxisAlignedWrapXY2DGhostRegionContainer(width, height);
 		}
 	}
 }

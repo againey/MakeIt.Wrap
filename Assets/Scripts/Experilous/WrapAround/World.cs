@@ -7,8 +7,13 @@ namespace Experilous.WrapAround
 	{
 		public abstract IEnumerable<GhostRegion> GetGhostRegions(AxisAlignedViewport viewport, object ghostRegions);
 
+		public abstract IEnumerable<GhostRegion> physicsGhostRegions { get; }
+
+		public abstract bool IsCollidable(Vector3 position);
+		public abstract bool IsCollidable(Vector3 position, float radius);
+
 		public abstract void Confine(Transform transform);
 		public abstract void Confine(Rigidbody rigidbody);
-		public abstract object InstantiateGhostRegions(Viewport viewport);
+		public abstract object InstantiateGhostRegions();
 	}
 }

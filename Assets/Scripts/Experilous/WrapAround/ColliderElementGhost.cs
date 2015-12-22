@@ -9,7 +9,7 @@ namespace Experilous.WrapAround
 
 		protected void FixedUpdate()
 		{
-			if (!region.isActive || !original.IsVisible(this))
+			if (!region.isActive || !original.IsCollidable(this))
 			{
 				region.RemoveElement(original.GetInstanceID());
 				Destroy(gameObject);

@@ -10,7 +10,7 @@ namespace Experilous.WrapAround
 		{
 			var element = (ColliderElement)target;
 
-			element.viewport = (Viewport)EditorGUILayout.ObjectField("Viewport", element.viewport, typeof(Viewport), true);
+			element.world = (World)EditorGUILayout.ObjectField("World", element.world, typeof(World), true);
 			element.ghostPrefab = (ColliderElementGhost)EditorGUILayout.ObjectField("Ghost Prefab", element.ghostPrefab, typeof(ColliderElementGhost), false);
 
 			if (GUILayout.Button("Create Ghost Prefab"))

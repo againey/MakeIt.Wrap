@@ -5,32 +5,32 @@ namespace Experilous.WrapAround
 	[RequireComponent(typeof(Collider))]
 	public class ColliderElement : MonoBehaviour
 	{
-		public Viewport viewport;
+		public World world;
 		public ColliderElementGhost ghostPrefab;
 
-		public virtual bool IsVisible(ColliderElementGhost ghost)
+		public virtual bool IsCollidable(ColliderElementGhost ghost)
 		{
-			return viewport.IsVisible(ghost.transform.position);
+			return world.IsCollidable(ghost.transform.position);
 		}
 
-		public virtual bool IsVisible(Vector3 position, Quaternion rotation)
+		public virtual bool IsCollidable(Vector3 position, Quaternion rotation)
 		{
-			return viewport.IsVisible(position);
+			return world.IsCollidable(position);
 		}
 
-		public bool IsVisible(GhostRegion ghostRegion)
+		public bool IsCollidable(GhostRegion ghostRegion)
 		{
 			var position = transform.position;
 			var rotation = transform.rotation;
 			ghostRegion.Transform(ref position, ref rotation);
-			return IsVisible(position, rotation);
+			return IsCollidable(position, rotation);
 		}
 
 		protected void FixedUpdate()
 		{
-			foreach (var ghostRegion in viewport.visibleGhostRegions)
+			foreach (var ghostRegion in world.physicsGhostRegions)
 			{
-				if (!ghostRegion.HasGhost(GetInstanceID()) && IsVisible(ghostRegion))
+				if (!ghostRegion.HasGhost(GetInstanceID()) && IsCollidable(ghostRegion))
 				{
 					InstantiateGhost(ghostRegion);
 				}

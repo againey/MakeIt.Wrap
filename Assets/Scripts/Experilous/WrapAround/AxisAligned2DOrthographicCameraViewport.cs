@@ -9,11 +9,6 @@ namespace Experilous.WrapAround
 	{
 		private Camera _camera;
 
-		public float bufferThickness;
-
-		public override Vector3 bufferedMin { get { return _min - new Vector3(bufferThickness, bufferThickness, bufferThickness); } }
-		public override Vector3 bufferedMax { get { return _max + new Vector3(bufferThickness, bufferThickness, bufferThickness); } }
-
 		protected new void Start()
 		{
 			_camera = GetComponent<Camera>();

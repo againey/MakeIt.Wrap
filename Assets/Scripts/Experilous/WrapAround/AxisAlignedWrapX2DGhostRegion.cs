@@ -8,16 +8,13 @@ namespace Experilous.WrapAround
 	{
 		private readonly HashSet<int> _ghostedElements = new HashSet<int>();
 		private float _xOffset;
-		private Viewport _viewport;
 		private bool _isActive = true;
 
-		public AxisAlignedWrapX2DGhostRegion(float xOffset, Viewport viewport)
+		public AxisAlignedWrapX2DGhostRegion(float xOffset)
 		{
 			_xOffset = xOffset;
-			_viewport = viewport;
 		}
 
-		public override Viewport viewport { get { return _viewport; } }
 		public override bool isActive { get { return _isActive; } set { _isActive = value; } }
 
 		public override bool HasGhost(int instanceId)

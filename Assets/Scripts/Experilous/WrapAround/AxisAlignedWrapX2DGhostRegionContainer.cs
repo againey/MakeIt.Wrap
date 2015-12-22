@@ -10,17 +10,14 @@ namespace Experilous.WrapAround
 		private AxisAlignedWrapX2DGhostRegion[] _ghostRegions = null;
 		private int _ghostRegionsWidth = 0;
 		private int _ghostRegionsXIndexOffset = 0;
-		private Viewport _viewport;
 
-		public AxisAlignedWrapX2DGhostRegionContainer(float worldWidth, Viewport viewport)
+		public AxisAlignedWrapX2DGhostRegionContainer(float worldWidth)
 		{
-			_viewport = viewport;
-
 			_ghostRegions = new AxisAlignedWrapX2DGhostRegion[3];
 
-			_ghostRegions[0] = new AxisAlignedWrapX2DGhostRegion(-worldWidth, _viewport);
+			_ghostRegions[0] = new AxisAlignedWrapX2DGhostRegion(-worldWidth);
 			_ghostRegions[1] = null;
-			_ghostRegions[2] = new AxisAlignedWrapX2DGhostRegion(+worldWidth, _viewport);
+			_ghostRegions[2] = new AxisAlignedWrapX2DGhostRegion(+worldWidth);
 
 			_ghostRegionsWidth = 3;
 			_ghostRegionsXIndexOffset = -1;
@@ -57,12 +54,12 @@ namespace Experilous.WrapAround
 
 			for (int x = 0; x < _ghostRegionsWidth; ++x)
 			{
-				_ghostRegions[x] = new AxisAlignedWrapX2DGhostRegion((_ghostRegionsXIndexOffset + x) * worldWidth, _viewport);
+				_ghostRegions[x] = new AxisAlignedWrapX2DGhostRegion((_ghostRegionsXIndexOffset + x) * worldWidth);
 			}
 
 			for (int x = _ghostRegionsWidth - rightExpansion; x < _ghostRegionsWidth; ++x)
 			{
-				_ghostRegions[x] = new AxisAlignedWrapX2DGhostRegion((_ghostRegionsXIndexOffset + x) * worldWidth, _viewport);
+				_ghostRegions[x] = new AxisAlignedWrapX2DGhostRegion((_ghostRegionsXIndexOffset + x) * worldWidth);
 			}
 		}
 

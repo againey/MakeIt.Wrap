@@ -16,14 +16,14 @@ namespace Experilous.WrapAround
 			}
 		}
 
-		public override bool IsVisible(ColliderElementGhost ghost)
+		public override bool IsCollidable(ColliderElementGhost ghost)
 		{
-			return viewport.IsVisible(ghost.transform.position, scaledRadius);
+			return world.IsCollidable(ghost.transform.position, scaledRadius);
 		}
 
-		public override bool IsVisible(Vector3 position, Quaternion rotation)
+		public override bool IsCollidable(Vector3 position, Quaternion rotation)
 		{
-			return viewport.IsVisible(position, scaledRadius);
+			return world.IsCollidable(position, scaledRadius);
 		}
 
 		protected void Start()

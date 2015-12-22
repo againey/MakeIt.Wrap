@@ -23,7 +23,7 @@ namespace Experilous.WrapAround
 			_rigidbody.angularVelocity = _originalRigidbody.angularVelocity;
 			_rigidbody.velocity = _originalRigidbody.velocity;
 
-			if (!region.isActive || !original.IsVisible(this))
+			if (!region.isActive || !original.IsCollidable(this))
 			{
 				region.RemoveElement(original.GetInstanceID());
 				Destroy(gameObject);

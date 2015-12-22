@@ -15,9 +15,15 @@ namespace Experilous.WrapAround
 
 		protected void LateUpdate()
 		{
+			var position = transform.position;
 			foreach (var ghostRegion in viewport.visibleGhostRegions)
 			{
-				RenderGhosts(ghostRegion.transformation);
+				var regionTransformation = ghostRegion.transformation;
+				var ghostPosition = regionTransformation.MultiplyPoint3x4(position);
+				if (viewport.IsVisible(ghostPosition))
+				{
+					RenderGhosts(regionTransformation);
+				}
 			}
 		}
 
