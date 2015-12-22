@@ -2,13 +2,13 @@
 
 namespace Experilous.WrapAround
 {
-	[RequireComponent(typeof(Rigidbody))]
-	public class RigidbodyElement : MonoBehaviour
+	[RequireComponent(typeof(Collider))]
+	public class ColliderElement : MonoBehaviour
 	{
 		public Viewport viewport;
-		public RigidbodyElementGhost ghostPrefab;
+		public ColliderElementGhost ghostPrefab;
 
-		public virtual bool IsVisible(RigidbodyElementGhost ghost)
+		public virtual bool IsVisible(ColliderElementGhost ghost)
 		{
 			return viewport.IsVisible(ghost.transform.position);
 		}
@@ -45,10 +45,8 @@ namespace Experilous.WrapAround
 			ghost.region = ghostRegion;
 			ghost.original = this;
 
-			var rigidbody = GetComponent<Rigidbody>();
-
-			ghost.transform.localScale = rigidbody.transform.localScale;
-			ghostRegion.Transform(rigidbody, ghost.GetComponent<Rigidbody>());
+			ghost.transform.localScale = transform.localScale;
+			ghostRegion.Transform(transform, ghost.transform);
 
 			ghostRegion.AddElement(GetInstanceID());
 		}

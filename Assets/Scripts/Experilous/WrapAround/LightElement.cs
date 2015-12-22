@@ -26,14 +26,6 @@ namespace Experilous.WrapAround
 			return IsVisible(position, rotation);
 		}
 
-		protected void Start()
-		{
-			if (ghostPrefab == null)
-			{
-				ghostPrefab = defaultGhostPrefab;
-			}
-		}
-
 		protected void LateUpdate()
 		{
 			foreach (var ghostRegion in viewport.visibleGhostRegions)
@@ -50,30 +42,12 @@ namespace Experilous.WrapAround
 			var ghost = Instantiate(ghostPrefab);
 			ghost.transform.SetParent(transform.parent, false);
 			ghost.name = name + " (Ghost)";
-
 			ghost.region = ghostRegion;
 			ghost.original = this;
 
 			ghostRegion.Transform(transform, ghost.transform);
 
 			ghostRegion.AddElement(GetInstanceID());
-
-			ghost.gameObject.SetActive(true);
-		}
-
-		protected LightElementGhost defaultGhostPrefab
-		{
-			get
-			{
-				var prefab = Instantiate(this);
-				prefab.gameObject.SetActive(false);
-				prefab.transform.SetParent(transform.parent, false);
-				prefab.name = name + " (Ghost)";
-				prefab.enabled = false;
-				var ghost = prefab.gameObject.AddComponent<LightElementGhost>();
-				Destroy(prefab);
-				return ghost;
-			}
 		}
 	}
 }

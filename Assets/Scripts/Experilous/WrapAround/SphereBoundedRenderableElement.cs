@@ -21,5 +21,21 @@ namespace Experilous.WrapAround
 				}
 			}
 		}
+
+		protected void Start()
+		{
+			if (radius == 0f)
+			{
+				var meshFilter = GetComponent<MeshFilter>();
+				if (meshFilter != null)
+				{
+					var mesh = meshFilter.mesh;
+					if (mesh != null)
+					{
+						radius = mesh.bounds.extents.magnitude;
+					}
+				}
+			}
+		}
 	}
 }

@@ -3,15 +3,15 @@ using UnityEditor;
 
 namespace Experilous.WrapAround
 {
-	[CustomEditor(typeof(RigidbodyElement))]
-	public class RigidbodyElementEditor : Editor
+	[CustomEditor(typeof(ColliderElement))]
+	public class ColliderElementEditor : Editor
 	{
 		public override void OnInspectorGUI()
 		{
-			var element = (RigidbodyElement)target;
+			var element = (ColliderElement)target;
 
 			element.viewport = (Viewport)EditorGUILayout.ObjectField("Viewport", element.viewport, typeof(Viewport), true);
-			element.ghostPrefab = (RigidbodyElementGhost)EditorGUILayout.ObjectField("Ghost Prefab", element.ghostPrefab, typeof(RigidbodyElementGhost), false);
+			element.ghostPrefab = (ColliderElementGhost)EditorGUILayout.ObjectField("Ghost Prefab", element.ghostPrefab, typeof(ColliderElementGhost), false);
 
 			if (GUILayout.Button("Create Ghost Prefab"))
 			{
@@ -27,7 +27,7 @@ namespace Experilous.WrapAround
 			}
 		}
 
-		protected void CreateGhostPrefab(RigidbodyElement element)
+		protected void CreateGhostPrefab(ColliderElement element)
 		{
 			var path = EditorUtility.SaveFilePanelInProject("Create Ghost Prefab", string.Format("{0} Ghost", element.name), "prefab", "Select where to create the ghost prefab.");
 
@@ -37,25 +37,25 @@ namespace Experilous.WrapAround
 			var ghostPrefab = PrefabUtility.CreatePrefab(path, ghostTemplate);
 			DestroyImmediate(ghostTemplate);
 
-			element.ghostPrefab = ghostPrefab.GetComponent<RigidbodyElementGhost>();
+			element.ghostPrefab = ghostPrefab.GetComponent<ColliderElementGhost>();
 		}
 
-		protected void UpdateGhostPrefab(RigidbodyElement element)
+		protected void UpdateGhostPrefab(ColliderElement element)
 		{
 			var ghostTemplate = CreateGhostTemplate(element);
 			var ghostPrefab = PrefabUtility.ReplacePrefab(ghostTemplate, element.ghostPrefab);
 			DestroyImmediate(ghostTemplate);
 
-			element.ghostPrefab = ghostPrefab.GetComponent<RigidbodyElementGhost>();
+			element.ghostPrefab = ghostPrefab.GetComponent<ColliderElementGhost>();
 		}
 
-		protected GameObject CreateGhostTemplate(RigidbodyElement element)
+		protected GameObject CreateGhostTemplate(ColliderElement element)
 		{
 			var ghostTemplate = Instantiate(element).gameObject;
 			ghostTemplate.transform.SetParent(element.transform.parent, false);
 			ghostTemplate.name = name + " Ghost";
 			AdjustComponents(ghostTemplate.transform, ghostTemplate.transform);
-			ghostTemplate.AddComponent<RigidbodyElementGhost>();
+			ghostTemplate.AddComponent<ColliderElementGhost>();
 			return ghostTemplate;
 		}
 
@@ -82,7 +82,7 @@ namespace Experilous.WrapAround
 				}
 			}
 
-			if (hasRigidbody && !ReferenceEquals(transform, topLevel))
+			if (hasRigidbody)
 			{
 				// Nested rigidbodies are not included as part of the element ghost prefab.
 				DestroyImmediate(transform.gameObject);
@@ -111,10 +111,10 @@ namespace Experilous.WrapAround
 			}
 			else
 			{
-				// Remove any component that doesn't contribute to the physical definition of the root rigidbody.
+				// Remove any component that doesn't contribute to the physical definition of the static collider.
 				foreach (var component in components)
 				{
-					if (!(component is Rigidbody || component is Collider || component is Transform))
+					if (!(component is Collider || component is Transform))
 					{
 						DestroyImmediate(component);
 					}

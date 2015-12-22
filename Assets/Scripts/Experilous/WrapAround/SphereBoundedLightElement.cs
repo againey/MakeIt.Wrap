@@ -16,10 +16,8 @@ namespace Experilous.WrapAround
 			return viewport.IsVisible(position, radius);
 		}
 
-		protected new void Start()
+		protected void Start()
 		{
-			base.Start();
-
 			if (radius == 0f)
 			{
 				var light = GetComponent<Light>();

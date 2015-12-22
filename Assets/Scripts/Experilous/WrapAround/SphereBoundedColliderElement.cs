@@ -2,8 +2,8 @@
 
 namespace Experilous.WrapAround
 {
-	[RequireComponent(typeof(Rigidbody))]
-	public class SphereBoundedRigidbodyElement : RigidbodyElement
+	[RequireComponent(typeof(Collider))]
+	public class SphereBoundedColliderElement : ColliderElement
 	{
 		public float radius;
 
@@ -16,7 +16,7 @@ namespace Experilous.WrapAround
 			}
 		}
 
-		public override bool IsVisible(RigidbodyElementGhost ghost)
+		public override bool IsVisible(ColliderElementGhost ghost)
 		{
 			return viewport.IsVisible(ghost.transform.position, scaledRadius);
 		}
@@ -38,10 +38,7 @@ namespace Experilous.WrapAround
 				else
 				{
 					var collider = GetComponent<Collider>();
-					if (collider != null)
-					{
-						radius = collider.bounds.extents.magnitude;
-					}
+					radius = collider.bounds.extents.magnitude;
 				}
 			}
 		}

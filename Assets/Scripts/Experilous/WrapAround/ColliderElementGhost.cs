@@ -2,9 +2,9 @@
 
 namespace Experilous.WrapAround
 {
-	public class RigidbodyTopLevelElementGhost : MonoBehaviour
+	public class ColliderElementGhost : MonoBehaviour
 	{
-		public RigidbodyElement original;
+		public ColliderElement original;
 		public GhostRegion region;
 
 		protected void FixedUpdate()
