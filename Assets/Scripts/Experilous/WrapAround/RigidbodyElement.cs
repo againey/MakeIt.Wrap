@@ -6,11 +6,12 @@ namespace Experilous.WrapAround
 	public class RigidbodyElement : MonoBehaviour
 	{
 		public World world;
+		public AbstractBounds bounds;
 		public RigidbodyElementGhost ghostPrefab;
 
 		public virtual bool IsCollidable(RigidbodyElementGhost ghost)
 		{
-			return world.IsCollidable(ghost.transform.position);
+			return bounds.IsCollidable(world, ghost.rigidbody);
 		}
 
 		public virtual bool IsCollidable(Vector3 position, Quaternion rotation)
@@ -23,7 +24,19 @@ namespace Experilous.WrapAround
 			var position = transform.position;
 			var rotation = transform.rotation;
 			ghostRegion.Transform(ref position, ref rotation);
-			return IsCollidable(position, rotation);
+			return bounds.IsCollidable(world, position, rotation);
+		}
+
+		protected void Awake()
+		{
+			if (bounds == null)
+			{
+				bounds = GetComponent<AbstractBounds>();
+				if (bounds == null)
+				{
+					bounds = gameObject.AddComponent<PointBounds>();
+				}
+			}
 		}
 
 		protected void FixedUpdate()

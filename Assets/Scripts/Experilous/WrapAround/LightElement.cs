@@ -6,16 +6,17 @@ namespace Experilous.WrapAround
 	public class LightElement : MonoBehaviour
 	{
 		public Viewport viewport;
+		public AbstractBounds bounds;
 		public LightElementGhost ghostPrefab;
 
 		public virtual bool IsVisible(LightElementGhost ghost)
 		{
-			return viewport.IsVisible(ghost.transform.position);
+			return bounds.IsVisible(viewport, ghost.transform);
 		}
 
 		public virtual bool IsVisible(Vector3 position, Quaternion rotation)
 		{
-			return viewport.IsVisible(position);
+			return bounds.IsVisible(viewport, position, rotation);
 		}
 
 		public bool IsVisible(GhostRegion ghostRegion)
@@ -24,6 +25,18 @@ namespace Experilous.WrapAround
 			var rotation = transform.rotation;
 			ghostRegion.Transform(ref position, ref rotation);
 			return IsVisible(position, rotation);
+		}
+
+		protected void Awake()
+		{
+			if (bounds == null)
+			{
+				bounds = GetComponent<AbstractBounds>();
+				if (bounds == null)
+				{
+					bounds = gameObject.AddComponent<PointBounds>();
+				}
+			}
 		}
 
 		protected void LateUpdate()

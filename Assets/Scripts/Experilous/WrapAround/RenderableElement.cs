@@ -5,24 +5,35 @@ namespace Experilous.WrapAround
 	public class RenderableElement : MonoBehaviour
 	{
 		public Viewport viewport;
+		public AbstractBounds bounds;
 
 		protected MeshFilter[] _meshFilters;
 
 		protected void Awake()
 		{
 			_meshFilters = GetComponentsInChildren<MeshFilter>();
+
+			if (bounds == null)
+			{
+				bounds = GetComponent<AbstractBounds>();
+				if (bounds == null)
+				{
+					bounds = gameObject.AddComponent<PointBounds>();
+				}
+			}
 		}
 
 		protected void LateUpdate()
 		{
-			var position = transform.position;
 			foreach (var ghostRegion in viewport.visibleGhostRegions)
 			{
-				var regionTransformation = ghostRegion.transformation;
-				var ghostPosition = regionTransformation.MultiplyPoint3x4(position);
-				if (viewport.IsVisible(ghostPosition))
+				var position = transform.position;
+				var rotation = transform.rotation;
+				ghostRegion.Transform(ref position, ref rotation);
+
+				if (bounds.IsVisible(viewport, position, rotation))
 				{
-					RenderGhosts(regionTransformation);
+					RenderGhosts(ghostRegion.transformation);
 				}
 			}
 		}

@@ -11,6 +11,7 @@ namespace Experilous.WrapAround
 			var element = (LightElement)target;
 
 			element.viewport = (Viewport)EditorGUILayout.ObjectField("Viewport", element.viewport, typeof(Viewport), true);
+			element.bounds = (AbstractBounds)EditorGUILayout.ObjectField("Bounds", element.bounds, typeof(AbstractBounds), true);
 			element.ghostPrefab = (LightElementGhost)EditorGUILayout.ObjectField("Ghost Prefab", element.ghostPrefab, typeof(LightElementGhost), false);
 
 			if (GUILayout.Button("Create Ghost Prefab"))

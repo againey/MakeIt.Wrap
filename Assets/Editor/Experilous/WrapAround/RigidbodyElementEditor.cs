@@ -11,6 +11,7 @@ namespace Experilous.WrapAround
 			var element = (RigidbodyElement)target;
 
 			element.world = (World)EditorGUILayout.ObjectField("World", element.world, typeof(World), true);
+			element.bounds = (AbstractBounds)EditorGUILayout.ObjectField("Bounds", element.bounds, typeof(AbstractBounds), true);
 			element.ghostPrefab = (RigidbodyElementGhost)EditorGUILayout.ObjectField("Ghost Prefab", element.ghostPrefab, typeof(RigidbodyElementGhost), false);
 
 			if (GUILayout.Button("Create Ghost Prefab"))
