@@ -11,6 +11,8 @@ namespace Experilous.WrapAround
 
 		public abstract bool IsCollidable(Vector3 position);
 		public abstract bool IsCollidable(Vector3 position, float radius);
+		public abstract bool IsCollidable(Bounds box);
+		public abstract bool IsCollidable(Vector3 position, Bounds box);
 
 		public abstract void Confine(Transform transform);
 		public abstract void Confine(Rigidbody rigidbody);

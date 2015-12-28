@@ -17,6 +17,7 @@ namespace Experilous.WrapAround
 
 		public float width { get { return maxX - minX; } }
 		public float height { get { return maxY - minY; } }
+		public Bounds bounds { get { return new Bounds(new Vector3((minX + maxX) * 0.5f, (minY + maxY) * 0.5f, 0f), new Vector3(width, height, 0f)); } }
 
 		private AxisAlignedWrapXY2DGhostRegionContainer _physicsGhostRegions;
 		private IEnumerable<GhostRegion> _enumerablePhysicsGhostRegions;
@@ -76,6 +77,16 @@ namespace Experilous.WrapAround
 				position.y + radius >= minY - maxPhysicsObjectRadius &&
 				position.x - radius < maxX + maxPhysicsObjectRadius &&
 				position.y - radius < maxY + maxPhysicsObjectRadius;
+		}
+
+		public override bool IsCollidable(Bounds box)
+		{
+			return bounds.Intersects(box);
+		}
+
+		public override bool IsCollidable(Vector3 position, Bounds box)
+		{
+			return bounds.Intersects(new Bounds(box.center + position, box.size));
 		}
 
 		public override void Confine(Transform transform)

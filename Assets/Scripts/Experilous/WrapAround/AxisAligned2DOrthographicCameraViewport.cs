@@ -34,15 +34,15 @@ namespace Experilous.WrapAround
 			var farTopLeft = _camera.ViewportToWorldPoint(new Vector3(0f, 1f, _camera.farClipPlane));
 			var farTopRight = _camera.ViewportToWorldPoint(new Vector3(1f, 1f, _camera.farClipPlane));
 
-			_min = new Vector3(
-				Mathf.Min(nearBottomLeft.x, nearBottomRight.x, nearTopLeft.x, nearTopRight.x, farBottomLeft.x, farBottomRight.x, farTopLeft.x, farTopRight.x),
-				Mathf.Min(nearBottomLeft.y, nearBottomRight.y, nearTopLeft.y, nearTopRight.y, farBottomLeft.y, farBottomRight.y, farTopLeft.y, farTopRight.y),
-				Mathf.Min(nearBottomLeft.z, nearBottomRight.z, nearTopLeft.z, nearTopRight.z, farBottomLeft.z, farBottomRight.z, farTopLeft.z, farTopRight.z));
-
-			_max = new Vector3(
-				Mathf.Max(nearBottomLeft.x, nearBottomRight.x, nearTopLeft.x, nearTopRight.x, farBottomLeft.x, farBottomRight.x, farTopLeft.x, farTopRight.x),
-				Mathf.Max(nearBottomLeft.y, nearBottomRight.y, nearTopLeft.y, nearTopRight.y, farBottomLeft.y, farBottomRight.y, farTopLeft.y, farTopRight.y),
-				Mathf.Max(nearBottomLeft.z, nearBottomRight.z, nearTopLeft.z, nearTopRight.z, farBottomLeft.z, farBottomRight.z, farTopLeft.z, farTopRight.z));
+			_box.SetMinMax(
+				new Vector3(
+					Mathf.Min(nearBottomLeft.x, nearBottomRight.x, nearTopLeft.x, nearTopRight.x, farBottomLeft.x, farBottomRight.x, farTopLeft.x, farTopRight.x),
+					Mathf.Min(nearBottomLeft.y, nearBottomRight.y, nearTopLeft.y, nearTopRight.y, farBottomLeft.y, farBottomRight.y, farTopLeft.y, farTopRight.y),
+					Mathf.Min(nearBottomLeft.z, nearBottomRight.z, nearTopLeft.z, nearTopRight.z, farBottomLeft.z, farBottomRight.z, farTopLeft.z, farTopRight.z)),
+				new Vector3(
+					Mathf.Max(nearBottomLeft.x, nearBottomRight.x, nearTopLeft.x, nearTopRight.x, farBottomLeft.x, farBottomRight.x, farTopLeft.x, farTopRight.x),
+					Mathf.Max(nearBottomLeft.y, nearBottomRight.y, nearTopLeft.y, nearTopRight.y, farBottomLeft.y, farBottomRight.y, farTopLeft.y, farTopRight.y),
+					Mathf.Max(nearBottomLeft.z, nearBottomRight.z, nearTopLeft.z, nearTopRight.z, farBottomLeft.z, farBottomRight.z, farTopLeft.z, farTopRight.z)));
 		}
 	}
 }
