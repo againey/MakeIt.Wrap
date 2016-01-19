@@ -55,5 +55,12 @@ namespace Experilous.WrapAround
 		{
 			return world.IsCollidable(rigidbody.position, box);
 		}
+
+#if UNITY_EDITOR
+		protected void OnDrawGizmosSelected()
+		{
+			Gizmos.DrawWireCube(transform.position + box.center, box.size);
+		}
+#endif
 	}
 }
