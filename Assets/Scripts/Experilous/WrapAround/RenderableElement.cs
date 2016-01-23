@@ -23,6 +23,18 @@ namespace Experilous.WrapAround
 			}
 		}
 
+		protected void Start()
+		{
+			if (viewport == null)
+			{
+				var provider = GetComponentInParent<ViewportProvider>();
+				if (provider != null)
+				{
+					viewport = provider.viewport;
+				}
+			}
+		}
+
 		protected void LateUpdate()
 		{
 			foreach (var ghostRegion in viewport.visibleGhostRegions)

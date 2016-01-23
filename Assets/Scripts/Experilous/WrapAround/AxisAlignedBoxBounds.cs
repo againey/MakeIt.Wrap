@@ -6,6 +6,18 @@ namespace Experilous.WrapAround
 	{
 		public Bounds box;
 
+		protected void Start()
+		{
+			if (box.extents == Vector3.zero)
+			{
+				var meshFilter = GetComponent<MeshFilter>();
+				if (meshFilter != null && meshFilter.mesh != null)
+				{
+					box = meshFilter.mesh.bounds;
+				}
+			}
+		}
+
 		public override bool IsVisible(Viewport viewport)
 		{
 			return viewport.IsVisible(transform.position, box);
