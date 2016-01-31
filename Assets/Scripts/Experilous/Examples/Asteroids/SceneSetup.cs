@@ -48,7 +48,7 @@ namespace Experilous.Examples.Asteroids
 			Physics.gravity = new Vector3(0f, 0f, 0f);
 			Time.timeScale = 0f;
 
-			var randomEngine = new NativeRandomEngine(randomSeed);
+			var randomEngine = NativeRandomEngine.Create(randomSeed);
 			List<AsteroidDefinition> asteroids = new List<AsteroidDefinition>();
 
 			if (physicalAsteroidPrefab != null)
