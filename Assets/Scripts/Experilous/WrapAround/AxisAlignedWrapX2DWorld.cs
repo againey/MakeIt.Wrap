@@ -10,212 +10,97 @@ namespace Experilous.WrapAround
 		public float minX;
 		public float maxX;
 
-		public float cameraBufferThickness = 0f;
-		public float physicsBufferThickness = 0f;
+		public float maxVisibleObjectRadius;
+		public float maxPhysicsObjectRadius;
 
-#pragma warning disable 0649
-		[SerializeField]
-		private Viewport _cameraViewport;
-#pragma warning restore 0649
+		public float width { get { return maxX - minX; } }
+		public Bounds bounds { get { return new Bounds(new Vector3((minX + maxX) * 0.5f, 0f, 0f), new Vector3(width, 0f, 0f)); } }
 
-		private GhostRegionRange _cameraGhostRegionRange;
-		private int _cameraGhostRegionRangeFrame = -1;
-
-		private AxisAligned2DViewport _physicsViewport;
-		private GhostRegionRange _physicsGhostRegionRange;
-		private int _physicsGhostRegionRangeFrame = -1;
-
-		private AxisAlignedWrapX2DGhostRegion[] _ghostRegions = null;
-		private int _ghostRegionsXIndexOffset = 0;
+		private AxisAlignedWrapX2DGhostRegionContainer _physicsGhostRegions;
+		private IEnumerable<GhostRegion> _enumerablePhysicsGhostRegions;
 
 		protected void Start()
 		{
-			_physicsViewport = gameObject.AddComponent<AxisAligned2DViewport>();
-			_physicsViewport.world = this;
-			_physicsViewport.min = new Vector3(minX - physicsBufferThickness, float.NegativeInfinity, float.NegativeInfinity);
-			_physicsViewport.max = new Vector3(maxX + physicsBufferThickness, float.PositiveInfinity, float.PositiveInfinity);
+			_physicsGhostRegions = new AxisAlignedWrapX2DGhostRegionContainer(width);
 
-			_ghostRegions = new AxisAlignedWrapX2DGhostRegion[3];
-
-			var worldWidth = width;
-			_ghostRegions[0] = new AxisAlignedWrapX2DGhostRegion(-worldWidth);
-			_ghostRegions[1] = null;
-			_ghostRegions[2] = new AxisAlignedWrapX2DGhostRegion(+worldWidth);
-
-			_ghostRegionsXIndexOffset = -1;
+			var physicsBuffer = maxPhysicsObjectRadius * 2f;
+			_enumerablePhysicsGhostRegions = GetGhostRegions(minX - physicsBuffer, maxX + physicsBuffer, _physicsGhostRegions);
 		}
 
-		public float width { get { return maxX - minX; } }
-
-		public override Viewport cameraViewport { get { return _cameraViewport; } }
-		public override Viewport physicsViewport { get { return _physicsViewport; } }
-
-		public override IEnumerable<GhostRegion> GetGhostRegions(AxisAligned2DViewport viewport)
+		public override IEnumerable<GhostRegion> GetGhostRegions(AxisAlignedViewport viewport, object ghostRegions)
 		{
-			if (viewport == _cameraViewport) return GetCameraGhostRegions(viewport);
-			else if (viewport == _physicsViewport) return GetPhysicsGhostRegions(viewport);
-			else return GetGhostRegions(viewport, cameraBufferThickness);
+			return GetGhostRegions(viewport, ghostRegions as AxisAlignedWrapX2DGhostRegionContainer);
 		}
 
-		private GhostRegionRange GetCameraGhostRegions(AxisAligned2DViewport viewport)
+		private IEnumerable<GhostRegion> GetGhostRegions(AxisAlignedViewport viewport, AxisAlignedWrapX2DGhostRegionContainer ghostRegions)
 		{
-			if (Time.frameCount == _cameraGhostRegionRangeFrame) return _cameraGhostRegionRange;
-			_cameraGhostRegionRange = GetGhostRegions(viewport, cameraBufferThickness);
-			_cameraGhostRegionRangeFrame = Time.frameCount;
-			return _cameraGhostRegionRange;
+			return GetGhostRegions(
+				viewport.min.x - maxVisibleObjectRadius,
+				viewport.max.x + maxVisibleObjectRadius,
+				ghostRegions);
 		}
 
-		private GhostRegionRange GetPhysicsGhostRegions(AxisAligned2DViewport viewport)
-		{
-			if (Time.frameCount == _physicsGhostRegionRangeFrame) return _physicsGhostRegionRange;
-			_physicsGhostRegionRange = GetGhostRegions(viewport, physicsBufferThickness);
-			_physicsGhostRegionRangeFrame = Time.frameCount;
-			return _physicsGhostRegionRange;
-		}
-
-		private GhostRegionRange GetGhostRegions(AxisAligned2DViewport viewport, float bufferThickness)
+		private IEnumerable<GhostRegion> GetGhostRegions(float rangeMinX, float rangeMaxX, AxisAlignedWrapX2DGhostRegionContainer ghostRegions)
 		{
 			var worldWidth = width;
 
-			var viewportMinX = viewport.min.x - bufferThickness;
-			var viewportMaxX = viewport.max.x + bufferThickness;
+			int xIndexMin = Mathf.FloorToInt((rangeMinX - minX) / worldWidth);
+			int xIndexMax = Mathf.CeilToInt((rangeMaxX - maxX) / worldWidth);
 
-			int xIndexMin = Mathf.FloorToInt((viewportMinX - minX) / worldWidth);
-			int xIndexMax = Mathf.CeilToInt((viewportMaxX - maxX) / worldWidth);
-
-			ExpandGhostRegions(xIndexMin);
-			ExpandGhostRegions(xIndexMax);
-
-			return new GhostRegionRange(this, xIndexMin - _ghostRegionsXIndexOffset, xIndexMax - _ghostRegionsXIndexOffset + 1);
+			ghostRegions.Expand(xIndexMin, xIndexMax, worldWidth);
+			return ghostRegions.Range(xIndexMin, xIndexMax);
 		}
 
-		private void ExpandGhostRegions(int xIndex)
+		public override IEnumerable<GhostRegion> physicsGhostRegions { get { return _enumerablePhysicsGhostRegions; } }
+
+		public override bool IsCollidable(Vector3 position)
 		{
-			if (xIndex < _ghostRegionsXIndexOffset)
-			{
-				var oldLength = _ghostRegions.Length;
-				var newLength = oldLength * 3 / 2;
-				var delta = newLength - oldLength;
-				var newGhostRegions = new AxisAlignedWrapX2DGhostRegion[newLength];
-				Array.Copy(_ghostRegions, 0, newGhostRegions, delta, oldLength);
-				_ghostRegions = newGhostRegions;
-				_ghostRegionsXIndexOffset -= delta;
-
-				var worldWidth = width;
-				for (int i = 0; i < delta; ++i)
-				{
-					_ghostRegions[i] = new AxisAlignedWrapX2DGhostRegion((_ghostRegionsXIndexOffset + i) * worldWidth);
-				}
-			}
-			else if (xIndex >= _ghostRegions.Length + _ghostRegionsXIndexOffset)
-			{
-				var oldLength = _ghostRegions.Length;
-				var newLength = oldLength * 3 / 2;
-				var newGhostRegions = new AxisAlignedWrapX2DGhostRegion[newLength];
-				Array.Copy(_ghostRegions, 0, newGhostRegions, 0, oldLength);
-				_ghostRegions = newGhostRegions;
-
-				var worldWidth = width;
-				for (int i = oldLength; i < newLength; ++i)
-				{
-					_ghostRegions[i] = new AxisAlignedWrapX2DGhostRegion((_ghostRegionsXIndexOffset + i) * worldWidth);
-				}
-			}
+			return
+				position.x >= minX - maxPhysicsObjectRadius &&
+				position.x < maxX + maxPhysicsObjectRadius;
 		}
 
-		public override void Confine(Element element)
+		public override bool IsCollidable(Vector3 position, float radius)
 		{
-			var position = element.transform.position;
+			return
+				position.x + radius >= minX - maxPhysicsObjectRadius &&
+				position.x - radius < maxX + maxPhysicsObjectRadius;
+		}
+
+		public override bool IsCollidable(Bounds box)
+		{
+			return bounds.Intersects(box);
+		}
+
+		public override bool IsCollidable(Vector3 position, Bounds box)
+		{
+			return bounds.Intersects(new Bounds(box.center + position, box.size));
+		}
+
+		public override void Confine(Transform transform)
+		{
+			var position = transform.position;
+			Confine(ref position);
+			transform.position = position;
+		}
+
+		public override void Confine(Rigidbody rigidbody)
+		{
+			var position = rigidbody.position;
+			Confine(ref position);
+			rigidbody.position = position;
+		}
+
+		public void Confine(ref Vector3 position)
+		{
 			var xOffset = position.x - minX;
 			var worldWidth = width;
 			position.x = xOffset - Mathf.Floor(xOffset / worldWidth) * worldWidth + minX;
-			element.transform.position = position;
 		}
 
-		public struct GhostRegionRange : IEnumerable<AxisAlignedWrapX2DGhostRegion>, IEnumerable<GhostRegion>
+		public override object InstantiateGhostRegions()
 		{
-			private AxisAlignedWrapX2DWorld _world;
-			private int _first;
-			private int _last;
-
-			public GhostRegionRange(AxisAlignedWrapX2DWorld world, int first, int last)
-			{
-				_world = world;
-				_first = first;
-				_last = last;
-			}
-
-			public IEnumerator<AxisAlignedWrapX2DGhostRegion> GetEnumerator()
-			{
-				return new GhostRegionEnumerator(_world, _first, _last);
-			}
-
-			IEnumerator IEnumerable.GetEnumerator()
-			{
-				return new GhostRegionEnumerator(_world, _first, _last);
-			}
-
-			IEnumerator<GhostRegion> IEnumerable<GhostRegion>.GetEnumerator()
-			{
-				return new GhostRegionEnumerator(_world, _first, _last);
-			}
-		}
-
-		public struct GhostRegionEnumerator : IEnumerator<AxisAlignedWrapX2DGhostRegion>, IEnumerator<GhostRegion>
-		{
-			private AxisAlignedWrapX2DWorld _world;
-			private int _first;
-			private int _last;
-			private int _current;
-
-			public GhostRegionEnumerator(AxisAlignedWrapX2DWorld world, int first, int last)
-			{
-				_world = world;
-				_first = first;
-				_last = last;
-				_current = _first - 1;
-			}
-
-			public AxisAlignedWrapX2DGhostRegion Current
-			{
-				get
-				{
-					return _world._ghostRegions[_current];
-				}
-			}
-
-			object IEnumerator.Current
-			{
-				get
-				{
-					return _world._ghostRegions[_current];
-				}
-			}
-
-			GhostRegion IEnumerator<GhostRegion>.Current
-			{
-				get
-				{
-					return _world._ghostRegions[_current];
-				}
-			}
-
-			public void Dispose()
-			{
-			}
-
-			public bool MoveNext()
-			{
-				if (_current < _last) ++_current;
-				if (_current == _last) return false;
-				if (_current == -_world._ghostRegionsXIndexOffset) ++_current;
-				return _current < _last;
-			}
-
-			public void Reset()
-			{
-				_current = _first - 1;
-			}
+			return new AxisAlignedWrapX2DGhostRegionContainer(width);
 		}
 	}
 }

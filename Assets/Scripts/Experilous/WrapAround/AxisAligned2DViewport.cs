@@ -4,49 +4,60 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
-	public class AxisAligned2DViewport : Viewport
+	public abstract class AxisAligned2DViewport : AxisAlignedViewport
 	{
-		public Vector3 min;
-		public Vector3 max;
+		private object _ghostRegions;
+		private IEnumerable<GhostRegion> _enumerableGhostRegions;
 
-		public override IEnumerable<GhostRegion> visibleGhostRegions
+		protected Bounds _box;
+
+		public override Vector3 min { get { return _box.min; } }
+		public override Vector3 max { get { return _box.max; } }
+
+		protected void Start()
 		{
-			get
-			{
-				return world.GetGhostRegions(this);
-			}
+			_ghostRegions = world.InstantiateGhostRegions();
+			RecalculateVisibleGhostRegions();
 		}
+
+		public override IEnumerable<GhostRegion> visibleGhostRegions { get { return _enumerableGhostRegions; } }
 
 		public override bool IsVisible(Vector3 position)
 		{
-			return
-				position.x >= min.x &&
-				position.y >= min.y &&
-				position.z >= min.z &&
-				position.x < max.x &&
-				position.y < max.y &&
-				position.z < max.z;
+			return _box.Contains(position);
 		}
 
 		public override bool IsVisible(Vector3 position, float radius)
 		{
-			return
-				position.x + radius >= min.x &&
-				position.y + radius >= min.y &&
-				position.z + radius >= min.z &&
-				position.x - radius < max.x &&
-				position.y - radius < max.y &&
-				position.z - radius < max.z;
+			return _box.SqrDistance(position) <= radius * radius;
 		}
 
-		public override bool IsVisible(PointElement element)
+		public override bool IsVisible(Bounds box)
 		{
-			return IsVisible(element.transform.position);
+			return _box.Intersects(box);
 		}
 
-		public override bool IsVisible(SphereElement element)
+		public override bool IsVisible(Vector3 position, Bounds box)
 		{
-			return IsVisible(element.transform.position, element.radius);
+			return _box.Intersects(new Bounds(box.center + position, box.size));
+		}
+
+		public override void RecalculateVisibleGhostRegions()
+		{
+			if (_enumerableGhostRegions != null)
+			{
+				foreach (var ghostRegion in _enumerableGhostRegions)
+				{
+					ghostRegion.isActive = false;
+				}
+			}
+
+			_enumerableGhostRegions = world.GetGhostRegions(this, _ghostRegions);
+
+			foreach (var ghostRegion in _enumerableGhostRegions)
+			{
+				ghostRegion.isActive = true;
+			}
 		}
 	}
 }

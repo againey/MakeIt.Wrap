@@ -6,22 +6,30 @@ namespace Experilous.WrapAround
 {
 	public class AxisAlignedWrapX2DGhostRegion : GhostRegion
 	{
-		private readonly HashSet<Element> _ghostedElements = new HashSet<Element>();
+		private readonly HashSet<int> _ghostedElements = new HashSet<int>();
 		private float _xOffset;
+		private bool _isActive = true;
 
 		public AxisAlignedWrapX2DGhostRegion(float xOffset)
 		{
 			_xOffset = xOffset;
 		}
 
-		public override bool HasGhost(Element element)
+		public override bool isActive { get { return _isActive; } set { _isActive = value; } }
+
+		public override bool HasGhost(int instanceId)
 		{
-			return _ghostedElements.Contains(element);
+			return _ghostedElements.Contains(instanceId);
 		}
 
-		public override void AddElement(Element element)
+		public override void AddElement(int instanceId)
 		{
-			_ghostedElements.Add(element);
+			_ghostedElements.Add(instanceId);
+		}
+
+		public override void RemoveElement(int instanceId)
+		{
+			_ghostedElements.Remove(instanceId);
 		}
 
 		public override void Transform(ref Vector3 position, ref Quaternion rotation)
@@ -29,10 +37,18 @@ namespace Experilous.WrapAround
 			position.x += _xOffset;
 		}
 
-		public override void DestroyGhost(ElementGhost ghost)
+		public override void Transform(Transform sourceTransform, Transform targetTransform)
 		{
-			_ghostedElements.Remove(ghost.original);
-			UnityEngine.Object.Destroy(ghost.gameObject);
+			targetTransform.position = sourceTransform.position + new Vector3(_xOffset, 0f, 0f);
+			targetTransform.rotation = sourceTransform.rotation;
 		}
+
+		public override void Transform(Rigidbody sourceRigidbody, Rigidbody targetRigidbody)
+		{
+			targetRigidbody.position = sourceRigidbody.position + new Vector3(_xOffset, 0f, 0f);
+			targetRigidbody.rotation = sourceRigidbody.rotation;
+		}
+
+		public override Matrix4x4 transformation { get { return Matrix4x4.TRS(new Vector3(_xOffset, 0f, 0f), Quaternion.identity, new Vector3(1f, 1f, 1f)); } }
 	}
 }
