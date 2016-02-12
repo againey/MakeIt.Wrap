@@ -3,11 +3,10 @@
 namespace Experilous.WrapAround
 {
 	[RequireComponent(typeof(Light))]
-	public class LightElement : MonoBehaviour
+	public class LightElement : GhostableElement<LightElement, LightElementGhost>
 	{
 		public Viewport viewport;
 		public AbstractBounds bounds;
-		public LightElementGhost ghostPrefab;
 
 		public virtual bool IsVisible(LightElementGhost ghost)
 		{
@@ -39,11 +38,23 @@ namespace Experilous.WrapAround
 			}
 		}
 
+		protected void Start()
+		{
+			if (viewport == null)
+			{
+				var provider = GetComponentInParent<ViewportProvider>();
+				if (provider != null)
+				{
+					viewport = provider.viewport;
+				}
+			}
+		}
+
 		protected void LateUpdate()
 		{
 			foreach (var ghostRegion in viewport.visibleGhostRegions)
 			{
-				if (!ghostRegion.HasGhost(GetInstanceID()) && IsVisible(ghostRegion))
+				if (FindGhost(ghostRegion) == null && IsVisible(ghostRegion))
 				{
 					InstantiateGhost(ghostRegion);
 				}
@@ -60,7 +71,7 @@ namespace Experilous.WrapAround
 
 			ghostRegion.Transform(transform, ghost.transform);
 
-			ghostRegion.AddElement(GetInstanceID());
+			Add(ghost);
 		}
 	}
 }

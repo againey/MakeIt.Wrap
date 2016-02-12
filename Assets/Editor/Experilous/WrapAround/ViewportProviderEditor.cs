@@ -23,6 +23,15 @@ namespace Experilous.WrapAround
 						EditorUtility.SetDirty(element);
 					}
 				}
+
+				foreach (var element in provider.GetComponentsInChildren<LightElement>())
+				{
+					if (element.viewport == null)
+					{
+						element.viewport = provider.viewport;
+						EditorUtility.SetDirty(element);
+					}
+				}
 			}
 			GUI.enabled = true;
 
@@ -30,6 +39,12 @@ namespace Experilous.WrapAround
 			if (GUILayout.Button("Push to All Children"))
 			{
 				foreach (var element in provider.GetComponentsInChildren<RenderableElement>())
+				{
+					element.viewport = provider.viewport;
+					EditorUtility.SetDirty(element);
+				}
+
+				foreach (var element in provider.GetComponentsInChildren<LightElement>())
 				{
 					element.viewport = provider.viewport;
 					EditorUtility.SetDirty(element);

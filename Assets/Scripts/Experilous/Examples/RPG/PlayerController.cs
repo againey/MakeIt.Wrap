@@ -7,7 +7,7 @@ namespace Experilous.Examples.RPG
 	[RequireComponent(typeof(Rigidbody))]
 	public class PlayerController : MonoBehaviour
 	{
-		public AxisAligned2DViewport viewport;
+		public Viewport viewport;
 
 		public float walkSpeed = 1f;
 

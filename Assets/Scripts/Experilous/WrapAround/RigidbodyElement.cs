@@ -3,11 +3,10 @@
 namespace Experilous.WrapAround
 {
 	[RequireComponent(typeof(Rigidbody))]
-	public class RigidbodyElement : MonoBehaviour
+	public class RigidbodyElement : GhostableElement<RigidbodyElement, RigidbodyElementGhost>
 	{
 		public World world;
 		public AbstractBounds bounds;
-		public RigidbodyElementGhost ghostPrefab;
 
 		public virtual bool IsCollidable(RigidbodyElementGhost ghost)
 		{
@@ -39,11 +38,23 @@ namespace Experilous.WrapAround
 			}
 		}
 
+		protected void Start()
+		{
+			if (world == null)
+			{
+				var provider = GetComponentInParent<WorldProvider>();
+				if (provider != null)
+				{
+					world = provider.world;
+				}
+			}
+		}
+
 		protected void FixedUpdate()
 		{
 			foreach (var ghostRegion in world.physicsGhostRegions)
 			{
-				if (!ghostRegion.HasGhost(GetInstanceID()) && IsCollidable(ghostRegion))
+				if (FindGhost(ghostRegion) == null && IsCollidable(ghostRegion))
 				{
 					InstantiateGhost(ghostRegion);
 				}
@@ -63,7 +74,7 @@ namespace Experilous.WrapAround
 			ghost.transform.localScale = rigidbody.transform.localScale;
 			ghostRegion.Transform(rigidbody, ghost.GetComponent<Rigidbody>());
 
-			ghostRegion.AddElement(GetInstanceID());
+			Add(ghost);
 		}
 	}
 }

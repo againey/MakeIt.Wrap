@@ -3,11 +3,10 @@
 namespace Experilous.WrapAround
 {
 	[RequireComponent(typeof(Collider))]
-	public class ColliderElement : MonoBehaviour
+	public class ColliderElement : GhostableElement<ColliderElement, ColliderElementGhost>
 	{
 		public World world;
 		public AbstractBounds bounds;
-		public ColliderElementGhost ghostPrefab;
 
 		public virtual bool IsCollidable(ColliderElementGhost ghost)
 		{
@@ -39,11 +38,23 @@ namespace Experilous.WrapAround
 			}
 		}
 
+		protected void Start()
+		{
+			if (world == null)
+			{
+				var provider = GetComponentInParent<WorldProvider>();
+				if (provider != null)
+				{
+					world = provider.world;
+				}
+			}
+		}
+
 		protected void FixedUpdate()
 		{
 			foreach (var ghostRegion in world.physicsGhostRegions)
 			{
-				if (!ghostRegion.HasGhost(GetInstanceID()) && IsCollidable(ghostRegion))
+				if (FindGhost(ghostRegion) == null && IsCollidable(ghostRegion))
 				{
 					InstantiateGhost(ghostRegion);
 				}
@@ -61,7 +72,7 @@ namespace Experilous.WrapAround
 			ghost.transform.localScale = transform.localScale;
 			ghostRegion.Transform(transform, ghost.transform);
 
-			ghostRegion.AddElement(GetInstanceID());
+			Add(ghost);
 		}
 	}
 }

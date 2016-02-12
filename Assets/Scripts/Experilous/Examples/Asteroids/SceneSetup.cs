@@ -6,7 +6,8 @@ namespace Experilous.Examples.Asteroids
 {
 	public class SceneSetup : MonoBehaviour
 	{
-		public WrapAround.AxisAlignedWrapXY2DWorld world;
+		public WrapAround.RhomboidWorld world;
+		public WrapAround.Viewport viewport;
 		public int randomSeed = 0;
 
 		[Header("Physical Asteroids")]
@@ -30,14 +31,13 @@ namespace Experilous.Examples.Asteroids
 		public float minVirtualAsteroidRotation = -90.0f;
 		public float maxVirtualAsteroidRotation = +90.0f;
 		public Transform virtualAsteroidContainer;
-		public WrapAround.Viewport viewport;
 
 		private struct AsteroidDefinition
 		{
-			public Vector2 position;
+			public Vector3 position;
 			public float scale;
 
-			public AsteroidDefinition(Vector2 p, float s)
+			public AsteroidDefinition(Vector3 p, float s)
 			{
 				position = p;
 				scale = s;
@@ -54,38 +54,56 @@ namespace Experilous.Examples.Asteroids
 
 			if (physicalAsteroidPrefab != null)
 			{
-				float prefabRadius = 0;
+				float physicalPrefabRadius = 0;
 				var sphereCollider = physicalAsteroidPrefab.GetComponent<SphereCollider>();
 				if (sphereCollider != null)
 				{
-					prefabRadius = sphereCollider.radius;
+					physicalPrefabRadius = sphereCollider.radius;
 				}
 				else
 				{
 					var boxCollider = physicalAsteroidPrefab.GetComponent<BoxCollider>();
 					if (boxCollider != null)
 					{
-						prefabRadius = boxCollider.size.magnitude * 0.5f;
+						physicalPrefabRadius = boxCollider.size.magnitude * 0.5f;
 					}
 				}
 
-				world.maxPhysicsObjectRadius = prefabRadius * maxPhysicalAsteroidScale;
+				world.maxPhysicsObjectRadius = physicalPrefabRadius * maxPhysicalAsteroidScale;
+
+				float virtualPrefabRadius = 0;
+				sphereCollider = virtualAsteroidPrefab.GetComponent<SphereCollider>();
+				if (sphereCollider != null)
+				{
+					virtualPrefabRadius = sphereCollider.radius;
+				}
+				else
+				{
+					var boxCollider = virtualAsteroidPrefab.GetComponent<BoxCollider>();
+					if (boxCollider != null)
+					{
+						virtualPrefabRadius = boxCollider.size.magnitude * 0.5f;
+					}
+				}
+
+				world.maxVisibleObjectRadius = Mathf.Max(world.maxPhysicsObjectRadius, virtualPrefabRadius * maxVirtualAsteroidScale);
 
 				int tries = 0;
 				while (asteroids.Count < physicalAsteroidCount && tries < physicalAsteroidCount * 10)
 				{
 					++tries;
 
-					var x = RandomUtility.HalfOpenRange(world.minX, world.maxX, randomEngine);
-					var y = RandomUtility.HalfOpenRange(world.minY, world.maxY, randomEngine);
+					var x = RandomUtility.HalfOpenRange(0f, 1f, randomEngine);
+					var y = RandomUtility.HalfOpenRange(0f, 1f, randomEngine);
+					var p = world.transform.TransformPoint(world.axis0 * x + world.axis1 * y + world.origin);
 					var s = RandomUtility.ClosedRange(minPhysicalAsteroidScale, maxPhysicalAsteroidScale, randomEngine);
-					var asteroid = new AsteroidDefinition(new Vector2(x, y), s);
+					var asteroid = new AsteroidDefinition(p, s);
 
 					bool collisionFound = false;
 					foreach (var existingAsteroid in asteroids)
 					{
 						var distance = (asteroid.position - existingAsteroid.position).magnitude;
-						var combinedRadius = prefabRadius * (asteroid.scale + existingAsteroid.scale) + 0.01f;
+						var combinedRadius = physicalPrefabRadius * (asteroid.scale + existingAsteroid.scale) + 0.01f;
 						if (distance < combinedRadius)
 						{
 							collisionFound = true;
@@ -103,7 +121,7 @@ namespace Experilous.Examples.Asteroids
 					var definition = asteroids[i];
 					var asteroid = Instantiate(physicalAsteroidPrefab);
 					asteroid.name = string.Format("Physical Asteroid ({0})", i);
-					asteroid.transform.position = new Vector3(definition.position.x, definition.position.y, 0f);
+					asteroid.transform.position = definition.position;
 					asteroid.transform.localScale = new Vector3(definition.scale, definition.scale, definition.scale);
 					asteroid.transform.SetParent(physicalAsteroidContainer, false);
 
@@ -135,14 +153,15 @@ namespace Experilous.Examples.Asteroids
 			{
 				for (int i = 0; i < virtualAsteroidCount; ++i)
 				{
-					var x = RandomUtility.HalfOpenRange(world.minX, world.maxX, randomEngine);
-					var y = RandomUtility.HalfOpenRange(world.minY, world.maxY, randomEngine);
+					var x = RandomUtility.HalfOpenRange(0f, 1f, randomEngine);
+					var y = RandomUtility.HalfOpenRange(0f, 1f, randomEngine);
+					var p = world.transform.TransformPoint(world.axis0 * x + world.axis1 * y + world.origin);
 					var s = RandomUtility.ClosedRange(minVirtualAsteroidScale, maxVirtualAsteroidScale, randomEngine);
-					var definition = new AsteroidDefinition(new Vector2(x, y), s);
+					var definition = new AsteroidDefinition(p, s);
 
 					var asteroid = Instantiate(virtualAsteroidPrefab);
 					asteroid.name = string.Format("Virtual Asteroid ({0})", i);
-					asteroid.transform.position = new Vector3(definition.position.x, definition.position.y, 0f);
+					asteroid.transform.position = definition.position;
 					asteroid.transform.localScale = new Vector3(definition.scale, definition.scale, definition.scale);
 					asteroid.transform.SetParent(virtualAsteroidContainer, false);
 

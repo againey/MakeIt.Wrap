@@ -3,11 +3,8 @@
 namespace Experilous.WrapAround
 {
 	[RequireComponent(typeof(Rigidbody))]
-	public class RigidbodyElementGhost : MonoBehaviour
+	public class RigidbodyElementGhost : Ghost<RigidbodyElement, RigidbodyElementGhost>
 	{
-		public RigidbodyElement original;
-		public GhostRegion region;
-
 		protected Rigidbody _rigidbody;
 		protected Rigidbody _originalRigidbody;
 
@@ -25,10 +22,9 @@ namespace Experilous.WrapAround
 			_rigidbody.angularVelocity = _originalRigidbody.angularVelocity;
 			_rigidbody.velocity = _originalRigidbody.velocity;
 
-			if (!region.isActive || !original.IsCollidable(this))
+			if (region == null || !region.isActive || !original.IsCollidable(this))
 			{
-				region.RemoveElement(original.GetInstanceID());
-				Destroy(gameObject);
+				Destroy();
 			}
 		}
 	}

@@ -2,17 +2,13 @@
 
 namespace Experilous.WrapAround
 {
-	public class ColliderElementGhost : MonoBehaviour
+	public class ColliderElementGhost : Ghost<ColliderElement, ColliderElementGhost>
 	{
-		public ColliderElement original;
-		public GhostRegion region;
-
 		protected void FixedUpdate()
 		{
-			if (!region.isActive || !original.IsCollidable(this))
+			if (region == null || !region.isActive || !original.IsCollidable(this))
 			{
-				region.RemoveElement(original.GetInstanceID());
-				Destroy(gameObject);
+				Destroy();
 			}
 		}
 	}

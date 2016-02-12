@@ -2,19 +2,15 @@
 
 namespace Experilous.WrapAround
 {
-	public class LightElementGhost : MonoBehaviour
+	public class LightElementGhost : Ghost<LightElement, LightElementGhost>
 	{
-		public LightElement original;
-		public GhostRegion region;
-
 		protected void LateUpdate()
 		{
 			region.Transform(original.transform, transform);
 
-			if (!region.isActive || !original.IsVisible(this))
+			if (region == null || !region.isActive || !original.IsVisible(this))
 			{
-				region.RemoveElement(original.GetInstanceID());
-				Destroy(gameObject);
+				Destroy();
 			}
 		}
 	}
