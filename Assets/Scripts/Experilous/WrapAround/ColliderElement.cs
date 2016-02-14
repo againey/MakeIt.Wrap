@@ -3,10 +3,13 @@
 namespace Experilous.WrapAround
 {
 	[RequireComponent(typeof(Collider))]
-	public class ColliderElement : GhostableElement<ColliderElement, ColliderElementGhost>
+	public class ColliderElement : GhostableElement<ColliderElement, ColliderElementGhost>, IWorldConsumer
 	{
 		public World world;
 		public AbstractBounds bounds;
+
+		public bool hasWorld { get { return world != null ; } }
+		public void SetWorld(World world) { this.world = world; }
 
 		public virtual bool IsCollidable(ColliderElementGhost ghost)
 		{
@@ -40,14 +43,7 @@ namespace Experilous.WrapAround
 
 		protected void Start()
 		{
-			if (world == null)
-			{
-				var provider = GetComponentInParent<WorldProvider>();
-				if (provider != null)
-				{
-					world = provider.world;
-				}
-			}
+			if (world == null) world = WorldConsumerUtility.FindWorld(this);
 		}
 
 		protected void FixedUpdate()

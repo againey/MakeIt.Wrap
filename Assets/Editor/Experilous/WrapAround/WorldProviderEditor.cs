@@ -13,41 +13,26 @@ namespace Experilous.WrapAround
 			provider.world = (World)EditorGUILayout.ObjectField("World", provider.world, typeof(World), true);
 
 			GUI.enabled = (provider.world != null);
-			if (GUILayout.Button("Push to Unset Children"))
+			if (GUILayout.Button("Apply to Unset Children"))
 			{
-				foreach (var element in provider.GetComponentsInChildren<ColliderElement>())
+				foreach (var element in provider.GetComponentsInChildren<IWorldConsumer>())
 				{
-					if (element.world == null)
+					if (!element.hasWorld)
 					{
-						element.world = provider.world;
-						EditorUtility.SetDirty(element);
-					}
-				}
-
-				foreach (var element in provider.GetComponentsInChildren<RigidbodyElement>())
-				{
-					if (element.world == null)
-					{
-						element.world = provider.world;
-						EditorUtility.SetDirty(element);
+						element.SetWorld(provider.world);
+						EditorUtility.SetDirty((Component)element);
 					}
 				}
 			}
 			GUI.enabled = true;
 
 			GUI.enabled = (provider.world != null);
-			if (GUILayout.Button("Push to All Children"))
+			if (GUILayout.Button("Apply to All Children"))
 			{
-				foreach (var element in provider.GetComponentsInChildren<ColliderElement>())
+				foreach (var element in provider.GetComponentsInChildren<IWorldConsumer>())
 				{
-					element.world = provider.world;
-					EditorUtility.SetDirty(element);
-				}
-
-				foreach (var element in provider.GetComponentsInChildren<RigidbodyElement>())
-				{
-					element.world = provider.world;
-					EditorUtility.SetDirty(element);
+					element.SetWorld(provider.world);
+					EditorUtility.SetDirty((Component)element);
 				}
 			}
 			GUI.enabled = true;

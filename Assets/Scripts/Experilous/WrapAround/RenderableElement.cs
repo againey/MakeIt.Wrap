@@ -2,12 +2,15 @@
 
 namespace Experilous.WrapAround
 {
-	public class RenderableElement : MonoBehaviour
+	public class RenderableElement : MonoBehaviour, IViewportConsumer
 	{
 		public Viewport viewport;
 		public AbstractBounds bounds;
 
 		protected MeshFilter[] _meshFilters;
+
+		public bool hasViewport { get { return viewport != null ; } }
+		public void SetViewport(Viewport viewport) { this.viewport = viewport; }
 
 		protected void Awake()
 		{
@@ -25,14 +28,7 @@ namespace Experilous.WrapAround
 
 		protected void Start()
 		{
-			if (viewport == null)
-			{
-				var provider = GetComponentInParent<ViewportProvider>();
-				if (provider != null)
-				{
-					viewport = provider.viewport;
-				}
-			}
+			if (viewport == null) viewport = ViewportConsumerUtility.FindViewport(this);
 		}
 
 		protected void LateUpdate()

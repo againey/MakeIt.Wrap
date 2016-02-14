@@ -10,8 +10,9 @@ namespace Experilous.WrapAround
 		private Plane[] _frustumPlanes;
 		private List<GhostRegion> _visibleGhostRegions = new List<GhostRegion>();
 
-		protected void Start()
+		protected new void Start()
 		{
+			base.Start();
 			_camera = GetComponent<Camera>();
 		}
 

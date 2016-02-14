@@ -13,41 +13,26 @@ namespace Experilous.WrapAround
 			provider.viewport = (Viewport)EditorGUILayout.ObjectField("Viewport", provider.viewport, typeof(Viewport), true);
 
 			GUI.enabled = (provider.viewport != null);
-			if (GUILayout.Button("Push to Unset Children"))
+			if (GUILayout.Button("Apply to Unset Children"))
 			{
-				foreach (var element in provider.GetComponentsInChildren<RenderableElement>())
+				foreach (var element in provider.GetComponentsInChildren<IViewportConsumer>())
 				{
-					if (element.viewport == null)
+					if (!element.hasViewport)
 					{
-						element.viewport = provider.viewport;
-						EditorUtility.SetDirty(element);
-					}
-				}
-
-				foreach (var element in provider.GetComponentsInChildren<LightElement>())
-				{
-					if (element.viewport == null)
-					{
-						element.viewport = provider.viewport;
-						EditorUtility.SetDirty(element);
+						element.SetViewport(provider.viewport);
+						EditorUtility.SetDirty((Component)element);
 					}
 				}
 			}
 			GUI.enabled = true;
 
 			GUI.enabled = (provider.viewport != null);
-			if (GUILayout.Button("Push to All Children"))
+			if (GUILayout.Button("Apply to All Children"))
 			{
-				foreach (var element in provider.GetComponentsInChildren<RenderableElement>())
+				foreach (var element in provider.GetComponentsInChildren<IViewportConsumer>())
 				{
-					element.viewport = provider.viewport;
-					EditorUtility.SetDirty(element);
-				}
-
-				foreach (var element in provider.GetComponentsInChildren<LightElement>())
-				{
-					element.viewport = provider.viewport;
-					EditorUtility.SetDirty(element);
+					element.SetViewport(provider.viewport);
+					EditorUtility.SetDirty((Component)element);
 				}
 			}
 			GUI.enabled = true;

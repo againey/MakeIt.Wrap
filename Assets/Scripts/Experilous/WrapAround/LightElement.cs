@@ -3,10 +3,13 @@
 namespace Experilous.WrapAround
 {
 	[RequireComponent(typeof(Light))]
-	public class LightElement : GhostableElement<LightElement, LightElementGhost>
+	public class LightElement : GhostableElement<LightElement, LightElementGhost>, IViewportConsumer
 	{
 		public Viewport viewport;
 		public AbstractBounds bounds;
+
+		public bool hasViewport { get { return viewport != null ; } }
+		public void SetViewport(Viewport viewport) { this.viewport = viewport; }
 
 		public virtual bool IsVisible(LightElementGhost ghost)
 		{
@@ -40,14 +43,7 @@ namespace Experilous.WrapAround
 
 		protected void Start()
 		{
-			if (viewport == null)
-			{
-				var provider = GetComponentInParent<ViewportProvider>();
-				if (provider != null)
-				{
-					viewport = provider.viewport;
-				}
-			}
+			if (viewport == null) viewport = ViewportConsumerUtility.FindViewport(this);
 		}
 
 		protected void LateUpdate()

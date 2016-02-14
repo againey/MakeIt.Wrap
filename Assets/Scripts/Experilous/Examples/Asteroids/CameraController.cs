@@ -11,11 +11,16 @@ namespace Experilous.Examples.Asteroids
 
 		public Vector3 surfaceNormal = Vector3.back;
 
+		protected void Start()
+		{
+			surfaceNormal.Normalize();
+		}
+
 		protected void Update()
 		{
-			var horizontal = Input.GetAxis("Horizontal");
-			var vertical = Input.GetAxis("Vertical");
-			var zoom = Input.GetAxis("Zoom");
+			var moveHorizontal = Input.GetAxis("Horizontal");
+			var moveForward = Input.GetAxis("Vertical");
+			var moveUp = -Input.GetAxis("Zoom");
 
 			var right = Vector3.Cross(surfaceNormal, transform.forward);
 			var forward = Vector3.Cross(transform.right, surfaceNormal);
@@ -25,7 +30,7 @@ namespace Experilous.Examples.Asteroids
 			right.Normalize();
 			forward.Normalize();
 
-			transform.position += right * horizontal * speed + forward * vertical * speed - surfaceNormal * zoom * zoomSpeed;
+			transform.position += right * moveHorizontal * speed + forward * moveForward * speed + surfaceNormal * moveUp * zoomSpeed;
 		}
 	}
 }

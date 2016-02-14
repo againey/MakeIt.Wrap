@@ -323,13 +323,9 @@ namespace Experilous.WrapAround
 
 		public void Confine(ref Vector3 position)
 		{
-			var localPosition = transform.InverseTransformPoint(position);
-
-			if (axis0IsWrapped) localPosition -= Mathf.Floor(-MathUtility.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) * _transformedAxis0Vector;
-			if (axis1IsWrapped) localPosition -= Mathf.Floor(-MathUtility.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) * _transformedAxis1Vector;
-			if (axis2IsWrapped) localPosition -= Mathf.Floor(-MathUtility.GetIntersectionParameter(_axis2NegativePlane, new ScaledRay(position, _transformedAxis2Vector))) * _transformedAxis2Vector;
-
-			position = transform.TransformPoint(localPosition);
+			if (axis0IsWrapped) position -= Mathf.Floor(-MathUtility.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) * _transformedAxis0Vector;
+			if (axis1IsWrapped) position -= Mathf.Floor(-MathUtility.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) * _transformedAxis1Vector;
+			if (axis2IsWrapped) position -= Mathf.Floor(-MathUtility.GetIntersectionParameter(_axis2NegativePlane, new ScaledRay(position, _transformedAxis2Vector))) * _transformedAxis2Vector;
 		}
 	}
 }
