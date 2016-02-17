@@ -2,6 +2,21 @@
 
 namespace Experilous.WrapAround
 {
+	/// <summary>
+	/// A wrap-around world element that ought to be rendered in visible ghost regions.
+	/// </summary>
+	/// <remarks>
+	/// Attach this component to a game object with one or more mesh filters whenever you want
+	/// those meshes to be visible across wrapped world boundaries.  Every frame, the element
+	/// will manually add the meshes to the render queue with the appropriate transformations
+	/// for each visible ghost region in which the ghost might also be visible.
+	/// </remarks>
+	/// <seealso cref="Viewport"/>
+	/// <seealso cref="AbstractBounds"/>
+	/// <seealso cref="GhostRegion"/>
+	/// <seealso cref="ViewportProvider"/>
+	/// <seealso cref="IViewportConsumer"/>
+	/// <seealso cref="MeshFilter"/>
 	public class RenderableElement : MonoBehaviour, IViewportConsumer
 	{
 		public Viewport viewport;

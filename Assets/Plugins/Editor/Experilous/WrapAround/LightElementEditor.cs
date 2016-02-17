@@ -14,14 +14,14 @@ namespace Experilous.WrapAround
 			element.bounds = (AbstractBounds)EditorGUILayout.ObjectField("Bounds", element.bounds, typeof(AbstractBounds), true);
 			element.ghostPrefab = (LightElementGhost)EditorGUILayout.ObjectField("Ghost Prefab", element.ghostPrefab, typeof(LightElementGhost), false);
 
-			if (GUILayout.Button("Create Ghost Prefab"))
+			if (GUILayout.Button(new GUIContent("Create Ghost Prefab", "Automatically generate a prefab that mimics this game object, but strips out all unnecessary children and components.")))
 			{
 				CreateGhostPrefab(element);
 			}
 
 			if (element.ghostPrefab != null)
 			{
-				if (GUILayout.Button("Update Ghost Prefab"))
+				if (GUILayout.Button(new GUIContent("Update Ghost Prefab", "Automatically generate a prefab that mimics this game object, but strips out all unnecessary children and components, and replace the existing prefab with the newly generated one.")))
 				{
 					UpdateGhostPrefab(element);
 				}

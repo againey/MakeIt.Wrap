@@ -2,6 +2,12 @@
 
 namespace Experilous.WrapAround
 {
+	/// <summary>
+	/// Abstract representation of a bounding volume that can perform the first phase of
+	/// a double-dispatch visibility or collision check with a viewport or world.
+	/// </summary>
+	/// <seealso cref="Viewport"/>
+	/// <seealso cref="World"/>
 	public abstract class AbstractBounds : MonoBehaviour
 	{
 		public abstract bool IsVisible(Viewport viewport);

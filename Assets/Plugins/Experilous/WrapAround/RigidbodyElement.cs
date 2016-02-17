@@ -2,6 +2,33 @@
 
 namespace Experilous.WrapAround
 {
+	/// <summary>
+	/// A wrap-around world element that is physically active and could potentially collide
+	/// with other objects across wrapped world boundaries.
+	/// </summary>
+	/// <remarks>
+	/// Attach this component to a game object with a rigidbody component whenever you want
+	/// any associated colliders to be able to collide with other rigidbodies across wrapped
+	/// world boundaries.  This component will create ghosts of itself at the opposite end(s)
+	/// of the world which are capable of causing collisions that the original object in its
+	/// canonical location would not cause since the standard physics engine cannot handle the
+	/// wrapped world boundaries.
+	/// 
+	/// The ghost prefab should include a rigidbody component and all collider components, as
+	/// well as any descendants with colliders that aren't attached to descendant rigidbodies,
+	/// but all other components should probably be absent from the ghost prefab.
+	/// 
+	/// This component cannot currently handle rigidbodies with attached joints of any kind.
+	/// </remarks>
+	/// <seealso cref="World"/>
+	/// <seealso cref="AbstractBounds"/>
+	/// <seealso cref="GhostRegion"/>
+	/// <seealso cref="WorldProvider"/>
+	/// <seealso cref="IWorldConsumer"/>
+	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
+	/// <seealso cref="RigidbodyElementGhost"/>
+	/// <seealso cref="Rigidbody"/>
+	/// <seealso cref="Collider"/>
 	[RequireComponent(typeof(Rigidbody))]
 	public class RigidbodyElement : GhostableElement<RigidbodyElement, RigidbodyElementGhost>, IWorldConsumer
 	{

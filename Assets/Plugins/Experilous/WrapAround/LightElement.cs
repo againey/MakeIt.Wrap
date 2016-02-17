@@ -2,7 +2,38 @@
 
 namespace Experilous.WrapAround
 {
-	[RequireComponent(typeof(Light))]
+	/// <summary>
+	/// A wrap-around world element that is a light source which might illuminate objects
+	/// across wrapped world boundaries, or which might cast shadows that wrap across world
+	/// boundaries.
+	/// </summary>
+	/// <remarks>
+	/// Attach this component to a game object with a light source whenever you want it to
+	/// illuminate light receiving objects across wrapped world boundaries, or whenever you
+	/// want the shadows it produces to be cast across wrapped world boundaries.  This
+	/// component will create ghosts of itself at the opposite end(s) of the world which
+	/// become an additional light source in the scene, producing illumination and shadows
+	/// that the original object in its canonical location would not produce since the
+	/// standard rendering engine cannot handle the wrapped world boundaries.
+	/// 
+	/// The ghost prefab should include only the light source component, as well as any
+	/// descendants with light sources that should also be applied, but all other components
+	/// should probably be absent from the ghost prefab.
+	/// 
+	/// This component is completely unnecessary for directional light sources when used
+	/// with the most common variety of wrapping world in which all wrapping transformations
+	/// involve translation only, with no rotation involved.
+	/// 
+	/// This component currently is only expected to work with dynamic lights.
+	/// </remarks>
+	/// <seealso cref="Viewport"/>
+	/// <seealso cref="AbstractBounds"/>
+	/// <seealso cref="GhostRegion"/>
+	/// <seealso cref="ViewportProvider"/>
+	/// <seealso cref="IViewportConsumer"/>
+	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
+	/// <seealso cref="LightElementGhost"/>
+	/// <seealso cref="Light"/>
 	public class LightElement : GhostableElement<LightElement, LightElementGhost>, IViewportConsumer
 	{
 		public Viewport viewport;

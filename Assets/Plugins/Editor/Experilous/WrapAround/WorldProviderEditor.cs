@@ -13,7 +13,7 @@ namespace Experilous.WrapAround
 			provider.world = (World)EditorGUILayout.ObjectField("World", provider.world, typeof(World), true);
 
 			GUI.enabled = (provider.world != null);
-			if (GUILayout.Button("Apply to Unset Children"))
+			if (GUILayout.Button(new GUIContent("Apply to Unset Children", "Search through all descendants for any components that implement IWorldConsumer, and assign it this provider's world if the component doesn't already have a world assigned.")))
 			{
 				foreach (var element in provider.GetComponentsInChildren<IWorldConsumer>())
 				{
@@ -27,7 +27,7 @@ namespace Experilous.WrapAround
 			GUI.enabled = true;
 
 			GUI.enabled = (provider.world != null);
-			if (GUILayout.Button("Apply to All Children"))
+			if (GUILayout.Button(new GUIContent("Apply to All Children", "Search through all descendants for any components that implement IWorldConsumer, and assign it this provider's world, overwriting any world it might have already been assigned.")))
 			{
 				foreach (var element in provider.GetComponentsInChildren<IWorldConsumer>())
 				{

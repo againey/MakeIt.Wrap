@@ -13,7 +13,7 @@ namespace Experilous.WrapAround
 			provider.viewport = (Viewport)EditorGUILayout.ObjectField("Viewport", provider.viewport, typeof(Viewport), true);
 
 			GUI.enabled = (provider.viewport != null);
-			if (GUILayout.Button("Apply to Unset Children"))
+			if (GUILayout.Button(new GUIContent("Apply to Unset Children", "Search through all descendants for any components that implement IViewportConsumer, and assign it this provider's viewport if the component doesn't already have a viewport assigned.")))
 			{
 				foreach (var element in provider.GetComponentsInChildren<IViewportConsumer>())
 				{
@@ -27,7 +27,7 @@ namespace Experilous.WrapAround
 			GUI.enabled = true;
 
 			GUI.enabled = (provider.viewport != null);
-			if (GUILayout.Button("Apply to All Children"))
+			if (GUILayout.Button(new GUIContent("Apply to All Children", "Search through all descendants for any components that implement IViewportConsumer, and assign it this provider's viewport, overwriting any viewport it might have already been assigned.")))
 			{
 				foreach (var element in provider.GetComponentsInChildren<IViewportConsumer>())
 				{

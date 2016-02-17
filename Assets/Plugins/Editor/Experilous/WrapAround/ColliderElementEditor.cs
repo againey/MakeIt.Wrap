@@ -14,14 +14,14 @@ namespace Experilous.WrapAround
 			element.bounds = (AbstractBounds)EditorGUILayout.ObjectField("Bounds", element.bounds, typeof(AbstractBounds), true);
 			element.ghostPrefab = (ColliderElementGhost)EditorGUILayout.ObjectField("Ghost Prefab", element.ghostPrefab, typeof(ColliderElementGhost), false);
 
-			if (GUILayout.Button("Create Ghost Prefab"))
+			if (GUILayout.Button(new GUIContent("Create Ghost Prefab", "Automatically generate a prefab that mimics this game object, but strips out all unnecessary children and components.")))
 			{
 				CreateGhostPrefab(element);
 			}
 
 			if (element.ghostPrefab != null)
 			{
-				if (GUILayout.Button("Update Ghost Prefab"))
+				if (GUILayout.Button(new GUIContent("Update Ghost Prefab", "Automatically generate a prefab that mimics this game object, but strips out all unnecessary children and components, and replace the existing prefab with the newly generated one.")))
 				{
 					UpdateGhostPrefab(element);
 				}
@@ -93,13 +93,13 @@ namespace Experilous.WrapAround
 			{
 				if (!hasChildren)
 				{
-					// Neither this object nor any of its descendents contain colliders, so it isn't neeed as part of the element ghost prefab.
+					// Neither this object nor any of its descendants contain colliders, so it isn't neeed as part of the element ghost prefab.
 					DestroyImmediate(transform.gameObject);
 					return false;
 				}
 				else
 				{
-					// This object is just a transform intermediary between the root and descendent colliders; keep the transform and nothing else.
+					// This object is just a transform intermediary between the root and descendant colliders; keep the transform and nothing else.
 					foreach (var component in components)
 					{
 						if (!(component is Transform))
