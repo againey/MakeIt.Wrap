@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
-using Experilous.WrapAround;
 
 namespace Experilous.Examples.Asteroids
 {
