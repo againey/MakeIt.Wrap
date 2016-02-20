@@ -44,12 +44,19 @@ namespace Experilous.Examples.Asteroids
 			}
 		}
 
-		protected void Awake()
+		protected void Start()
 		{
+			this.DisableAndThrowOnMissingReference(world, "The Asteroids.SceneSetup component requires a reference to a RhomboidWorld component.");
+			this.DisableAndThrowOnMissingReference(viewport, "The Asteroids.SceneSetup component requires a reference to a Viewport component.");
+			this.DisableAndThrowOnMissingReference(physicalAsteroidPrefab, "The Asteroids.SceneSetup component requires a reference to a physical asteroid GameObject prefab.");
+			this.DisableAndThrowOnMissingReference(virtualAsteroidPrefab, "The Asteroids.SceneSetup component requires a reference to a virtual asteroid GameObject prefab.");
+			this.DisableAndThrowOnMissingReference(physicalAsteroidContainer, "The Asteroids.SceneSetup component requires a reference to a physical asteroid Transform root.");
+			this.DisableAndThrowOnMissingReference(virtualAsteroidContainer, "The Asteroids.SceneSetup component requires a reference to a virtual asteroid Transform root.");
+
 			Physics.gravity = new Vector3(0f, 0f, 0f);
 			Time.timeScale = 0f;
 
-			var randomEngine = NativeRandomEngine.Create(randomSeed);
+			var randomEngine = XorShift128Plus.Create(randomSeed);
 			List<AsteroidDefinition> asteroids = new List<AsteroidDefinition>();
 
 			if (physicalAsteroidPrefab != null)
@@ -132,7 +139,7 @@ namespace Experilous.Examples.Asteroids
 					var rigidBody = asteroid.GetComponent<Rigidbody>();
 					var direction = RandomUtility.UnitVector2(randomEngine);
 					var speed = RandomUtility.ClosedRange(minPhysicalAsteroidSpeed, maxPhysicalAsteroidSpeed, randomEngine);
-					rigidBody.velocity = new Vector3(direction.x * speed, direction.y * speed, 0f);
+					rigidBody.velocity = new Vector3(direction.x * speed, 0f, direction.y * speed);
 					rigidBody.angularVelocity = new Vector3(
 						RandomUtility.ClosedRange(minPhysicalAsteroidRotation, maxPhysicalAsteroidRotation, randomEngine),
 						RandomUtility.ClosedRange(minPhysicalAsteroidRotation, maxPhysicalAsteroidRotation, randomEngine),
@@ -171,7 +178,7 @@ namespace Experilous.Examples.Asteroids
 					var rigidBody = asteroid.GetComponent<Rigidbody>();
 					var direction = RandomUtility.UnitVector2(randomEngine);
 					var speed = RandomUtility.ClosedRange(minVirtualAsteroidSpeed, maxVirtualAsteroidSpeed, randomEngine);
-					rigidBody.velocity = new Vector3(direction.x * speed, direction.y * speed, 0f);
+					rigidBody.velocity = new Vector3(direction.x * speed, 0f, direction.y * speed);
 					rigidBody.angularVelocity = new Vector3(
 						RandomUtility.ClosedRange(minVirtualAsteroidRotation, maxVirtualAsteroidRotation, randomEngine),
 						RandomUtility.ClosedRange(minVirtualAsteroidRotation, maxVirtualAsteroidRotation, randomEngine),

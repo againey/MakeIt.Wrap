@@ -56,6 +56,11 @@ namespace Experilous.WrapAround
 		/// </summary>
 		[HideInInspector] public TGhost firstGhost;
 
+		protected void Start()
+		{
+			this.DisableAndThrowOnMissingReference(ghostPrefab, string.Format("The {0} component requires a reference to a prefab {1}.", typeof(TDerivedElement).GetPrettyName(), typeof(TGhost).GetPrettyName()));
+		}
+
 		/// <summary>
 		/// Checks whether or not the element's list of ghosts contains the specified ghost object.
 		/// </summary>

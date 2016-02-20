@@ -44,6 +44,8 @@ namespace Experilous.WrapAround
 		protected void Start()
 		{
 			if (viewport == null) viewport = ViewportConsumerUtility.FindViewport(this);
+			this.DisableAndThrowOnMissingReference(viewport, "The RenderableElement component requires a reference to a Viewport component.");
+			this.DisableAndThrowOnMissingReference(bounds, "The RenderableElement component requires a reference to an AbstractBounds component.");
 		}
 
 		protected void LateUpdate()

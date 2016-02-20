@@ -65,9 +65,13 @@ namespace Experilous.WrapAround
 			}
 		}
 
-		protected void Start()
+		protected new void Start()
 		{
+			base.Start();
+
 			if (world == null) world = WorldConsumerUtility.FindWorld(this);
+			this.DisableAndThrowOnMissingReference(world, "The ColliderElement component requires a reference to a World component.");
+			this.DisableAndThrowOnMissingReference(bounds, "The ColliderElement component requires a reference to an AbstractBounds component.");
 		}
 
 		protected void FixedUpdate()

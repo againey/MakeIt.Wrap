@@ -10,8 +10,10 @@ namespace Experilous.WrapAround
 
 		public new Rigidbody rigidbody { get { return _rigidbody; } }
 
-		protected void Start()
+		protected new void Start()
 		{
+			base.Start();
+
 			_rigidbody = GetComponent<Rigidbody>();
 			_originalRigidbody = original.GetComponent<Rigidbody>();
 		}

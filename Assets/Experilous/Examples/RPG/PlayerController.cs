@@ -6,8 +6,6 @@ namespace Experilous.Examples.RPG
 	[RequireComponent(typeof(Rigidbody))]
 	public class PlayerController : MonoBehaviour
 	{
-		public Viewport viewport;
-
 		public float walkSpeed = 1f;
 
 		protected Rigidbody _rigidbody;
@@ -16,25 +14,13 @@ namespace Experilous.Examples.RPG
 		{
 			_rigidbody = GetComponent<Rigidbody>();
 		}
-	
-		protected void Start()
-		{
-		}
-	
-		protected void FixedUpdate()
-		{
-		}
-	
+
 		protected void Update()
 		{
 			var horizontal = Input.GetAxis("Horizontal");
 			var vertical = Input.GetAxis("Vertical");
 
 			_rigidbody.velocity = new Vector3(horizontal * walkSpeed, vertical * walkSpeed, 0f);
-		}
-	
-		protected void LateUpdate()
-		{
 		}
 	}
 }

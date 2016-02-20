@@ -9,11 +9,7 @@ namespace Experilous.WrapAround
 
 		protected new void Start()
 		{
-			if (surface == null)
-			{
-				enabled = false;
-				throw new MissingReferenceException("A topological planar world component requires a planar surface in order to function.");
-			}
+			this.DisableAndThrowOnMissingReference(surface, "The TopologicalPlanarWorld component requires a reference to a PlanarSurface component.");
 
 			base.Start();
 		}

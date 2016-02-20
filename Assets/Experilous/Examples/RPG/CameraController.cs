@@ -6,6 +6,11 @@ namespace Experilous.Examples.RPG
 	{
 		public PlayerController player;
 
+		protected void Start()
+		{
+			this.DisableAndThrowOnMissingReference(player, "The RPG.CameraController component requires a reference to a PlayerController component.");
+		}
+
 		protected void LateUpdate()
 		{
 			transform.position = player.transform.position;
