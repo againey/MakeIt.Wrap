@@ -36,7 +36,7 @@ namespace Experilous.WrapAround
 			}
 
 			// TODO: Find a better design for where to put this.
-			_frustumPlanes = GeometryUtility.CalculateFrustumPlanes(_camera);
+			_frustumPlanes = UnityEngine.GeometryUtility.CalculateFrustumPlanes(_camera);
 		}
 
 		public override bool IsVisible(Vector3 position)
@@ -59,7 +59,7 @@ namespace Experilous.WrapAround
 
 		public override bool IsVisible(Bounds box)
 		{
-			return GeometryUtility.TestPlanesAABB(_frustumPlanes, box);
+			return UnityEngine.GeometryUtility.TestPlanesAABB(_frustumPlanes, box);
 		}
 
 		public override bool IsVisible(Vector3 position, Bounds box)
