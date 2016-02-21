@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Experilous.Topological;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Experilous.WrapAround
 {
