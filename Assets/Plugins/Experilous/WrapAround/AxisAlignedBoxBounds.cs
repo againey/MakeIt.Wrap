@@ -13,7 +13,17 @@ namespace Experilous.WrapAround
 				var meshFilter = GetComponent<MeshFilter>();
 				if (meshFilter != null && meshFilter.mesh != null)
 				{
-					box = meshFilter.mesh.bounds;
+					var meshBounds = meshFilter.mesh.bounds;
+					var min = meshBounds.min;
+					var max = meshBounds.max;
+					box = new Bounds(transform.TransformVector(min), Vector3.zero);
+					box.Encapsulate(transform.TransformVector(new Vector3(min.x, min.y, max.z)));
+					box.Encapsulate(transform.TransformVector(new Vector3(min.x, max.y, min.z)));
+					box.Encapsulate(transform.TransformVector(new Vector3(min.x, max.y, max.z)));
+					box.Encapsulate(transform.TransformVector(new Vector3(max.x, min.y, min.z)));
+					box.Encapsulate(transform.TransformVector(new Vector3(max.x, min.y, max.z)));
+					box.Encapsulate(transform.TransformVector(new Vector3(max.x, max.y, min.z)));
+					box.Encapsulate(transform.TransformVector(max));
 				}
 			}
 		}
