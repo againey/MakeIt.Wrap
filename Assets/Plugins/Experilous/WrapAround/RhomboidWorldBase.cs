@@ -71,8 +71,6 @@ namespace Experilous.WrapAround
 
 		protected void GetGhostRegions(float bufferRadius, List<GhostRegion> ghostRegions)
 		{
-			ghostRegions.Clear();
-
 			if (bufferRadius <= 0f) return;
 
 			var axis0NormalOffset = Vector3.Dot(_transformedAxis0Vector, _axis0NegativePlane.normal);
@@ -80,8 +78,9 @@ namespace Experilous.WrapAround
 			var axis2NormalOffset = Vector3.Dot(_transformedAxis2Vector, _axis2NegativePlane.normal);
 			var axis0RegionBufferCount = axis0IsWrapped ? Mathf.CeilToInt(bufferRadius / axis0NormalOffset) : 0;
 			var axis1RegionBufferCount = axis1IsWrapped ? Mathf.CeilToInt(bufferRadius / axis1NormalOffset) : 0;
-			var axis2RegionBufferCount = axis1IsWrapped ? Mathf.CeilToInt(bufferRadius / axis2NormalOffset) : 0;
+			var axis2RegionBufferCount = axis2IsWrapped ? Mathf.CeilToInt(bufferRadius / axis2NormalOffset) : 0;
 
+			int startIndex = 0;
 			for (int z = -axis2RegionBufferCount; z <= axis2RegionBufferCount; ++z)
 			{
 				for (int y = -axis1RegionBufferCount; y <= axis1RegionBufferCount; ++y)
@@ -89,17 +88,16 @@ namespace Experilous.WrapAround
 					for (int x = -axis0RegionBufferCount; x <= axis0RegionBufferCount; ++x)
 					{
 						if (x == 0 && y == 0 && z == 0) continue; // The 0,0 region is the real region, not a ghost region, so skip it.
-
-						ghostRegions.Add(new RhomboidGhostRegion(_transformedAxis0Vector * x + _transformedAxis1Vector * y + _transformedAxis2Vector * z));
+						InsertGhostRegion(new Index3D(x, y, z), ghostRegions, ref startIndex);
 					}
 				}
 			}
+
+			ghostRegions.RemoveRange(startIndex, ghostRegions.Count - startIndex);
 		}
 
 		protected void GetGhostRegions(Camera camera, float bufferRadius, List<GhostRegion> ghostRegions)
 		{
-			ghostRegions.Clear();
-
 			// Get the six planes of the frustum volume, and expand them outward based on the buffer radius.
 			var frustumPlanes = UnityEngine.GeometryUtility.CalculateFrustumPlanes(camera);
 			if (bufferRadius != 0f)
@@ -125,31 +123,31 @@ namespace Experilous.WrapAround
 			// If the bounds are limited to a single dimension, then just return a linear array of ghost regions.
 			if (min.y == max.y && min.z == max.z)
 			{
-				var yzVector = _transformedAxis1Vector * min.y + _transformedAxis2Vector * min.z;
+				int startIndex = 0;
 				for (int x = min.x; x <= max.x; ++x)
 				{
 					if (x == 0 && min.y == 0 && min.z == 0) continue; // The 0,0,0 region is the real region, not a ghost region, so skip it.
-					ghostRegions.Add(new RhomboidGhostRegion(_transformedAxis0Vector * x + yzVector));
+					InsertGhostRegion(new Index3D(x, min.y, min.z), ghostRegions, ref startIndex);
 				}
 				return;
 			}
 			else if (min.x == max.x && min.z == max.z)
 			{
-				var xzVector = _transformedAxis0Vector * min.x + _transformedAxis2Vector * min.z;
+				int startIndex = 0;
 				for (int y = min.y; y <= max.y; ++y)
 				{
 					if (min.x == 0 && y == 0 && min.z == 0) continue; // The 0,0,0 region is the real region, not a ghost region, so skip it.
-					ghostRegions.Add(new RhomboidGhostRegion(_transformedAxis1Vector * y + xzVector));
+					InsertGhostRegion(new Index3D(min.x, y, min.z), ghostRegions, ref startIndex);
 				}
 				return;
 			}
 			else if (min.x == max.x && min.y == max.y)
 			{
-				var xyVector = _transformedAxis0Vector * min.x + _transformedAxis1Vector * min.y;
+				int startIndex = 0;
 				for (int z = min.z; z <= max.z; ++z)
 				{
 					if (min.x == 0 && min.y == 0 && z == 0) continue; // The 0,0,0 region is the real region, not a ghost region, so skip it.
-					ghostRegions.Add(new RhomboidGhostRegion(_transformedAxis2Vector * z + xyVector));
+					InsertGhostRegion(new Index3D(min.x, min.y, z), ghostRegions, ref startIndex);
 				}
 				return;
 			}
@@ -168,16 +166,17 @@ namespace Experilous.WrapAround
 			var regionCorners = unwrappedAxis == -1 ? new Vector3[8] : null;
 			var regionLines = unwrappedAxis != -1 ? new ScaledRay[4] : null;
 
-			for (int z = min.z; z <= max.z; ++z)
+			if (unwrappedAxis == -1)
 			{
-				for (int y = min.y; y <= max.y; ++y)
+				int startIndex = 0;
+				for (int z = min.z; z <= max.z; ++z)
 				{
-					for (int x = min.x; x <= max.x; ++x)
+					for (int y = min.y; y <= max.y; ++y)
 					{
-						if (x == 0 && y == 0 && z == 0) continue; // The 0,0,0 region is the real region, not a ghost region, so skip it.
-
-						if (unwrappedAxis == -1)
+						for (int x = min.x; x <= max.x; ++x)
 						{
+							if (x == 0 && y == 0 && z == 0) continue; // The 0,0,0 region is the real region, not a ghost region, so skip it.
+
 							regionCorners[0] = _transformedAxis0Vector * x + _transformedAxis1Vector * y + _transformedAxis2Vector * z;
 							regionCorners[1] = regionCorners[0] + _transformedAxis0Vector;
 							regionCorners[2] = regionCorners[0] + _transformedAxis1Vector;
@@ -199,11 +198,23 @@ namespace Experilous.WrapAround
 
 							if (!exclude)
 							{
-								ghostRegions.Add(new RhomboidGhostRegion(regionCorners[0]));
+								InsertGhostRegion(new Index3D(x, y, z), ghostRegions, ref startIndex);
 							}
 						}
-						else
+					}
+				}
+			}
+			else
+			{
+				int startIndex = 0;
+				for (int z = min.z; z <= max.z; ++z)
+				{
+					for (int y = min.y; y <= max.y; ++y)
+					{
+						for (int x = min.x; x <= max.x; ++x)
 						{
+							if (x == 0 && y == 0 && z == 0) continue; // The 0,0,0 region is the real region, not a ghost region, so skip it.
+
 							switch (unwrappedAxis)
 							{
 								case 0:
@@ -244,12 +255,73 @@ namespace Experilous.WrapAround
 
 							if (!exclude)
 							{
-								ghostRegions.Add(new RhomboidGhostRegion(regionLines[0].origin));
+								InsertGhostRegion(new Index3D(x, y, z), ghostRegions, ref startIndex);
 							}
 						}
 					}
 				}
 			}
+		}
+
+		private bool FindGhostRegion(Index3D regionIndex3D, List<GhostRegion> ghostRegions, out int index, int startIndex = 0)
+		{
+			index = startIndex;
+			if (index >= ghostRegions.Count) return false;
+			var currentRegion = (RhomboidGhostRegion)ghostRegions[index];
+			if (regionIndex3D == currentRegion) return true;
+			if (regionIndex3D < currentRegion) return false;
+
+			var endIndex = ghostRegions.Count;
+
+			while (startIndex < endIndex)
+			{
+				index = (startIndex + endIndex) / 2;
+				currentRegion = (RhomboidGhostRegion)ghostRegions[index];
+				if (regionIndex3D == currentRegion)
+				{
+					return true;
+				}
+				else if (regionIndex3D < currentRegion)
+				{
+					endIndex = index;
+				}
+				else
+				{
+					startIndex = index + 1;
+				}
+			}
+
+			index = startIndex;
+			return false;
+		}
+
+		private void InsertGhostRegion(Index3D regionIndex3D, List<GhostRegion> ghostRegions, ref int startIndex)
+		{
+			int insertionIndex;
+			if (FindGhostRegion(regionIndex3D, ghostRegions, out insertionIndex, startIndex))
+			{
+				ghostRegions.RemoveRange(startIndex, insertionIndex - startIndex);
+			}
+			else if (insertionIndex == startIndex)
+			{
+				ghostRegions.Insert(insertionIndex,
+					new RhomboidGhostRegion(
+						regionIndex3D,
+						_transformedAxis0Vector * regionIndex3D.x +
+						_transformedAxis1Vector * regionIndex3D.y +
+						_transformedAxis2Vector * regionIndex3D.z));
+			}
+			else
+			{
+				ghostRegions.RemoveRange(startIndex, insertionIndex - startIndex - 1);
+				ghostRegions[startIndex] =
+					new RhomboidGhostRegion(
+						regionIndex3D,
+						_transformedAxis0Vector * regionIndex3D.x +
+						_transformedAxis1Vector * regionIndex3D.y +
+						_transformedAxis2Vector * regionIndex3D.z);
+			}
+			++startIndex;
 		}
 
 		private Index3D GetGhostRegionIndex(Vector3 position)

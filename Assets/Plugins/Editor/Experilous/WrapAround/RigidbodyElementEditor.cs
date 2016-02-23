@@ -89,7 +89,7 @@ namespace Experilous.WrapAround
 				DestroyImmediate(transform.gameObject);
 				return false;
 			}
-			else if (!hasCollider)
+			else if (!hasCollider && !ReferenceEquals(transform, topLevel))
 			{
 				if (!hasChildren)
 				{
