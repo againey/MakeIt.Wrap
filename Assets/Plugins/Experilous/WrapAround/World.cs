@@ -96,6 +96,22 @@ namespace Experilous.WrapAround
 
 		#endregion
 
+		#region Intersects
+
+		public abstract bool Intersects(Vector3 position, float buffer = 0f);
+		public abstract bool Intersects(Bounds box, float buffer = 0f);
+		public abstract bool Intersects(Vector3 position, Bounds box, float buffer = 0f);
+
+		#endregion
+
+		#region Contains
+
+		public abstract bool Contains(Vector3 position, float buffer = 0f);
+		public abstract bool Contains(Bounds box, float buffer = 0f);
+		public abstract bool Contains(Vector3 position, Bounds box, float buffer = 0f);
+
+		#endregion
+
 		/// <summary>
 		/// Applies the necessary transformations to the supplied transform according to the relevant edge wrapping
 		/// behavior to keep the transform confined to the canonical world bounds.
@@ -114,5 +130,17 @@ namespace Experilous.WrapAround
 		/// all attached colliders to recalculate their positions relative to the rigidbody.
 		/// </remarks>
 		public abstract void Confine(Rigidbody rigidbody);
+
+		/// <summary>
+		/// Applies the necessary transformations to the supplied rigidbody according to the relevant edge wrapping
+		/// behavior to keep the rigidbody confined to the canonical world bounds.
+		/// </summary>
+		/// <param name="rigidbody">The rigidbody that needs to be confined to the canonical world bounds.</param>
+		/// <remarks>
+		/// This overload is provided for performance purposes, because setting a rigidbody's
+		/// position and rotation is faster than setting the transform's, as the latter will cause
+		/// all attached colliders to recalculate their positions relative to the rigidbody.
+		/// </remarks>
+		public abstract void Confine(Rigidbody2D rigidbody);
 	}
 }

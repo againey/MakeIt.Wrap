@@ -20,23 +20,26 @@ namespace Experilous.WrapAround
 	/// only need the position and orientation to be correct for each rendered frame, then see the
 	/// similar <see cref="DynamicElementWrapper"/> class.  Or if this element needs to be correct
 	/// for each fixed-interval frame but does not have a rigidbody component, then see the
-	/// <see cref="DynamicElementFixedUpdateWrapper"/> class.
+	/// <see cref="DynamicElementWrapperUsingFixedUpdate"/> class.
 	/// </remarks>
 	/// <seealso cref="World"/>
 	/// <seealso cref="IWorldConsumer"/>
 	/// <seealso cref="DynamicElementWrapper"/>
-	/// <seealso cref="DynamicElementFixedUpdateWrapper"/>
+	/// <seealso cref="DynamicElementWrapperUsingFixedUpdate"/>
 	[RequireComponent(typeof(Rigidbody))]
-	public class RigidbodyElementWrapper : MonoBehaviour
+	public class RigidbodyElementWrapper : MonoBehaviour, IWorldConsumer
 	{
 		public World world;
 
 		protected Rigidbody _rigidbody;
 
+		public bool hasWorld { get { return world != null ; } }
+		public void SetWorld(World world) { this.world = world; }
+
 		protected void Start()
 		{
 			if (world == null) world = WorldConsumerUtility.FindWorld(this);
-			this.DisableAndThrowOnMissingReference(world, "The RigidbodyElementWrapper component requires a reference to a World component.");
+			this.DisableAndThrowOnUnassignedReference(world, "The RigidbodyElementWrapper component requires a reference to a World component.");
 
 			_rigidbody = GetComponent<Rigidbody>();
 		}

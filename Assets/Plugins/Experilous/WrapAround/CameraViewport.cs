@@ -20,8 +20,8 @@ namespace Experilous.WrapAround
 
 		protected new void Start()
 		{
-			base.Start();
 			_camera = GetComponent<Camera>();
+			base.Start();
 		}
 
 		public override IEnumerable<GhostRegion> visibleGhostRegions { get { return _visibleGhostRegions; } }

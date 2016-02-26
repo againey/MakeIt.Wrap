@@ -61,6 +61,11 @@ namespace Experilous.WrapAround
 			return viewport.IsVisible(rigidbody.position, box);
 		}
 
+		public override bool IsVisible(Viewport viewport, Rigidbody2D rigidbody)
+		{
+			return viewport.IsVisible(rigidbody.position, box);
+		}
+
 		public override bool IsCollidable(World world)
 		{
 			return world.IsCollidable(transform.position, box);
@@ -84,6 +89,71 @@ namespace Experilous.WrapAround
 		public override bool IsCollidable(World world, Rigidbody rigidbody)
 		{
 			return world.IsCollidable(rigidbody.position, box);
+		}
+
+		public override bool IsCollidable(World world, Rigidbody2D rigidbody)
+		{
+			return world.IsCollidable(rigidbody.position, box);
+		}
+
+		public override bool Intersects(World world, float buffer = 0f)
+		{
+			return world.Intersects(transform.position, box, buffer);
+		}
+
+		public override bool Intersects(World world, Vector3 position, float buffer = 0f)
+		{
+			return world.Intersects(position, box, buffer);
+		}
+
+		public override bool Intersects(World world, Vector3 position, Quaternion rotation, float buffer = 0f)
+		{
+			return world.Intersects(position, box, buffer);
+		}
+
+		public override bool Intersects(World world, Transform transform, float buffer = 0f)
+		{
+			return world.Intersects(transform.position, box, buffer);
+		}
+
+		public override bool Intersects(World world, Rigidbody rigidbody, float buffer = 0f)
+		{
+			return world.Intersects(rigidbody.position, box, buffer);
+		}
+
+		public override bool Intersects(World world, Rigidbody2D rigidbody, float buffer = 0f)
+		{
+			return world.Intersects(rigidbody.position, box, buffer);
+		}
+
+		public override bool ContainedBy(World world, float buffer = 0f)
+		{
+			return world.Contains(transform.position, box, buffer);
+		}
+
+		public override bool ContainedBy(World world, Vector3 position, float buffer = 0f)
+		{
+			return world.Contains(position, box, buffer);
+		}
+
+		public override bool ContainedBy(World world, Vector3 position, Quaternion rotation, float buffer = 0f)
+		{
+			return world.Contains(position, box, buffer);
+		}
+
+		public override bool ContainedBy(World world, Transform transform, float buffer = 0f)
+		{
+			return world.Contains(transform.position, box, buffer);
+		}
+
+		public override bool ContainedBy(World world, Rigidbody rigidbody, float buffer = 0f)
+		{
+			return world.Contains(rigidbody.position, box, buffer);
+		}
+
+		public override bool ContainedBy(World world, Rigidbody2D rigidbody, float buffer = 0f)
+		{
+			return world.Contains(rigidbody.position, box, buffer);
 		}
 
 #if UNITY_EDITOR

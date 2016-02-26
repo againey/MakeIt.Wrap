@@ -27,7 +27,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="IWorldConsumer"/>
 	/// <seealso cref="DynamicElementWrapper"/>
 	/// <seealso cref="RigidbodyElementWrapper"/>
-	public class DynamicElementFixedUpdateWrapper : MonoBehaviour, IWorldConsumer
+	public class DynamicElementWrapperUsingFixedUpdate : MonoBehaviour, IWorldConsumer
 	{
 		public World world;
 
@@ -37,7 +37,7 @@ namespace Experilous.WrapAround
 		protected void Start()
 		{
 			if (world == null) world = WorldConsumerUtility.FindWorld(this);
-			this.DisableAndThrowOnMissingReference(world, "The DynamicElementFixedUpdateWrapper component requires a reference to a World component.");
+			this.DisableAndThrowOnUnassignedReference(world, "The DynamicElementFixedUpdateWrapper component requires a reference to a World component.");
 		}
 
 		protected void FixedUpdate()

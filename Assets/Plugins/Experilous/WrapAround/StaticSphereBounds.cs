@@ -46,6 +46,11 @@ namespace Experilous.WrapAround
 			return viewport.IsVisible(rigidbody.position, _cachedScaledRadius);
 		}
 
+		public override bool IsVisible(Viewport viewport, Rigidbody2D rigidbody)
+		{
+			return viewport.IsVisible(rigidbody.position, _cachedScaledRadius);
+		}
+
 		public override bool IsCollidable(World world)
 		{
 			return world.IsCollidable(transform.position, _cachedScaledRadius);
@@ -70,5 +75,77 @@ namespace Experilous.WrapAround
 		{
 			return world.IsCollidable(rigidbody.position, _cachedScaledRadius);
 		}
+
+		public override bool IsCollidable(World world, Rigidbody2D rigidbody)
+		{
+			return world.IsCollidable(rigidbody.position, _cachedScaledRadius);
+		}
+
+		public override bool Intersects(World world, float buffer = 0f)
+		{
+			return world.Intersects(transform.position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool Intersects(World world, Vector3 position, float buffer = 0f)
+		{
+			return world.Intersects(position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool Intersects(World world, Vector3 position, Quaternion rotation, float buffer = 0f)
+		{
+			return world.Intersects(position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool Intersects(World world, Transform transform, float buffer = 0f)
+		{
+			return world.Intersects(transform.position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool Intersects(World world, Rigidbody rigidbody, float buffer = 0f)
+		{
+			return world.Intersects(rigidbody.position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool Intersects(World world, Rigidbody2D rigidbody, float buffer = 0f)
+		{
+			return world.Intersects(rigidbody.position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool ContainedBy(World world, float buffer = 0f)
+		{
+			return world.Contains(transform.position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool ContainedBy(World world, Vector3 position, float buffer = 0f)
+		{
+			return world.Contains(position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool ContainedBy(World world, Vector3 position, Quaternion rotation, float buffer = 0f)
+		{
+			return world.Contains(position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool ContainedBy(World world, Transform transform, float buffer = 0f)
+		{
+			return world.Contains(transform.position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool ContainedBy(World world, Rigidbody rigidbody, float buffer = 0f)
+		{
+			return world.Contains(rigidbody.position, _cachedScaledRadius + buffer);
+		}
+
+		public override bool ContainedBy(World world, Rigidbody2D rigidbody, float buffer = 0f)
+		{
+			return world.Contains(rigidbody.position, _cachedScaledRadius + buffer);
+		}
+
+#if UNITY_EDITOR
+		protected new void OnDrawGizmosSelected()
+		{
+			Gizmos.DrawWireSphere(transform.position, scaledRadius);
+		}
+#endif
 	}
 }

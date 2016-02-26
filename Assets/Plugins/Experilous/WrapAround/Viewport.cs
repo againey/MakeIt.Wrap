@@ -102,7 +102,9 @@ namespace Experilous.WrapAround
 		protected void Start()
 		{
 			if (world == null) world = WorldConsumerUtility.FindWorld(this);
-			this.DisableAndThrowOnMissingReference(world, "The Viewport component requires a reference to a World component.");
+			this.DisableAndThrowOnUnassignedReference(world, "The Viewport component requires a reference to a World component.");
+
+			RecalculateVisibleGhostRegions();
 		}
 	}
 }

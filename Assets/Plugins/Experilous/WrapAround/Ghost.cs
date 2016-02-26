@@ -47,8 +47,8 @@ namespace Experilous.WrapAround
 
 		protected void Start()
 		{
-			this.DisableAndThrowOnMissingReference(original, string.Format("The {0} component requires a reference to an original {1} component.", typeof(TDerivedGhost).GetPrettyName(), typeof(TElement).GetPrettyName()));
-			this.DisableAndThrowOnMissingClassInstance(region, string.Format("The {0} component requires a reference to a GhostRegion instance.", typeof(TDerivedGhost).GetPrettyName()));
+			this.DisableAndThrowOnUnassignedReference(original, string.Format("The {0} component requires a reference to an original {1} component.", typeof(TDerivedGhost).GetPrettyName(), typeof(TElement).GetPrettyName()));
+			this.DisableAndThrowOnUnassignedClassInstance(region, string.Format("The {0} component requires a reference to a GhostRegion instance.", typeof(TDerivedGhost).GetPrettyName()));
 		}
 
 		/// <summary>

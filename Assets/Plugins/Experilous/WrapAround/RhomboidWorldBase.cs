@@ -354,38 +354,133 @@ namespace Experilous.WrapAround
 
 		public override IEnumerable<GhostRegion> physicsGhostRegions { get { return _physicsGhostRegions; } }
 
+		#region IsCollidable
+
 		public override bool IsCollidable(Vector3 position)
 		{
 			return
-				_axis0NegativePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius &&
-				_axis0PositivePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius &&
-				_axis1NegativePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius &&
-				_axis1PositivePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius;
+				(!axis0IsWrapped || (
+					_axis0NegativePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius &&
+					_axis0PositivePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius)) &&
+				(!axis1IsWrapped || (
+					_axis1NegativePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius &&
+					_axis1PositivePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius)) &&
+				(!axis2IsWrapped || (
+					_axis2NegativePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius &&
+					_axis2PositivePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius));
 		}
 
 		public override bool IsCollidable(Vector3 position, float radius)
 		{
 			var extendedRadius = radius + maxPhysicsObjectRadius;
 			return
-				_axis0NegativePlane.GetDistanceToPoint(position) >= -extendedRadius &&
-				_axis0PositivePlane.GetDistanceToPoint(position) >= -extendedRadius &&
-				_axis1NegativePlane.GetDistanceToPoint(position) >= -extendedRadius &&
-				_axis1PositivePlane.GetDistanceToPoint(position) >= -extendedRadius;
+				(!axis0IsWrapped || (
+					_axis0NegativePlane.GetDistanceToPoint(position) >= -extendedRadius &&
+					_axis0PositivePlane.GetDistanceToPoint(position) >= -extendedRadius)) &&
+				(!axis1IsWrapped || (
+					_axis1NegativePlane.GetDistanceToPoint(position) >= -extendedRadius &&
+					_axis1PositivePlane.GetDistanceToPoint(position) >= -extendedRadius)) &&
+				(!axis2IsWrapped || (
+					_axis2NegativePlane.GetDistanceToPoint(position) >= -extendedRadius &&
+					_axis2PositivePlane.GetDistanceToPoint(position) >= -extendedRadius));
 		}
 
 		public override bool IsCollidable(Bounds box)
 		{
 			return
-				box.IsAboveOrIntersects(_axis0NegativePlane) ||
-				box.IsAboveOrIntersects(_axis0PositivePlane) ||
-				box.IsAboveOrIntersects(_axis1NegativePlane) ||
-				box.IsAboveOrIntersects(_axis1PositivePlane);
+				(!axis0IsWrapped || (
+					box.IsAboveOrIntersects(_axis0NegativePlane.Shift(-maxPhysicsObjectRadius)) &&
+					box.IsAboveOrIntersects(_axis0PositivePlane.Shift(-maxPhysicsObjectRadius)))) &&
+				(!axis1IsWrapped || (
+					box.IsAboveOrIntersects(_axis1NegativePlane.Shift(-maxPhysicsObjectRadius)) &&
+					box.IsAboveOrIntersects(_axis1PositivePlane.Shift(-maxPhysicsObjectRadius)))) &&
+				(!axis2IsWrapped || (
+					box.IsAboveOrIntersects(_axis2NegativePlane.Shift(-maxPhysicsObjectRadius)) &&
+					box.IsAboveOrIntersects(_axis2PositivePlane.Shift(-maxPhysicsObjectRadius))));
 		}
 
 		public override bool IsCollidable(Vector3 position, Bounds box)
 		{
 			return IsCollidable(new Bounds(box.center + position, box.size));
 		}
+
+		#endregion
+
+		#region Intersects
+
+		public override bool Intersects(Vector3 position, float buffer = 0f)
+		{
+			return
+				(!axis0IsWrapped || (
+					_axis0NegativePlane.GetDistanceToPoint(position) >= -buffer &&
+					_axis0PositivePlane.GetDistanceToPoint(position) >= -buffer)) &&
+				(!axis1IsWrapped || (
+					_axis1NegativePlane.GetDistanceToPoint(position) >= -buffer &&
+					_axis1PositivePlane.GetDistanceToPoint(position) >= -buffer)) &&
+				(!axis2IsWrapped || (
+					_axis2NegativePlane.GetDistanceToPoint(position) >= -buffer &&
+					_axis2PositivePlane.GetDistanceToPoint(position) >= -buffer));
+		}
+
+		public override bool Intersects(Bounds box, float buffer = 0f)
+		{
+			return
+				(!axis0IsWrapped || (
+					!box.IsBelow(_axis0NegativePlane.Shift(-buffer)) &&
+					!box.IsBelow(_axis0PositivePlane.Shift(-buffer)))) &&
+				(!axis1IsWrapped || (
+					!box.IsBelow(_axis1NegativePlane.Shift(-buffer)) &&
+					!box.IsBelow(_axis1PositivePlane.Shift(-buffer)))) &&
+				(!axis2IsWrapped || (
+					!box.IsBelow(_axis2NegativePlane.Shift(-buffer)) &&
+					!box.IsBelow(_axis2PositivePlane.Shift(-buffer))));
+		}
+
+		public override bool Intersects(Vector3 position, Bounds box, float buffer = 0f)
+		{
+			return Intersects(new Bounds(box.center + position, box.size));
+		}
+
+		#endregion
+
+		#region Contains
+
+		public override bool Contains(Vector3 position, float buffer = 0f)
+		{
+			return
+				(!axis0IsWrapped || (
+					_axis0NegativePlane.GetDistanceToPoint(position) >= buffer &&
+					_axis0PositivePlane.GetDistanceToPoint(position) >= buffer)) &&
+				(!axis1IsWrapped || (
+					_axis1NegativePlane.GetDistanceToPoint(position) >= buffer &&
+					_axis1PositivePlane.GetDistanceToPoint(position) >= buffer)) &&
+				(!axis2IsWrapped || (
+					_axis2NegativePlane.GetDistanceToPoint(position) >= buffer &&
+					_axis2PositivePlane.GetDistanceToPoint(position) >= buffer));
+		}
+
+		public override bool Contains(Bounds box, float buffer = 0f)
+		{
+			return
+				(!axis0IsWrapped || (
+					box.IsAboveOrTouches(_axis0NegativePlane.Shift(buffer)) &&
+					box.IsAboveOrTouches(_axis0PositivePlane.Shift(buffer)))) &&
+				(!axis1IsWrapped || (
+					box.IsAboveOrTouches(_axis1NegativePlane.Shift(buffer)) &&
+					box.IsAboveOrTouches(_axis1PositivePlane.Shift(buffer)))) &&
+				(!axis2IsWrapped || (
+					box.IsAboveOrTouches(_axis2NegativePlane.Shift(buffer)) &&
+					box.IsAboveOrTouches(_axis2PositivePlane.Shift(buffer))));
+		}
+
+		public override bool Contains(Vector3 position, Bounds box, float buffer = 0f)
+		{
+			return Contains(new Bounds(box.center + position, box.size));
+		}
+
+		#endregion
+
+		#region Confine
 
 		public override void Confine(Transform transform)
 		{
@@ -401,11 +496,26 @@ namespace Experilous.WrapAround
 			rigidbody.position = position;
 		}
 
+		public override void Confine(Rigidbody2D rigidbody)
+		{
+			var position = rigidbody.position;
+			Confine(ref position);
+			rigidbody.position = position;
+		}
+
 		public void Confine(ref Vector3 position)
 		{
 			if (axis0IsWrapped) position -= Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) * _transformedAxis0Vector;
 			if (axis1IsWrapped) position -= Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) * _transformedAxis1Vector;
 			if (axis2IsWrapped) position -= Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis2NegativePlane, new ScaledRay(position, _transformedAxis2Vector))) * _transformedAxis2Vector;
 		}
+
+		public void Confine(ref Vector2 position)
+		{
+			if (axis0IsWrapped) position -= (Vector2)(Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) * _transformedAxis0Vector);
+			if (axis1IsWrapped) position -= (Vector2)(Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) * _transformedAxis1Vector);
+		}
+
+		#endregion
 	}
 }

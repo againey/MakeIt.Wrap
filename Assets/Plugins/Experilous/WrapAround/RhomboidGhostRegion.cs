@@ -42,6 +42,12 @@ namespace Experilous.WrapAround
 			targetRigidbody.rotation = sourceRigidbody.rotation;
 		}
 
+		public override void Transform(Rigidbody2D sourceRigidbody, Rigidbody2D targetRigidbody)
+		{
+			targetRigidbody.position = sourceRigidbody.position + (Vector2)_offset;
+			targetRigidbody.rotation = sourceRigidbody.rotation;
+		}
+
 		public override Matrix4x4 transformation { get { return Matrix4x4.TRS(_offset, Quaternion.identity, Vector3.one); } }
 
 		public override string ToString()

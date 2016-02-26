@@ -58,6 +58,20 @@ namespace Experilous.WrapAround
 		public abstract void Transform(Rigidbody sourceRigidbody, Rigidbody targetRigidbody);
 
 		/// <summary>
+		/// Applies the translation and rotation values from a source rigidbody to a target
+		/// rigidbody, after adjusting the source's translation and rotation according to
+		/// this region's particular combination of the world's wrapping transformations.
+		/// </summary>
+		/// <param name="sourceRigidbody">The rigidbody which provides the original translation and rotation values.</param>
+		/// <param name="targetRigidbody">The rigidbody which receives the modified translation and rotation values.  This is allowed to be the same as the <paramref name="sourceRigidBody" /> parameter.</param>
+		/// <remarks>
+		/// This overload is provided for performance purposes, because setting a rigidbody's
+		/// position and rotation is faster than setting the transform's, as the latter will cause
+		/// all attached colliders to recalculate their positions relative to the rigidbody.
+		/// </remarks>
+		public abstract void Transform(Rigidbody2D sourceRigidbody, Rigidbody2D targetRigidbody);
+
+		/// <summary>
 		/// The transformation matrix which can be used to apply this region's particular
 		/// combination of the world's wrapping transformations.
 		/// </summary>

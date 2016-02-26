@@ -36,5 +36,24 @@ namespace Experilous.WrapAround
 				return null;
 			}
 		}
+
+		public static TWorld FindWorld<TWorld>(Component component) where TWorld : World
+		{
+			var provider = component.GetComponentInParent<WorldProvider>();
+			while (provider != null)
+			{
+				if (provider.world is TWorld)
+				{
+					return (TWorld)provider.world;
+				}
+				else
+				{
+					var parent = provider.transform.parent;
+					if (parent == null) return null;
+					provider = component.GetComponentInParent<WorldProvider>();
+				}
+			}
+			return null;
+		}
 	}
 }

@@ -36,5 +36,24 @@ namespace Experilous.WrapAround
 				return null;
 			}
 		}
+
+		public static TViewport FindWorld<TViewport>(Component component) where TViewport : Viewport
+		{
+			var provider = component.GetComponentInParent<ViewportProvider>();
+			while (provider != null)
+			{
+				if (provider.viewport is TViewport)
+				{
+					return (TViewport)provider.viewport;
+				}
+				else
+				{
+					var parent = provider.transform.parent;
+					if (parent == null) return null;
+					provider = component.GetComponentInParent<ViewportProvider>();
+				}
+			}
+			return null;
+		}
 	}
 }

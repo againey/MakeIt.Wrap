@@ -34,6 +34,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
 	/// <seealso cref="ColliderElementGhost"/>
 	/// <seealso cref="Collider"/>
+	/// <seealso cref="Collider2DElement"/>
 	[RequireComponent(typeof(Collider))]
 	public class ColliderElement : GhostableElement<ColliderElement, ColliderElementGhost>, IWorldConsumer
 	{
@@ -78,8 +79,8 @@ namespace Experilous.WrapAround
 			base.Start();
 
 			if (world == null) world = WorldConsumerUtility.FindWorld(this);
-			this.DisableAndThrowOnMissingReference(world, "The ColliderElement component requires a reference to a World component.");
-			this.DisableAndThrowOnMissingReference(bounds, "The ColliderElement component requires a reference to an AbstractBounds component.");
+			this.DisableAndThrowOnUnassignedReference(world, "The ColliderElement component requires a reference to a World component.");
+			this.DisableAndThrowOnUnassignedReference(bounds, "The ColliderElement component requires a reference to an AbstractBounds component.");
 		}
 
 		protected void FixedUpdate()

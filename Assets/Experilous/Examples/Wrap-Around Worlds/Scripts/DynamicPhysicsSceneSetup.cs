@@ -54,12 +54,12 @@ namespace Experilous.Examples.WrapAround
 
 		protected void Start()
 		{
-			this.DisableAndThrowOnMissingReference(world, "The Rigidbodies.SceneSetup component requires a reference to a RhomboidWorld component.");
-			this.DisableAndThrowOnMissingReference(viewport, "The Rigidbodies.SceneSetup component requires a reference to a Viewport component.");
-			this.DisableAndThrowOnMissingReference(physicalRigidbodyPrefab, "The Rigidbodies.SceneSetup component requires a reference to a physical rigidbody GameObject prefab.");
-			this.DisableAndThrowOnMissingReference(virtualRigidbodyPrefab, "The Rigidbodies.SceneSetup component requires a reference to a virtual rigidbody GameObject prefab.");
-			this.DisableAndThrowOnMissingReference(physicalRigidbodyContainer, "The Rigidbodies.SceneSetup component requires a reference to a physical rigidbody Transform root.");
-			this.DisableAndThrowOnMissingReference(virtualRigidbodyContainer, "The Rigidbodies.SceneSetup component requires a reference to a virtual rigidbody Transform root.");
+			this.DisableAndThrowOnUnassignedReference(world, "The Rigidbodies.SceneSetup component requires a reference to a RhomboidWorld component.");
+			this.DisableAndThrowOnUnassignedReference(viewport, "The Rigidbodies.SceneSetup component requires a reference to a Viewport component.");
+			this.DisableAndThrowOnUnassignedReference(physicalRigidbodyPrefab, "The Rigidbodies.SceneSetup component requires a reference to a physical rigidbody GameObject prefab.");
+			this.DisableAndThrowOnUnassignedReference(virtualRigidbodyPrefab, "The Rigidbodies.SceneSetup component requires a reference to a virtual rigidbody GameObject prefab.");
+			this.DisableAndThrowOnUnassignedReference(physicalRigidbodyContainer, "The Rigidbodies.SceneSetup component requires a reference to a physical rigidbody Transform root.");
+			this.DisableAndThrowOnUnassignedReference(virtualRigidbodyContainer, "The Rigidbodies.SceneSetup component requires a reference to a virtual rigidbody Transform root.");
 
 			Physics.gravity = new Vector3(0f, 0f, 0f);
 			Time.timeScale = 0f;

@@ -37,6 +37,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="RigidbodyElementGhost"/>
 	/// <seealso cref="Rigidbody"/>
 	/// <seealso cref="Collider"/>
+	/// <seealso cref="Rigidbody2DElement"/>
 	[RequireComponent(typeof(Rigidbody))]
 	public class RigidbodyElement : GhostableElement<RigidbodyElement, RigidbodyElementGhost>, IWorldConsumer
 	{
@@ -81,8 +82,8 @@ namespace Experilous.WrapAround
 			base.Start();
 
 			if (world == null) world = WorldConsumerUtility.FindWorld(this);
-			this.DisableAndThrowOnMissingReference(world, "The RigidbodyElement component requires a reference to a World component.");
-			this.DisableAndThrowOnMissingReference(bounds, "The RigidbodyElement component requires a reference to an AbstractBounds component.");
+			this.DisableAndThrowOnUnassignedReference(world, "The RigidbodyElement component requires a reference to a World component.");
+			this.DisableAndThrowOnUnassignedReference(bounds, "The RigidbodyElement component requires a reference to an AbstractBounds component.");
 		}
 
 		protected void FixedUpdate()

@@ -66,7 +66,7 @@ namespace Experilous.WrapAround
 
 		protected void Start()
 		{
-			this.DisableAndThrowOnMissingReference(ghostPrefab, string.Format("The {0} component requires a reference to a prefab {1}.", typeof(TDerivedElement).GetPrettyName(), typeof(TGhost).GetPrettyName()));
+			this.DisableAndThrowOnUnassignedReference(ghostPrefab, string.Format("The {0} component requires a reference to a prefab {1}.", typeof(TDerivedElement).GetPrettyName(), typeof(TGhost).GetPrettyName()));
 		}
 
 		/// <summary>
@@ -139,6 +139,32 @@ namespace Experilous.WrapAround
 				ghost = ghost.nextGhost;
 			}
 			return ghost;
+		}
+
+		protected void OnDestroy()
+		{
+			var ghost = firstGhost;
+			while (ghost != null)
+			{
+				var nextGhost = ghost.nextGhost;
+				Destroy(ghost.gameObject);
+				ghost = nextGhost;
+			}
+			firstGhost = null;
+		}
+	}
+
+	public static class GhostableElementUtility
+	{
+		public static TElement GetGhostableComponent<TElement, TGhost>(this GameObject gameObject)
+			where TElement : GhostableElement<TElement, TGhost>
+			where TGhost : Ghost<TElement, TGhost>
+		{
+			var element = gameObject.GetComponent<TElement>();
+			if (element != null) return element;
+			var ghost = gameObject.GetComponent<TGhost>();
+			if (ghost != null) return ghost.original;
+			return null;
 		}
 	}
 }

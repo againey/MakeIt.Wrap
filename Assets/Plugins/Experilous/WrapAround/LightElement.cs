@@ -85,8 +85,8 @@ namespace Experilous.WrapAround
 			base.Start();
 
 			if (viewport == null) viewport = ViewportConsumerUtility.FindViewport(this);
-			this.DisableAndThrowOnMissingReference(viewport, "The LightElement component requires a reference to a Viewport component.");
-			this.DisableAndThrowOnMissingReference(bounds, "The LightElement component requires a reference to an AbstractBounds component.");
+			this.DisableAndThrowOnUnassignedReference(viewport, "The LightElement component requires a reference to a Viewport component.");
+			this.DisableAndThrowOnUnassignedReference(bounds, "The LightElement component requires a reference to an AbstractBounds component.");
 		}
 
 		protected void LateUpdate()
