@@ -7,7 +7,6 @@
 \******************************************************************************/
 
 using UnityEngine;
-using Experilous.Topological;
 
 namespace Experilous.WrapAround
 {
