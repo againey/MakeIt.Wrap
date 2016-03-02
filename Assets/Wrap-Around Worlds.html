@@ -127,6 +127,7 @@
 				<li><a href="#wrappers">Wrappers</a></li>
 				<li><a href="#bounds">Bounds</a></li>
 				<li><a href="#providers-consumers">Providers &amp; Consumers</a></li>
+				<li><a href="#execution-order">Execution Order</a></li>
 				<li><a href="#tile-based">Integration with Tile-Based Worlds</a></li>
 			</ol>
 		</section>
@@ -335,6 +336,9 @@
 				Simply select the provider in the scene hierarchy, and you should find two buttons within the provider component's inspector panel, "Apply to Unset Children" and "Apply to All Children".
 				The first button will search all descendants for consumers of the relevant type and will use the provider's reference to initialize any of them that do not already have a reference set.
 				The latter button is the same, but also overwrites the reference sof any consumers that already had their references set.</p>
+		</section>
+		<section class="chapter" id="execution-order">
+			<h2 class="section-head">Execution Order</h2>
 		</section>
 		<section class="chapter" id="tile-based">
 			<h2 class="section-head">Integration with Tile-Based Worlds</h2>
