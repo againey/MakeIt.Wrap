@@ -54,7 +54,6 @@
 			h1 div.subtitle
 			{
 				font-size: 75%;
-				margin-left: 18pt;
 			}
 			
 			section.chapter:first-of-type
@@ -99,7 +98,12 @@
 				<div class="title">Wrap-Around Worlds, by <a href="http://experilous.com" target="experilous">Experilous</a></div>
 				<div class="subtitle">User's Manual</div>
 			</h1>
-			<p>Wrap-Around Worlds is a framework for Unity to aid in...<p>
+			<p>Wrap-Around Worlds is a framework to aid in the creation of game worlds which do not simply end at their borders,
+				but allow game objects or effects passing across the borders to wrap around to the other side of the world.
+				The framework can handle cylindrical worlds (such as those found in the Civilization series) or toroidal or "doughnut shaped" worlds (such as the screen space in Asteroids).</p>
+			<p>The framework is able to manage not just the actual position and wrapping behavior of game objects,
+				but also the rendering of meshes, lights, and shadows and the detection and proper handling of physical or trigger collisions across all wrapped boundaries of a world.</p>
+			<p>Both orthographic and perspective cameras are supported, and the perspective camera can even render an infinitely repeating world all the way out to the horizon, limited only by the far clipping plane.<p>
 		</section>
 		<section id="contents">
 			<h2>Contents</h2>
@@ -138,25 +142,27 @@
 				<p>Included in this package are example scenes to demonstrate some of the worlds that the framework can manage.
 					These scenes can be found in the <a href="Experilous/Examples/Wrap-Around Worlds/">&lt;project&gt;/Assets/Experilous/Examples/Wrap-Around Worlds/</a> folder.</p>
 				<dl>
-					<dt><a href="Experilous/Examples/Wrap-Around Worlds/Asteroids.unity">Asteroids</a></dt>
+					<dt><a href="Experilous/Examples/Wrap-Around Worlds/Space Rocks.unity">Space Rocks</a></dt>
+					<dd>A simple Asteroids clone, with asteroids entering from all sides of the screen, and only wrapping once fully visible.</dd>
+					<dt><a href="Experilous/Examples/Wrap-Around Worlds/Dynamic Physics.unity">Dynamic Physics</a></dt>
 					<dd>A small square world with dynamic rigidbody elements, some of which are able to collide with each other across world boundaries.</dd>
-					<dt><a href="Experilous/Examples/Wrap-Around Worlds/RPG.unity">RPG</a></dt>
+					<dt><a href="Experilous/Examples/Wrap-Around Worlds/Lighting and Static Physics.unity">Lighting and Static Physics</a></dt>
 					<dd>A small square world with a simple player model and scattered bushes, with lighting and shadows that are able to wrap around across world boundaries.</dd>
 				</dl>
 				<p>If you also have access to the Tile-Based Worlds framework and import
 					<a href="Experilous/Packages/Tile-Based Wrap-Around Integration - With Examples.unitypackage">Tile-Based Wrap-Around Integration - With Examples&#8203;.unitypackage</a>,
 					then you will gain access to a few more example scenes.</p>
 				<dl>
-					<dt><a href="Experilous/Examples/Tile-Based Worlds/Planar Square Vertical Wrap.unity">Planar Square Vertical Wrap</a></dt>
-					<dd>A planar surface with square tiles.  The world wraps around across the top and bottom edges.</dd>
-					<dt><a href="Experilous/Examples/Tile-Based Worlds/Planar Square Full Wrap.unity">Planar Square Full Wrap</a></dt>
-					<dd>A large planar surface with square tiles.  The world wraps around both across the top and bottom edges and across the left and right edges.</dd>
-					<dt><a href="Experilous/Examples/Tile-Based Worlds/Planar Hex Horizontal Wrap.unity">Planar Hex Horizontal Wrap</a></dt>
-					<dd>A planar surface with hexagonal tiles arranged at an angle to create a parallelogram-shaped world.  The world wraps around across the left and right edges.</dd>
-					<dt><a href="Experilous/Examples/Tile-Based Worlds/Planar Hex Full Wrap.unity">Planar Hex Full Wrap</a></dt>
-					<dd>A wide planar surface with hexagonal tiles arranged at an angle to create a parallelogram-shaped world.  The world wraps around both across the top and bottom edges and across the left and right edges.</dd>
-					<dt><a href="Experilous/Examples/Tile-Based Worlds/Planar Random Full Wrap.unity">Planar Random Full Wrap</a></dt>
-					<dd>A planar surface with randomly shaped tiles which began as hexagonal tiles before being randomized.  The world wraps around both across the top and bottom edges and across the left and right edges.</dd>
+					<dt><a href="Experilous/Examples/Tile-Based Wrap-Around Worlds/Planar Square Grid Vertical Wrap.unity">Planar Square Grid Vertical Wrap</a></dt>
+					<dd>A pre-generated planar surface with square tiles.  The world wraps around across the top and bottom edges.</dd>
+					<dt><a href="Experilous/Examples/Tile-Based Wrap-Around Worlds/Planar Square Grid Full Wrap.unity">Planar Square Grid Full Wrap</a></dt>
+					<dd>A pre-generated large planar surface with square tiles.  The world wraps around both across the top and bottom edges and across the left and right edges.</dd>
+					<dt><a href="Experilous/Examples/Tile-Based Wrap-Around Worlds/Planar Hex Grid Horizontal Wrap.unity">Planar Hex Grid Horizontal Wrap</a></dt>
+					<dd>A pre-generated planar surface with hexagonal tiles arranged at an angle to create a parallelogram-shaped world.  The world wraps around across the left and right edges.</dd>
+					<dt><a href="Experilous/Examples/Tile-Based Wrap-Around Worlds/Planar Hex Grid Full Wrap.unity">Planar Hex Grid Full Wrap</a></dt>
+					<dd>A pre-generated wide planar surface with hexagonal tiles arranged at an angle to create a parallelogram-shaped world.  The world wraps around both across the top and bottom edges and across the left and right edges.</dd>
+					<dt><a href="Experilous/Examples/Tile-Based Wrap-Around Worlds/Planar Random Tiles Full Wrap.unity">Planar Random Tiles Full Wrap</a></dt>
+					<dd>A pre-generated planar surface with randomly shaped tiles which began as hexagonal tiles before being randomized.  The world wraps around both across the top and bottom edges and across the left and right edges.</dd>
 				</dl>
 			</section>
 			<section id="create-your-own">
