@@ -18,7 +18,7 @@ namespace Experilous.WrapAround
 	/// to be given a specific script execution order which will guarantee that it executes after
 	/// any scripts that might affect the viewport's configuration (such as a camera controller),
 	/// but before all other scripts that need to operate relative to the viewport's latest
-	/// configuration (such as a renderable element or light element).
+	/// configuration (such as a mesh element or light element).
 	/// </remarks>
 	[RequireComponent(typeof(Viewport))]
 	public class DynamicViewport : MonoBehaviour

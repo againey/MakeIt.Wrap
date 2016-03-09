@@ -14,7 +14,7 @@ namespace Experilous.WrapAround
 		{
 			region.Transform(original.transform, transform);
 
-			if (region == null || !region.isActive || !original.IsVisible(this))
+			if (region == null || !region.isActive || !original.bounds.IsVisible(original.viewport, transform))
 			{
 				Destroy();
 			}

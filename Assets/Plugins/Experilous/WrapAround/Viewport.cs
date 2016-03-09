@@ -60,31 +60,20 @@ namespace Experilous.WrapAround
 		public abstract bool IsVisible(Vector3 position);
 
 		/// <summary>
-		/// Returns whether an object at the specified position and with the specified bounding radius could
-		/// possibly be visible when the world is observed through this viewport with its current configuration.
-		/// </summary>
-		/// <param name="position">The position of the object.</param>
-		/// <param name="radius">The radius of the object's bounding sphere.</param>
-		/// <returns>Returns <c>true</c> is the object is potentially visible through this viewport; <c>false</c> otherwise.</returns>
-		public abstract bool IsVisible(Vector3 position, float radius);
-
-		/// <summary>
 		/// Returns whether an object with the specified axis aligned bounding box could possibly be visible
 		/// when the world is observed through this viewport with its current configuration.
 		/// </summary>
 		/// <param name="box">The axis aligned bounding box of the object.</param>
 		/// <returns>Returns <c>true</c> is the object is potentially visible through this viewport; <c>false</c> otherwise.</returns>
-		public abstract bool IsVisible(Bounds box);
+		public abstract bool IsVisible(Bounds axisAlignedBox);
 
 		/// <summary>
-		/// Returns whether an object with the specified axis aligned bounding box centered at the specified
-		/// position could possibly be visible when the world is observed through this viewport with its
-		/// current configuration.
+		/// Returns whether an object with the specified bounding sphere could possibly be visible when the
+		/// world is observed through this viewport with its current configuration.
 		/// </summary>
-		/// <param name="position">The position of the object.</param>
-		/// <param name="box">The untranslated axis aligned bounding box of the object.</param>
+		/// <param name="sphere">The bounding sphere of the object.</param>
 		/// <returns>Returns <c>true</c> is the object is potentially visible through this viewport; <c>false</c> otherwise.</returns>
-		public abstract bool IsVisible(Vector3 position, Bounds box);
+		public abstract bool IsVisible(Sphere sphere);
 
 		#endregion
 
@@ -92,6 +81,12 @@ namespace Experilous.WrapAround
 		/// Indicates if this <see cref="IWorldConsumer"/> has been assigned a world.
 		/// </summary>
 		public bool hasWorld { get { return world != null ; } }
+
+		/// <summary>
+		/// Retrieves the world assigned to this <see cref="IWorldConsumer"/>.
+		/// </summary>
+		/// <returns>The world assigned.</returns>
+		public World GetWorld() { return world; }
 
 		/// <summary>
 		/// Assigns a world to this <see cref="IWorldConsumer"/>.

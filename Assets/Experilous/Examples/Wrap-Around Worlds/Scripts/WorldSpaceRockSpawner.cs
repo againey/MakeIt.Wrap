@@ -7,12 +7,13 @@
 \******************************************************************************/
 
 using UnityEngine;
+using Experilous.WrapAround;
 
 namespace Experilous.Examples.WrapAround
 {
 	public class WorldSpaceRockSpawner : SpaceRockSpawner
 	{
-		public Experilous.WrapAround.CameraWorld world;
+		public CameraWorld world;
 		public Transform spaceRockContainer;
 
 		public float targetSignificanceTotal = 1f;
@@ -48,7 +49,10 @@ namespace Experilous.Examples.WrapAround
 
 		protected override void SetPositionAndMovement(SpaceRock rock, float movementSpeed)
 		{
-			var radius = rock.GetComponent<Experilous.WrapAround.SphereBounds>().radius * 0.99f;
+			var element = rock.GetComponent<SpriteElement>();
+			var boundingSphere = new Sphere(Vector3.zero, 0f);
+			boundingSphere.Encapsulate(((SphereBounds)element.bounds).sphere);
+			var radius = boundingSphere.radius * 0.99f;
 
 			var width = world.untransformedAxis0Vector.magnitude;
 			var height = world.untransformedAxis1Vector.magnitude;

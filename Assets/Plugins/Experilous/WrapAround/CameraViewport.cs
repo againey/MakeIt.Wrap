@@ -56,11 +56,11 @@ namespace Experilous.WrapAround
 			return true;
 		}
 
-		public override bool IsVisible(Vector3 position, float radius)
+		public override bool IsVisible(Sphere sphere)
 		{
 			foreach (var plane in _frustumPlanes)
 			{
-				if (plane.GetDistanceToPoint(position) < -radius) return false;
+				if (plane.GetDistanceToPoint(sphere.center) < -sphere.radius) return false;
 			}
 			return true;
 		}
@@ -68,11 +68,6 @@ namespace Experilous.WrapAround
 		public override bool IsVisible(Bounds box)
 		{
 			return UnityEngine.GeometryUtility.TestPlanesAABB(_frustumPlanes, box);
-		}
-
-		public override bool IsVisible(Vector3 position, Bounds box)
-		{
-			return IsVisible(new Bounds(box.center + position, box.size));
 		}
 	}
 }

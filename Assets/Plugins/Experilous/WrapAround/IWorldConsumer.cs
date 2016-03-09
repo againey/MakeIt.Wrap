@@ -19,6 +19,7 @@ namespace Experilous.WrapAround
 	public interface IWorldConsumer
 	{
 		bool hasWorld { get; }
+		World GetWorld();
 		void SetWorld(World world);
 	}
 

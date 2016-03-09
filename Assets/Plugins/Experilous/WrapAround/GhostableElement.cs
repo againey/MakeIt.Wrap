@@ -7,6 +7,7 @@
 \******************************************************************************/
 
 using UnityEngine;
+using System;
 
 namespace Experilous.WrapAround
 {
@@ -20,8 +21,12 @@ namespace Experilous.WrapAround
 	/// </remarks>
 	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost};"/>
 	/// <seealso cref="GhostBase"/>
-	public abstract class GhostableElementBase : MonoBehaviour
+	public abstract class GhostableElementBase : BoundedElement
 	{
+		[NonSerialized] protected ElementBounds _bounds;
+
+		public override ElementBounds bounds { get { return _bounds; } }
+
 		/// <summary>
 		/// Checks whether or not the element's list of ghosts contains the specified ghost object.
 		/// </summary>
@@ -48,7 +53,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="GhostBase"/>
 	/// <seealso cref="Ghost`2{TElement,TDerivedGhost};"/>
 	/// <seealso cref="GhostRegion"/>
-	public class GhostableElement<TDerivedElement, TGhost> : GhostableElementBase
+	public abstract class GhostableElement<TDerivedElement, TGhost> : GhostableElementBase
 		where TDerivedElement : GhostableElement<TDerivedElement, TGhost>
 		where TGhost : Ghost<TDerivedElement, TGhost>
 	{
@@ -66,6 +71,8 @@ namespace Experilous.WrapAround
 
 		protected void Start()
 		{
+			if (_bounds == null) RefreshBounds();
+
 			this.DisableAndThrowOnUnassignedReference(ghostPrefab, string.Format("The {0} component requires a reference to a prefab {1}.", typeof(TDerivedElement).GetPrettyName(), typeof(TGhost).GetPrettyName()));
 		}
 
@@ -152,6 +159,31 @@ namespace Experilous.WrapAround
 			}
 			firstGhost = null;
 		}
+
+#if UNITY_EDITOR
+		protected virtual Color GetGizmoColor() { return Color.white; }
+		protected virtual Color GetGhostGizmoColor() { return Color.gray; }
+
+		protected override void OnDrawGizmosSelected()
+		{
+			if (bounds == null) RefreshBounds();
+			if (bounds != null)
+			{
+				bounds.DrawGizmosSelected(transform, GetGizmoColor());
+				DrawGhostGizmosSelected(GetGhostGizmoColor());
+			}
+		}
+
+		protected void DrawGhostGizmosSelected(Color color)
+		{
+			var ghost = firstGhost;
+			while (ghost != null)
+			{
+				bounds.DrawGizmosSelected(ghost.transform, color);
+				ghost = ghost.nextGhost;
+			}
+		}
+#endif
 	}
 
 	public static class GhostableElementUtility

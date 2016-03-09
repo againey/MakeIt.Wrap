@@ -20,6 +20,7 @@ namespace Experilous.Examples.WrapAround
 		public float breakupSignificanceFraction = 1f;
 
 		public bool hasWorld { get { return world != null; } }
+		public World GetWorld() { return world; }
 		public void SetWorld(World world) { if (world is CameraWorld) this.world = (CameraWorld)world; }
 
 		protected void Start()

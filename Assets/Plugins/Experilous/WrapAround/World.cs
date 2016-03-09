@@ -67,48 +67,76 @@ namespace Experilous.WrapAround
 		public abstract bool IsCollidable(Vector3 position);
 
 		/// <summary>
-		/// Returns whether a physically active object at the specified position and with the specified bounding
-		/// radius could possibly collide with another physically active object whose origin is strictly confined
-		/// to the world's canonical bounds.
-		/// </summary>
-		/// <param name="position">The position of the physically active object.</param>
-		/// <param name="radius">The radius of the physically active object's bounding sphere.</param>
-		/// <returns>Returns <c>true</c> if the physically active object could possibly collide with another object; <c>false</c> otherwise</returns>
-		public abstract bool IsCollidable(Vector3 position, float radius);
-
-		/// <summary>
 		/// Returns whether a physically active object with the specified axis aligned bounding box could possibly collide
 		/// with another physically active object whose origin is strictly confined to the world's canonical bounds.
 		/// </summary>
 		/// <param name="box">The axis aligned bounding box of the physically active object.</param>
 		/// <returns>Returns <c>true</c> if the physically active object could possibly collide with another object; <c>false</c> otherwise</returns>
-		public abstract bool IsCollidable(Bounds box);
+		public abstract bool IsCollidable(Bounds axisAlignedBox);
 
 		/// <summary>
-		/// Returns whether a physically active object with the specified axis aligned bounding box centered at the
-		/// specified position could possibly collide with another physically active object whose origin is strictly
-		/// confined to the world's canonical bounds.
+		/// Returns whether a physically active object with the specifed bounding sphere could possibly collide with
+		/// another physically active object whose origin is strictly confined to the world's canonical bounds.
 		/// </summary>
-		/// <param name="position">The position of the physically active object.</param>
-		/// <param name="box">The untranslated axis aligned bounding box of the physically active object.</param>
+		/// <param name="position">The bounding sphere of the physically active object.</param>
 		/// <returns>Returns <c>true</c> if the physically active object could possibly collide with another object; <c>false</c> otherwise</returns>
-		public abstract bool IsCollidable(Vector3 position, Bounds box);
+		public abstract bool IsCollidable(Sphere sphere);
 
 		#endregion
 
 		#region Intersects
 
+		/// <summary>
+		/// Returns whether the specified position is within <paramref name="buffer"/> units of the world's canonical bounds.
+		/// </summary>
+		/// <param name="position">The position to test against the world's bounds.</param>
+		/// <param name="buffer">The buffer thickness beyond the world's bounds.</param>
+		/// <returns>Returns <c>true</c> if <paramref name="position"/> is within <paramref name="buffer"/> units of the world's bounds; <c>false</c> otherwise</returns>
 		public abstract bool Intersects(Vector3 position, float buffer = 0f);
+
+		/// <summary>
+		/// Returns whether any point within the specified axis aligned bounding box is within <paramref name="buffer"/> units of the world's canonical bounds.
+		/// </summary>
+		/// <param name="box">The axis aligned bounding box to test against the world's bounds.</param>
+		/// <param name="buffer">The buffer thickness beyond the world's bounds.</param>
+		/// <returns>Returns <c>true</c> if some point within <paramref name="box"/> is within <paramref name="buffer"/> units of the world's bounds; <c>false</c> otherwise</returns>
 		public abstract bool Intersects(Bounds box, float buffer = 0f);
-		public abstract bool Intersects(Vector3 position, Bounds box, float buffer = 0f);
+
+		/// <summary>
+		/// Returns whether any point within the specified bounding sphere is within <paramref name="buffer"/> units of the world's canonical bounds.
+		/// </summary>
+		/// <param name="sphere">The bounding sphere to test against the world's bounds.</param>
+		/// <param name="buffer">The buffer thickness beyond the world's bounds.</param>
+		/// <returns>Returns <c>true</c> if some point within <paramref name="sphere"/> is within <paramref name="buffer"/> units of the world's bounds; <c>false</c> otherwise</returns>
+		public abstract bool Intersects(Sphere sphere, float buffer = 0f);
 
 		#endregion
 
 		#region Contains
 
+		/// <summary>
+		/// Returns whether the specified position is within the world's canonical bounds, with <paramref name="buffer"/> units to spare.
+		/// </summary>
+		/// <param name="position">The position to test against the world's bounds.</param>
+		/// <param name="buffer">The buffer thickness within the world's bounds.</param>
+		/// <returns>Returns <c>true</c> if <paramref name="position"/> is within and no closer than <paramref name="buffer"/> units to the world's bounds; <c>false</c> otherwise</returns>
 		public abstract bool Contains(Vector3 position, float buffer = 0f);
+
+		/// <summary>
+		/// Returns whether the specified axis aligned bounding box is fully within the world's canonical bounds, with <paramref name="buffer"/> units to spare.
+		/// </summary>
+		/// <param name="box">The axis aligned bounding box to test against the world's bounds.</param>
+		/// <param name="buffer">The buffer thickness within the world's bounds.</param>
+		/// <returns>Returns <c>true</c> if <paramref name="box"/> is fully within and no closer than <paramref name="buffer"/> units to the world's bounds; <c>false</c> otherwise</returns>
 		public abstract bool Contains(Bounds box, float buffer = 0f);
-		public abstract bool Contains(Vector3 position, Bounds box, float buffer = 0f);
+
+		/// <summary>
+		/// Returns whether the specified bounding sphere is fully within the world's canonical bounds, with <paramref name="buffer"/> units to spare.
+		/// </summary>
+		/// <param name="sphere">The bounding sphere to test against the world's bounds.</param>
+		/// <param name="buffer">The buffer thickness within the world's bounds.</param>
+		/// <returns>Returns <c>true</c> if <paramref name="sphere"/> is fully within and no closer than <paramref name="buffer"/> units to the world's bounds; <c>false</c> otherwise</returns>
+		public abstract bool Contains(Sphere sphere, float buffer = 0f);
 
 		#endregion
 

@@ -370,9 +370,10 @@ namespace Experilous.WrapAround
 					_axis2PositivePlane.GetDistanceToPoint(position) >= -maxPhysicsObjectRadius));
 		}
 
-		public override bool IsCollidable(Vector3 position, float radius)
+		public override bool IsCollidable(Sphere sphere)
 		{
-			var extendedRadius = radius + maxPhysicsObjectRadius;
+			var position = sphere.center;
+			var extendedRadius = sphere.radius + maxPhysicsObjectRadius;
 			return
 				(!axis0IsWrapped || (
 					_axis0NegativePlane.GetDistanceToPoint(position) >= -extendedRadius &&
@@ -397,11 +398,6 @@ namespace Experilous.WrapAround
 				(!axis2IsWrapped || (
 					box.IsAboveOrIntersects(_axis2NegativePlane.Shift(-maxPhysicsObjectRadius)) &&
 					box.IsAboveOrIntersects(_axis2PositivePlane.Shift(-maxPhysicsObjectRadius))));
-		}
-
-		public override bool IsCollidable(Vector3 position, Bounds box)
-		{
-			return IsCollidable(new Bounds(box.center + position, box.size));
 		}
 
 		#endregion
@@ -436,9 +432,9 @@ namespace Experilous.WrapAround
 					!box.IsBelow(_axis2PositivePlane.Shift(-buffer))));
 		}
 
-		public override bool Intersects(Vector3 position, Bounds box, float buffer = 0f)
+		public override bool Intersects(Sphere sphere, float buffer = 0f)
 		{
-			return Intersects(new Bounds(box.center + position, box.size));
+			return Intersects(sphere.center, sphere.radius + buffer);
 		}
 
 		#endregion
@@ -473,9 +469,9 @@ namespace Experilous.WrapAround
 					box.IsAboveOrTouches(_axis2PositivePlane.Shift(buffer))));
 		}
 
-		public override bool Contains(Vector3 position, Bounds box, float buffer = 0f)
+		public override bool Contains(Sphere sphere, float buffer = 0f)
 		{
-			return Contains(new Bounds(box.center + position, box.size));
+			return Contains(sphere.center, sphere.radius + buffer);
 		}
 
 		#endregion

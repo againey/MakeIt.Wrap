@@ -141,7 +141,7 @@ namespace Experilous.Examples.WrapAround
 
 					rigidbody.GetComponent<RigidbodyElementWrapper>().world = world;
 					rigidbody.GetComponent<RigidbodyElement>().world = world;
-					rigidbody.GetComponent<RenderableElement>().viewport = viewport;
+					rigidbody.GetComponent<MeshElement>().viewport = viewport;
 
 					var rigidBody = rigidbody.GetComponent<Rigidbody>();
 					var direction = Random.Range(0, 1000000) / 1000000f * Mathf.PI * 2f;
@@ -180,7 +180,7 @@ namespace Experilous.Examples.WrapAround
 					rigidbody.transform.SetParent(virtualRigidbodyContainer, false);
 
 					rigidbody.GetComponent<DynamicElementWrapper>().world = world;
-					rigidbody.GetComponent<RenderableElement>().viewport = viewport;
+					rigidbody.GetComponent<MeshElement>().viewport = viewport;
 
 					var rigidBody = rigidbody.GetComponent<Rigidbody>();
 					var direction = Random.Range(0, 1000000) / 1000000f * Mathf.PI * 2f;

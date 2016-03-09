@@ -27,26 +27,62 @@ namespace Experilous.WrapAround
 		public abstract bool isActive { get; set; }
 
 		/// <summary>
-		/// Transforms a provided position and rotation according to this region's particular
-		/// combination of the world's wrapping transformations.
+		/// Updates the specified translation transformations according to this region's particular combination of the world's wrapping transformations.
 		/// </summary>
-		/// <param name="position">The position to be transformed through translation.</param>
-		/// <param name="rotation">The orientation that is to be transformed through rotation.</param>
+		/// <param name="position">The translation transformation to be transformed.</param>
+		public abstract void Transform(ref Vector3 position);
+
+		/// <summary>
+		/// Updates the specified translation and rotation transformations according to this region's particular combination of the world's wrapping transformations.
+		/// </summary>
+		/// <param name="position">The translation transformation to be transformed.</param>
+		/// <param name="rotation">The rotation transformation to be transformed.</param>
 		public abstract void Transform(ref Vector3 position, ref Quaternion rotation);
 
 		/// <summary>
-		/// Applies the translation and rotation values from a source transform to a target
-		/// transform, after adjusting the source's translation and rotation according to
-		/// this region's particular combination of the world's wrapping transformations.
+		/// Updates the specified translation, rotation, and scaling transformations according to this region's particular combination of the world's wrapping transformations.
+		/// </summary>
+		/// <param name="position">The translation transformation to be transformed.</param>
+		/// <param name="rotation">The rotation transformation to be transformed.</param>
+		/// <param name="scale">The scaling transformation to be transformed.</param>
+		public abstract void Transform(ref Vector3 position, ref Quaternion rotation, ref Vector3 scale);
+
+		/// <summary>
+		/// Updates the specified transformation matrix according to this region's particular combination of the world's wrapping transformations.
+		/// </summary>
+		/// <param name="transformation">The transformation matrix to be transformed.</param>
+		public abstract void Transform(ref Matrix4x4 transformation);
+
+		/// <summary>
+		/// Transforms the specified position according to this region's particular combination of the world's wrapping transformations.
+		/// </summary>
+		/// <param name="position">The position to be transformed.</param>
+		/// <returns>The transformed position.</returns>
+		public abstract Vector3 Transform(Vector3 position);
+
+		/// <summary>
+		/// Transforms the specified axis aligned bounding box according to this region's particular combination of the world's wrapping transformations.
+		/// </summary>
+		/// <param name="axisAlignedBox">The axis aligned bounding box to be transformed.</param>
+		/// <returns>The transformed axis aligned bounding box.</returns>
+		public abstract Bounds Transform(Bounds axisAlignedBox);
+
+		/// <summary>
+		/// Transforms the specified bounding sphere according to this region's particular combination of the world's wrapping transformations.
+		/// </summary>
+		/// <param name="sphere">The bounding sphere to be transformed.</param>
+		/// <returns>The transformed bounding sphere.</returns>
+		public abstract Sphere Transform(Sphere sphere);
+
+		/// <summary>
+		/// Sets the target transform to the source transform after applying this region's particular combination of the world's wrapping transformations.
 		/// </summary>
 		/// <param name="sourceTransform">The transform which provides the original translation and rotation values.</param>
 		/// <param name="targetTransform">The transform which receives the modified translation and rotation values.  This is allowed to be the same as the <paramref name="sourceTransform" /> parameter.</param>
 		public abstract void Transform(Transform sourceTransform, Transform targetTransform);
 
 		/// <summary>
-		/// Applies the translation and rotation values from a source rigidbody to a target
-		/// rigidbody, after adjusting the source's translation and rotation according to
-		/// this region's particular combination of the world's wrapping transformations.
+		/// Sets the target rigidbody transform to the source rigidbody transform after applying this region's particular combination of the world's wrapping transformations.
 		/// </summary>
 		/// <param name="sourceRigidbody">The rigidbody which provides the original translation and rotation values.</param>
 		/// <param name="targetRigidbody">The rigidbody which receives the modified translation and rotation values.  This is allowed to be the same as the <paramref name="sourceRigidBody" /> parameter.</param>
@@ -58,9 +94,7 @@ namespace Experilous.WrapAround
 		public abstract void Transform(Rigidbody sourceRigidbody, Rigidbody targetRigidbody);
 
 		/// <summary>
-		/// Applies the translation and rotation values from a source rigidbody to a target
-		/// rigidbody, after adjusting the source's translation and rotation according to
-		/// this region's particular combination of the world's wrapping transformations.
+		/// Sets the target rigidbody transform to the source rigidbody transform after applying this region's particular combination of the world's wrapping transformations.
 		/// </summary>
 		/// <param name="sourceRigidbody">The rigidbody which provides the original translation and rotation values.</param>
 		/// <param name="targetRigidbody">The rigidbody which receives the modified translation and rotation values.  This is allowed to be the same as the <paramref name="sourceRigidBody" /> parameter.</param>

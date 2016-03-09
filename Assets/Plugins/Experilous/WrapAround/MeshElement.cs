@@ -7,11 +7,12 @@
 \******************************************************************************/
 
 using UnityEngine;
+using System;
 
 namespace Experilous.WrapAround
 {
 	/// <summary>
-	/// A wrap-around world element that ought to be rendered in visible ghost regions.
+	/// A wrap-around world element with a mesh that ought to be rendered in visible ghost regions.
 	/// </summary>
 	/// <remarks>
 	/// Attach this component to a game object with one or more mesh filters whenever you want
@@ -20,55 +21,61 @@ namespace Experilous.WrapAround
 	/// for each visible ghost region in which the ghost might also be visible.
 	/// </remarks>
 	/// <seealso cref="Viewport"/>
-	/// <seealso cref="AbstractBounds"/>
+	/// <seealso cref="ElementBounds"/>
 	/// <seealso cref="GhostRegion"/>
 	/// <seealso cref="ViewportProvider"/>
 	/// <seealso cref="IViewportConsumer"/>
 	/// <seealso cref="MeshFilter"/>
-	public class RenderableElement : MonoBehaviour, IViewportConsumer
+	/// <seealso cref="MeshRenderer"/>
+	public class MeshElement : BoundedElement, IViewportConsumer
 	{
 		public Viewport viewport;
-		public AbstractBounds bounds;
+		public ElementBoundsSource boundsSource = ElementBoundsSource.FixedScale | ElementBoundsSource.Automatic;
+		public ElementBoundsProvider boundsProvider;
 
 		protected MeshFilter[] _meshFilters;
 
 		public bool hasViewport { get { return viewport != null ; } }
+		public Viewport GetViewport() { return viewport; }
 		public void SetViewport(Viewport viewport) { this.viewport = viewport; }
+
+		[NonSerialized] protected ElementBounds _bounds;
+
+		public override ElementBounds bounds { get { return _bounds; } }
 
 		protected void Awake()
 		{
 			_meshFilters = GetComponentsInChildren<MeshFilter>();
-
-			if (bounds == null)
-			{
-				bounds = GetComponent<AbstractBounds>();
-				if (bounds == null)
-				{
-					bounds = gameObject.AddComponent<PointBounds>();
-				}
-			}
 		}
 
 		protected void Start()
 		{
 			if (viewport == null) viewport = ViewportConsumerUtility.FindViewport(this);
-			this.DisableAndThrowOnUnassignedReference(viewport, "The RenderableElement component requires a reference to a Viewport component.");
-			this.DisableAndThrowOnUnassignedReference(bounds, "The RenderableElement component requires a reference to an AbstractBounds component.");
+			this.DisableAndThrowOnUnassignedReference(viewport, "The MeshElement component requires a reference to a Viewport component.");
+
+			if (_bounds == null) RefreshBounds();
 		}
 
 		protected void LateUpdate()
 		{
 			foreach (var ghostRegion in viewport.visibleGhostRegions)
 			{
-				var position = transform.position;
-				var rotation = transform.rotation;
-				ghostRegion.Transform(ref position, ref rotation);
-
-				if (bounds.IsVisible(viewport, position, rotation))
+				if (bounds.IsVisible(viewport, transform, ghostRegion))
 				{
 					RenderGhosts(ghostRegion.transformation);
 				}
 			}
+		}
+
+		public override void RefreshBounds()
+		{
+			_bounds = ElementBounds.CreateBounds(boundsSource, boundsProvider, transform,
+				() => { return HierarchyUtility.GetMeshGroupAxisAlignedBoxBounds(transform); },
+				() => { return HierarchyUtility.GetMeshGroupSphereBounds(transform); });
+
+#if UNITY_EDITOR
+			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UnityEditor.SceneView.RepaintAll();
+#endif
 		}
 
 		protected void RenderGhosts(Matrix4x4 regionTransformation)
@@ -90,5 +97,30 @@ namespace Experilous.WrapAround
 				}
 			}
 		}
+
+#if UNITY_EDITOR
+		protected override void OnDrawGizmosSelected()
+		{
+			if (bounds == null) RefreshBounds();
+			if (bounds != null)
+			{
+				bounds.DrawGizmosSelected(transform, new Color(0f, 0.5f, 1f, 0.5f));
+				DrawGhostGizmosSelected(new Color(0.25f, 0.5f, 1f, 0.25f));
+			}
+		}
+
+		protected void DrawGhostGizmosSelected(Color color)
+		{
+			if (viewport == null) return;
+
+			foreach (var ghostRegion in viewport.visibleGhostRegions)
+			{
+				if (bounds.IsVisible(viewport, transform, ghostRegion))
+				{
+					bounds.DrawGizmosSelected(transform, ghostRegion, color);
+				}
+			}
+		}
+#endif
 	}
 }

@@ -34,6 +34,7 @@ namespace Experilous.WrapAround
 		protected Rigidbody _rigidbody;
 
 		public bool hasWorld { get { return world != null ; } }
+		public World GetWorld() { return world; }
 		public void SetWorld(World world) { this.world = world; }
 
 		protected void Start()

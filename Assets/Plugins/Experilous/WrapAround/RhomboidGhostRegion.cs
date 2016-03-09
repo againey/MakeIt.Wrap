@@ -25,9 +25,39 @@ namespace Experilous.WrapAround
 
 		public override bool isActive { get { return _isActive; } set { _isActive = value; } }
 
+		public override void Transform(ref Vector3 position)
+		{
+			position += _offset;
+		}
+
 		public override void Transform(ref Vector3 position, ref Quaternion rotation)
 		{
 			position += _offset;
+		}
+
+		public override void Transform(ref Vector3 position, ref Quaternion rotation, ref Vector3 scale)
+		{
+			position += _offset;
+		}
+
+		public override void Transform(ref Matrix4x4 transformation)
+		{
+			transformation *= Matrix4x4.TRS(_offset, Quaternion.identity, Vector3.one);
+		}
+
+		public override Vector3 Transform(Vector3 position)
+		{
+			return position + _offset;
+		}
+
+		public override Bounds Transform(Bounds axisAlignedBox)
+		{
+			return new Bounds(axisAlignedBox.center + _offset, axisAlignedBox.size);
+		}
+
+		public override Sphere Transform(Sphere sphere)
+		{
+			return new Sphere(sphere.center + _offset, sphere.radius);
 		}
 
 		public override void Transform(Transform sourceTransform, Transform targetTransform)

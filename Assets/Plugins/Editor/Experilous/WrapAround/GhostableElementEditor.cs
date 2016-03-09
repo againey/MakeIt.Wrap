@@ -17,9 +17,12 @@ namespace Experilous.WrapAround
 	{
 		public override void OnInspectorGUI()
 		{
+			var element = (TElement)target;
+
+			Undo.RecordObject(element, typeof(TElement).GetPrettyName());
+
 			EditorGUI.BeginChangeCheck();
 
-			var element = (TElement)target;
 			OnElementGUI(element);
 			OnGhostPrefabGUI(element);
 

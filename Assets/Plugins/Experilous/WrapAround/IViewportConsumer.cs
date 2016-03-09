@@ -19,6 +19,7 @@ namespace Experilous.WrapAround
 	public interface IViewportConsumer
 	{
 		bool hasViewport { get; }
+		Viewport GetViewport();
 		void SetViewport(Viewport viewport);
 	}
 

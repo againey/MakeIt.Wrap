@@ -8,6 +8,7 @@
 
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 namespace Experilous.WrapAround
 {
@@ -18,32 +19,64 @@ namespace Experilous.WrapAround
 		{
 			var provider = (WorldProvider)target;
 
-			provider.world = (World)EditorGUILayout.ObjectField("World", provider.world, typeof(World), true);
+			World world = null;
 
-			GUI.enabled = (provider.world != null);
+			world = (World)EditorGUILayout.ObjectField("World", provider.world, typeof(World), true);
+
+			GUI.enabled = (world != null);
 			if (GUILayout.Button(new GUIContent("Apply to Unset Children", "Search through all descendants for any components that implement IWorldConsumer, and assign it this provider's world if the component doesn't already have a world assigned.")))
 			{
+				var consumers = new List<Object>();
 				foreach (var element in provider.GetComponentsInChildren<IWorldConsumer>())
 				{
-					if (!element.hasWorld)
+					if (element.GetWorld() == null)
 					{
-						element.SetWorld(provider.world);
-						EditorUtility.SetDirty((Component)element);
+						consumers.Add((Object)element);
+					}
+				}
+
+				if (consumers.Count > 0)
+				{
+					Undo.RecordObjects(consumers.ToArray(), "Apply World To Children");
+
+					foreach (var element in consumers)
+					{
+						((IWorldConsumer)element).SetWorld(provider.world);
+						EditorUtility.SetDirty(element);
+					}
+				}
+			}
+
+			if (GUILayout.Button(new GUIContent("Apply to All Children", "Search through all descendants for any components that implement IWorldConsumer, and assign it this provider's world, overwriting any world it might have already been assigned.")))
+			{
+				var consumers = new List<Object>();
+				foreach (var element in provider.GetComponentsInChildren<IWorldConsumer>())
+				{
+					if (!ReferenceEquals(element.GetWorld(), world))
+					{
+						consumers.Add((Object)element);
+					}
+				}
+
+				if (consumers.Count > 0)
+				{
+					Undo.RecordObjects(consumers.ToArray(), "Apply World To Children");
+
+					foreach (var element in consumers)
+					{
+						((IWorldConsumer)element).SetWorld(provider.world);
+						EditorUtility.SetDirty(element);
 					}
 				}
 			}
 			GUI.enabled = true;
 
-			GUI.enabled = (provider.world != null);
-			if (GUILayout.Button(new GUIContent("Apply to All Children", "Search through all descendants for any components that implement IWorldConsumer, and assign it this provider's world, overwriting any world it might have already been assigned.")))
+			if (!ReferenceEquals(provider.world, world))
 			{
-				foreach (var element in provider.GetComponentsInChildren<IWorldConsumer>())
-				{
-					element.SetWorld(provider.world);
-					EditorUtility.SetDirty((Component)element);
-				}
+				Undo.RecordObject(provider, "World Provider");
+				provider.world = world;
+				EditorUtility.SetDirty(provider);
 			}
-			GUI.enabled = true;
 		}
 	}
 }

@@ -17,7 +17,11 @@ namespace Experilous.WrapAround
 		protected override void OnElementGUI(RigidbodyElement element)
 		{
 			element.world = (World)EditorGUILayout.ObjectField("World", element.world, typeof(World), true);
-			element.bounds = (AbstractBounds)EditorGUILayout.ObjectField("Bounds", element.bounds, typeof(AbstractBounds), true);
+
+			if (ElementBoundsEditorUtility.OnInspectorGUI(element, ref element.boundsSource, ref element.boundsProvider))
+			{
+				element.RefreshBounds();
+			}
 		}
 
 		protected override bool IsExcluded(Component[] components)

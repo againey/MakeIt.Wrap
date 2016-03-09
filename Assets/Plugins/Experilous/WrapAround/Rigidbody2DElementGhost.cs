@@ -32,7 +32,7 @@ namespace Experilous.WrapAround
 			_rigidbody.angularVelocity = _originalRigidbody.angularVelocity;
 			_rigidbody.velocity = _originalRigidbody.velocity;
 
-			if (region == null || !region.isActive || !original.IsCollidable(this))
+			if (region == null || !region.isActive || !original.bounds.IsCollidable(original.world, transform))
 			{
 				Destroy();
 			}

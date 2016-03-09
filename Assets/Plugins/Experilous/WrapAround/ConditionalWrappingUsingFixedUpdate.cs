@@ -13,13 +13,14 @@ namespace Experilous.WrapAround
 	public class ConditionalWrappingUsingFixedUpdate : MonoBehaviour, IWorldConsumer
 	{
 		public World world;
-		public AbstractBounds bounds;
+		public BoundedElement boundedElement;
 		public float enableBuffer = 0f;
 		public float destroyBuffer = 0f;
 
 		public MonoBehaviour[] componentsToEnable;
 
 		public bool hasWorld { get { return world != null ; } }
+		public World GetWorld() { return world; }
 		public void SetWorld(World world) { this.world = world; }
 
 		protected void Start()
@@ -27,13 +28,13 @@ namespace Experilous.WrapAround
 			if (world == null) world = WorldConsumerUtility.FindWorld(this);
 			this.DisableAndThrowOnUnassignedReference(world, "The ConditionalWrappingUsingFixedUpdate component requires a reference to a World component.");
 
-			if (bounds == null) bounds = GetComponent<AbstractBounds>();
-			this.DisableAndThrowOnUnassignedReference(bounds, "The ConditionalWrappingUsingFixedUpdate component requires a reference to an AbstractBounds component.");
+			if (boundedElement == null) boundedElement = GetComponent<BoundedElement>();
+			this.DisableAndThrowOnUnassignedReference(boundedElement, "The ConditionalWrappingUsingFixedUpdate component requires a reference to an BoundedElement component.");
 		}
 
 		protected void FixedUpdate()
 		{
-			if (bounds.ContainedBy(world, enableBuffer))
+			if (boundedElement.bounds.ContainedBy(world, transform, enableBuffer))
 			{
 				foreach (var component in componentsToEnable)
 				{
@@ -41,7 +42,7 @@ namespace Experilous.WrapAround
 				}
 				enabled = false;
 			}
-			else if (!bounds.Intersects(world, destroyBuffer))
+			else if (!boundedElement.bounds.Intersects(world, transform, destroyBuffer))
 			{
 				Destroy(gameObject);
 			}

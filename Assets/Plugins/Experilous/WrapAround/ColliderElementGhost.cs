@@ -14,7 +14,7 @@ namespace Experilous.WrapAround
 	{
 		protected void FixedUpdate()
 		{
-			if (region == null || !region.isActive || !original.IsCollidable(this))
+			if (region == null || !region.isActive || !original.bounds.IsCollidable(original.world, transform))
 			{
 				Destroy();
 			}

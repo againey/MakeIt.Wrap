@@ -17,7 +17,11 @@ namespace Experilous.WrapAround
 		protected override void OnElementGUI(LightElement element)
 		{
 			element.viewport = (Viewport)EditorGUILayout.ObjectField("Viewport", element.viewport, typeof(Viewport), true);
-			element.bounds = (AbstractBounds)EditorGUILayout.ObjectField("Bounds", element.bounds, typeof(AbstractBounds), true);
+
+			if (ElementBoundsEditorUtility.OnInspectorGUI(element, ref element.boundsSource, ref element.boundsProvider))
+			{
+				element.RefreshBounds();
+			}
 		}
 
 		protected override bool IsExcluded(Component[] components)

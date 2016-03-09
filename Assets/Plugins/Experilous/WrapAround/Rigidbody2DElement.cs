@@ -7,6 +7,7 @@
 \******************************************************************************/
 
 using UnityEngine;
+using System;
 
 namespace Experilous.WrapAround
 {
@@ -29,7 +30,7 @@ namespace Experilous.WrapAround
 	/// This component cannot currently handle rigidbodies with attached joints of any kind.
 	/// </remarks>
 	/// <seealso cref="World"/>
-	/// <seealso cref="AbstractBounds"/>
+	/// <seealso cref="ElementBounds"/>
 	/// <seealso cref="GhostRegion"/>
 	/// <seealso cref="WorldProvider"/>
 	/// <seealso cref="IWorldConsumer"/>
@@ -42,40 +43,12 @@ namespace Experilous.WrapAround
 	public class Rigidbody2DElement : GhostableElement<Rigidbody2DElement, Rigidbody2DElementGhost>, IWorldConsumer
 	{
 		public World world;
-		public AbstractBounds bounds;
+		public ElementBoundsSource boundsSource = ElementBoundsSource.FixedScale | ElementBoundsSource.Automatic;
+		public ElementBoundsProvider boundsProvider;
 
 		public bool hasWorld { get { return world != null ; } }
+		public World GetWorld() { return world; }
 		public void SetWorld(World world) { this.world = world; }
-
-		public virtual bool IsCollidable(Rigidbody2DElementGhost ghost)
-		{
-			return bounds.IsCollidable(world, ghost.rigidbody);
-		}
-
-		public virtual bool IsCollidable(Vector3 position, Quaternion rotation)
-		{
-			return world.IsCollidable(position);
-		}
-
-		public bool IsCollidable(GhostRegion ghostRegion)
-		{
-			var position = transform.position;
-			var rotation = transform.rotation;
-			ghostRegion.Transform(ref position, ref rotation);
-			return bounds.IsCollidable(world, position, rotation);
-		}
-
-		protected void Awake()
-		{
-			if (bounds == null)
-			{
-				bounds = GetComponent<AbstractBounds>();
-				if (bounds == null)
-				{
-					bounds = gameObject.AddComponent<PointBounds>();
-				}
-			}
-		}
 
 		protected new void Start()
 		{
@@ -83,18 +56,28 @@ namespace Experilous.WrapAround
 
 			if (world == null) world = WorldConsumerUtility.FindWorld(this);
 			this.DisableAndThrowOnUnassignedReference(world, "The Rigidbody2DElement component requires a reference to a World component.");
-			this.DisableAndThrowOnUnassignedReference(bounds, "The Rigidbody2DElement component requires a reference to an AbstractBounds component.");
 		}
 
 		protected void FixedUpdate()
 		{
 			foreach (var ghostRegion in world.physicsGhostRegions)
 			{
-				if (FindGhost(ghostRegion) == null && IsCollidable(ghostRegion))
+				if (FindGhost(ghostRegion) == null && _bounds.IsCollidable(world, transform, ghostRegion))
 				{
 					InstantiateGhost(ghostRegion);
 				}
 			}
+		}
+
+		public override void RefreshBounds()
+		{
+			_bounds = ElementBounds.CreateBounds(boundsSource, boundsProvider, transform,
+				() => { return HierarchyUtility.GetCollider2DGroupAxisAlignedBoxBounds(transform); },
+				() => { return HierarchyUtility.GetCollider2DGroupSphereBounds(transform); });
+
+#if UNITY_EDITOR
+			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UnityEditor.SceneView.RepaintAll();
+#endif
 		}
 
 		protected void InstantiateGhost(GhostRegion ghostRegion)
