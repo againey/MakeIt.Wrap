@@ -14,7 +14,7 @@ namespace Experilous.WrapAround
 {
 	public static class ElementBoundsEditorUtility
 	{
-		private static string[] _sourceLabels_Complete = new string[]
+		private static string[] _sourceLabels = new string[]
 			{
 				"None",
 				"Local Origin",
@@ -24,79 +24,47 @@ namespace Experilous.WrapAround
 				"Manual (Provider Component)",
 			};
 
-		private static string[] _sourceLabels_Rotatable = new string[]
-			{
-				"None",
-				"Local Origin",
-				"Automatic (Sphere)",
-				"Manual (Provider Component)",
-			};
-
 		public static bool OnInspectorGUI(BoundedElement element, ref ElementBoundsSource source, ref ElementBoundsProvider provider)
 		{
 			EditorGUI.BeginChangeCheck();
 
-			bool fixedScale = EditorGUILayout.Toggle("Fixed Scale", (source & ElementBoundsSource.FixedScale) != 0);
-			bool fixedOrientation = EditorGUILayout.Toggle("Fixed Orientation", (source & ElementBoundsSource.FixedOrientation) != 0);
-
 			int sourceIndex;
-			if (fixedOrientation)
+			switch (source & ElementBoundsSource.Source)
 			{
-				switch (source & ElementBoundsSource.Source)
-				{
-					case ElementBoundsSource.None: sourceIndex = 0; break;
-					case ElementBoundsSource.LocalOrigin: sourceIndex = 1; break;
-					case ElementBoundsSource.Automatic: sourceIndex = 2; break;
-					case ElementBoundsSource.AutomaticAxisAlignedBox: sourceIndex = 3; break;
-					case ElementBoundsSource.AutomaticSphere: sourceIndex = 4; break;
-					case ElementBoundsSource.Manual: sourceIndex = 5; break;
-					default: throw new NotImplementedException();
-				}
-			}
-			else
-			{
-				switch (source & ElementBoundsSource.Source)
-				{
-					case ElementBoundsSource.None: sourceIndex = 0; break;
-					case ElementBoundsSource.LocalOrigin: sourceIndex = 1; break;
-					case ElementBoundsSource.Automatic: sourceIndex = 2; break;
-					case ElementBoundsSource.AutomaticAxisAlignedBox: sourceIndex = 2; break;
-					case ElementBoundsSource.AutomaticSphere: sourceIndex = 2; break;
-					case ElementBoundsSource.Manual: sourceIndex = 3; break;
-					default: throw new NotImplementedException();
-				}
+				case ElementBoundsSource.None: sourceIndex = 0; break;
+				case ElementBoundsSource.LocalOrigin: sourceIndex = 1; break;
+				case ElementBoundsSource.Automatic: sourceIndex = 2; break;
+				case ElementBoundsSource.AutomaticAxisAlignedBox: sourceIndex = 3; break;
+				case ElementBoundsSource.AutomaticSphere: sourceIndex = 4; break;
+				case ElementBoundsSource.Manual: sourceIndex = 5; break;
+				default: throw new NotImplementedException();
 			}
 
-			sourceIndex = EditorGUILayout.Popup("Bounds", sourceIndex, fixedOrientation ? _sourceLabels_Complete : _sourceLabels_Rotatable);
+			sourceIndex = EditorGUILayout.Popup("Bounds", sourceIndex, _sourceLabels);
 
-			source = ElementBoundsSource.None;
+			bool fixedScale = (source & ElementBoundsSource.FixedScale) != 0;
+			bool fixedRotation = (source & ElementBoundsSource.FixedRotation) != 0;
+
+			switch (sourceIndex)
+			{
+				case 0: source = ElementBoundsSource.None; break;
+				case 1: source = ElementBoundsSource.LocalOrigin; break;
+				case 2: source = ElementBoundsSource.Automatic; break;
+				case 3: source = ElementBoundsSource.AutomaticAxisAlignedBox; break;
+				case 4: source = ElementBoundsSource.AutomaticSphere; break;
+				case 5: source = ElementBoundsSource.Manual; break;
+				default: throw new NotImplementedException();
+			}
+
+			fixedScale = EditorGUILayout.Toggle("Fixed Scale", fixedScale);
+
+			if ((source & ElementBoundsSource.Source) != ElementBoundsSource.AutomaticAxisAlignedBox)
+			{
+				fixedRotation = EditorGUILayout.Toggle("Fixed Rotation", fixedRotation);
+			}
+
 			if (fixedScale) source |= ElementBoundsSource.FixedScale;
-			if (fixedOrientation) source |= ElementBoundsSource.FixedOrientation;
-
-			if (fixedOrientation)
-			{
-				switch (sourceIndex)
-				{
-					case 0: source |= ElementBoundsSource.None; break;
-					case 1: source |= ElementBoundsSource.LocalOrigin; break;
-					case 2: source |= ElementBoundsSource.Automatic; break;
-					case 3: source |= ElementBoundsSource.AutomaticAxisAlignedBox; break;
-					case 4: source |= ElementBoundsSource.AutomaticSphere; break;
-					case 5: source |= ElementBoundsSource.Manual; break;
-					default: throw new NotImplementedException();
-				}
-			}
-			else
-			{
-				switch (sourceIndex)
-				{
-					case 0: source |= ElementBoundsSource.None; break;
-					case 1: source |= ElementBoundsSource.LocalOrigin; break;
-					case 2: source |= ElementBoundsSource.AutomaticSphere; break;
-					case 3: source |= ElementBoundsSource.Manual; break;
-					default: throw new NotImplementedException();
-				}
-			}
+			if (fixedRotation) source |= ElementBoundsSource.FixedRotation;
 
 			if ((source & ElementBoundsSource.Source) == ElementBoundsSource.Manual)
 			{

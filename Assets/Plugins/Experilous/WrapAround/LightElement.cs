@@ -6,6 +6,8 @@
  *
 \******************************************************************************/
 
+using UnityEngine;
+
 namespace Experilous.WrapAround
 {
 	/// <summary>
@@ -39,7 +41,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="IViewportConsumer"/>
 	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
 	/// <seealso cref="LightElementGhost"/>
-	/// <seealso cref="UnityEngine.Light"/>
+	/// <seealso cref="Light"/>
 	public class LightElement : GhostableElement<LightElement, LightElementGhost>, IViewportConsumer
 	{
 		public Viewport viewport;
@@ -84,13 +86,35 @@ namespace Experilous.WrapAround
 		{
 			var ghost = Instantiate(ghostPrefab);
 			ghost.transform.SetParent(transform.parent, false);
-			ghost.name = name + " (Ghost)";
+			ghost.name = name + " (Light Ghost)";
 			ghost.region = ghostRegion;
 			ghost.original = this;
 
 			ghostRegion.Transform(transform, ghost.transform);
 
 			Add(ghost);
+		}
+
+		protected override bool IsGameObjectExcludedFromGhost(Component[] components)
+		{
+			return false;
+		}
+
+		protected override bool IsGameObjectNecessaryForGhost(Component[] components)
+		{
+			foreach (var component in components)
+			{
+				if (component is Light)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		protected override void RemoveUnnecessaryComponentsFromGhost(Component[] components)
+		{
+			RemoveMatchingComponentsFromGhost(components, (Component component) => { return !(component is Light || component is Transform); });
 		}
 	}
 }

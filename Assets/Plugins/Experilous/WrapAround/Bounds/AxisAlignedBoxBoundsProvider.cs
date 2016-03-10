@@ -16,9 +16,9 @@ namespace Experilous.WrapAround
 		public Vector3 center;
 		public Vector3 size;
 
-		public override ElementBounds CreateBounds(bool fixedScale, bool fixedOrientation)
+		public override ElementBounds CreateBounds(bool fixedScale, bool fixedRotation)
 		{
-			if (fixedOrientation == false) throw new ArgumentException("Axis aligned box bounds cannot be used with dynamic orientation.");
+			if (fixedRotation == false) throw new ArgumentException("Axis aligned box bounds cannot be used with dynamic rotation.");
 			return AxisAlignedBoxBounds.Create(new Bounds(center, size), fixedScale);
 		}
 	}

@@ -40,6 +40,113 @@ namespace Experilous.WrapAround
 		/// <param name="ghost">The ghost which is to be removed from the element's list of ghosts.</param>
 		/// <returns>Returns <c>true</c> if the ghost was found and removed from the element's list of ghosts; <c>false</c> if the ghost was not found in the list.</returns>
 		public abstract bool Remove(GhostBase ghost);
+
+		protected abstract bool IsGameObjectExcludedFromGhost(Component[] components);
+		protected abstract bool IsGameObjectNecessaryForGhost(Component[] components);
+		protected abstract void RemoveUnnecessaryComponentsFromGhost(Component[] components);
+
+		public bool AdjustGhostComponents(Transform transform, Transform topLevel)
+		{
+			var hasChildren = false;
+			int childIndex = 0;
+			int childCount = transform.childCount;
+			while (childIndex < childCount)
+			{
+				var child = transform.GetChild(childIndex);
+				if (child.GetComponent<GhostBase>() == null && AdjustGhostComponents(child, topLevel))
+				{
+					hasChildren = true;
+					++childIndex;
+				}
+				else
+				{
+					DestroyImmediate(child.gameObject);
+					--childCount;
+				}
+			}
+
+			var components = transform.GetComponents<Component>();
+
+			bool isExcludedDescendant = IsGameObjectExcludedFromGhost(components) && !ReferenceEquals(transform, topLevel);
+			bool isNecessary = IsGameObjectNecessaryForGhost(components) || ReferenceEquals(transform, topLevel);
+
+			if (isExcludedDescendant)
+			{
+				return false;
+			}
+			else if (!isNecessary)
+			{
+				if (!hasChildren)
+				{
+					return false;
+				}
+				else
+				{
+					RemoveMatchingComponentsFromGhost(components, (Component component) => { return !(component is Transform); });
+					return true;
+				}
+			}
+			else
+			{
+				RemoveUnnecessaryComponentsFromGhost(components);
+				return true;
+			}
+		}
+
+		protected void RemoveMatchingComponentsFromGhost(Component[] components, Predicate<Component> predicate)
+		{
+			bool noneRemoved = false;
+			bool allRemoved = false;
+			while (!noneRemoved && !allRemoved)
+			{
+				noneRemoved = true;
+				allRemoved = true;
+				foreach (var component in components)
+				{
+					if (component != null)
+					{
+						if (predicate(component))
+						{
+							if (CanDestroy(component, components))
+							{
+								DestroyImmediate(component);
+								if (component == null)
+								{
+									noneRemoved = false;
+								}
+								else
+								{
+									allRemoved = false;
+								}
+							}
+							else
+							{
+								allRemoved = false;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private bool CanDestroy(Component component, Component[] components)
+		{
+			foreach (var otherComponent in components)
+			{
+				if (otherComponent != null)
+				{
+					var requirements = Utility.GetAttributes<RequireComponent>(otherComponent.GetType());
+					foreach (var requirement in requirements)
+					{
+						if (requirement.m_Type0 != null && requirement.m_Type0.IsInstanceOfType(component)) return false;
+						if (requirement.m_Type1 != null && requirement.m_Type1.IsInstanceOfType(component)) return false;
+						if (requirement.m_Type2 != null && requirement.m_Type2.IsInstanceOfType(component)) return false;
+					}
+				}
+			}
+
+			return true;
+		}
 	}
 
 	/// <summary>
@@ -73,7 +180,16 @@ namespace Experilous.WrapAround
 		{
 			if (_bounds == null) RefreshBounds();
 
-			this.DisableAndThrowOnUnassignedReference(ghostPrefab, string.Format("The {0} component requires a reference to a prefab {1}.", typeof(TDerivedElement).GetPrettyName(), typeof(TGhost).GetPrettyName()));
+			if (ghostPrefab == null)
+			{
+				var ghostTemplate = Instantiate(this).gameObject;
+				ghostTemplate.SetActive(false);
+				ghostTemplate.transform.SetParent(transform, false);
+				ghostTemplate.hideFlags = HideFlags.HideAndDontSave;
+				ghostTemplate.name = string.Format("{0} Ghost ({1})", name, typeof(TDerivedElement).GetPrettyName());
+				AdjustGhostComponents(ghostTemplate.transform, ghostTemplate.transform);
+				ghostPrefab = ghostTemplate.AddComponent<TGhost>();
+			}
 		}
 
 		/// <summary>
@@ -98,6 +214,7 @@ namespace Experilous.WrapAround
 		/// <param name="ghost">The ghost which is to be added to the element's list of ghosts.</param>
 		protected void Add(TGhost ghost)
 		{
+			ghost.gameObject.SetActive(true);
 			ghost.nextGhost = firstGhost;
 			firstGhost = ghost;
 		}

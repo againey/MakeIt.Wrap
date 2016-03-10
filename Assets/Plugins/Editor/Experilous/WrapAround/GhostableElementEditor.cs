@@ -38,7 +38,6 @@ namespace Experilous.WrapAround
 
 		protected void OnGhostPrefabGUI(TElement element)
 		{
-
 			element.ghostPrefab = (TGhost)EditorGUILayout.ObjectField("Ghost Prefab", element.ghostPrefab, typeof(TGhost), false);
 
 			if (GUILayout.Button(new GUIContent("Create Ghost Prefab", "Automatically generate a prefab that mimics this game object, but strips out all unnecessary children and components.")))
@@ -52,6 +51,11 @@ namespace Experilous.WrapAround
 				{
 					UpdateGhostPrefab(element);
 				}
+			}
+
+			if (element.ghostPrefab == null)
+			{
+				EditorGUILayout.HelpBox("This ghostable element does not yet have a ghost prefab, which will result in various startup and runtime costs.", MessageType.Warning);
 			}
 		}
 
@@ -82,106 +86,9 @@ namespace Experilous.WrapAround
 			var ghostTemplate = Instantiate(element).gameObject;
 			ghostTemplate.transform.SetParent(element.transform.parent, false);
 			ghostTemplate.name = name + " Ghost";
-			AdjustComponents(ghostTemplate.transform, ghostTemplate.transform);
+			element.AdjustGhostComponents(ghostTemplate.transform, ghostTemplate.transform);
 			ghostTemplate.AddComponent<TGhost>();
 			return ghostTemplate;
-		}
-
-		protected abstract bool IsExcluded(Component[] components);
-		protected abstract bool IsNecessary(Component[] components);
-		protected abstract void RemoveUnnecessaryComponents(Component[] components);
-
-		protected bool AdjustComponents(Transform transform, Transform topLevel)
-		{
-			var hasChildren = false;
-			for (int i = 0; i < transform.childCount; ++i)
-			{
-				hasChildren = AdjustComponents(transform.GetChild(i), topLevel) || hasChildren;
-			}
-
-			var components = transform.GetComponents<Component>();
-
-			bool isExcludedDescendant = IsExcluded(components) && !ReferenceEquals(transform, topLevel);
-			bool isNecessary = IsNecessary(components) || ReferenceEquals(transform, topLevel);
-
-			if (isExcludedDescendant)
-			{
-				DestroyImmediate(transform.gameObject);
-				return false;
-			}
-			else if (!isNecessary)
-			{
-				if (!hasChildren)
-				{
-					DestroyImmediate(transform.gameObject);
-					return false;
-				}
-				else
-				{
-					RemoveAll(components, (Component component) => { return !(component is Transform); });
-					return true;
-				}
-			}
-			else
-			{
-				RemoveUnnecessaryComponents(components);
-				return true;
-			}
-		}
-
-		protected void RemoveAll(Component[] components, System.Predicate<Component> predicate)
-		{
-			bool noneRemoved = false;
-			bool allRemoved = false;
-			while (!noneRemoved && !allRemoved)
-			{
-				noneRemoved = true;
-				allRemoved = true;
-				foreach (var component in components)
-				{
-					if (component != null)
-					{
-						if (predicate(component))
-						{
-							if (CanDestroy(component, components))
-							{
-								DestroyImmediate(component);
-								if (component == null)
-								{
-									noneRemoved = false;
-								}
-								else
-								{
-									allRemoved = false;
-								}
-							}
-							else
-							{
-								allRemoved = false;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		private bool CanDestroy(Component component, Component[] components)
-		{
-			foreach (var otherComponent in components)
-			{
-				if (otherComponent != null)
-				{
-					var requirements = Utility.GetAttributes<RequireComponent>(otherComponent.GetType());
-					foreach (var requirement in requirements)
-					{
-						if (requirement.m_Type0 != null && requirement.m_Type0.IsInstanceOfType(component)) return false;
-						if (requirement.m_Type1 != null && requirement.m_Type1.IsInstanceOfType(component)) return false;
-						if (requirement.m_Type2 != null && requirement.m_Type2.IsInstanceOfType(component)) return false;
-					}
-				}
-			}
-
-			return true;
 		}
 	}
 }

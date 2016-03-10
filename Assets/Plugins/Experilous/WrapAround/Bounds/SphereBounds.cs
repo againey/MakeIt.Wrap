@@ -19,11 +19,11 @@ namespace Experilous.WrapAround
 			this.sphere = sphere;
 		}
 
-		public static SphereBounds Create(Sphere sphere, bool fixedScale, bool fixedOrientation)
+		public static SphereBounds Create(Sphere sphere, bool fixedScale, bool fixedRotation)
 		{
 			if (fixedScale)
 			{
-				if (fixedOrientation)
+				if (fixedRotation)
 				{
 					return new FixedSphereBounds(sphere);
 				}
@@ -34,7 +34,7 @@ namespace Experilous.WrapAround
 			}
 			else
 			{
-				if (fixedOrientation)
+				if (fixedRotation)
 				{
 					return new ScalableSphereBounds(sphere);
 				}
@@ -45,12 +45,12 @@ namespace Experilous.WrapAround
 			}
 		}
 
-		public static SphereBounds Create(Sphere sphere, Transform transform, bool fixedScale, bool fixedOrientation)
+		public static SphereBounds Create(Sphere sphere, Transform transform, bool fixedScale, bool fixedRotation)
 		{
 			if (fixedScale)
 			{
 				var radius = sphere.radius;
-				if (fixedOrientation)
+				if (fixedRotation)
 				{
 					var center = sphere.center - transform.position;
 					return new FixedSphereBounds(new Sphere(center, radius));
@@ -65,7 +65,7 @@ namespace Experilous.WrapAround
 			{
 				var scale = transform.lossyScale;
 				var radius = sphere.radius / scale.MaxAbsComponent();
-				if (fixedOrientation)
+				if (fixedRotation)
 				{
 					var center = (sphere.center - transform.position).DivideComponents(scale);
 					return new ScalableSphereBounds(new Sphere(center, radius));

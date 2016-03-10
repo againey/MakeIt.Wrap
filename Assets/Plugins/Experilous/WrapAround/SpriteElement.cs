@@ -82,13 +82,35 @@ namespace Experilous.WrapAround
 		{
 			var ghost = Instantiate(ghostPrefab);
 			ghost.transform.SetParent(transform.parent, false);
-			ghost.name = name + " (Ghost)";
+			ghost.name = name + " (Sprite Ghost)";
 			ghost.region = ghostRegion;
 			ghost.original = this;
 
 			ghostRegion.Transform(transform, ghost.transform);
 
 			Add(ghost);
+		}
+
+		protected override bool IsGameObjectExcludedFromGhost(Component[] components)
+		{
+			return false;
+		}
+
+		protected override bool IsGameObjectNecessaryForGhost(Component[] components)
+		{
+			foreach (var component in components)
+			{
+				if (component is SpriteRenderer)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		protected override void RemoveUnnecessaryComponentsFromGhost(Component[] components)
+		{
+			RemoveMatchingComponentsFromGhost(components, (Component component) => { return !(component is SpriteRenderer || component is Transform); });
 		}
 
 #if UNITY_EDITOR

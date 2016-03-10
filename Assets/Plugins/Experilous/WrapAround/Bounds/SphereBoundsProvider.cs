@@ -15,9 +15,9 @@ namespace Experilous.WrapAround
 		public Vector3 center;
 		public float radius;
 
-		public override ElementBounds CreateBounds(bool fixedScale, bool fixedOrientation)
+		public override ElementBounds CreateBounds(bool fixedScale, bool fixedRotation)
 		{
-			return SphereBounds.Create(new Sphere(center, radius), fixedScale, fixedOrientation);
+			return SphereBounds.Create(new Sphere(center, radius), fixedScale, fixedRotation);
 		}
 	}
 }

@@ -18,32 +18,14 @@ namespace Experilous.WrapAround
 		{
 			element.viewport = (Viewport)EditorGUILayout.ObjectField("Viewport", element.viewport, typeof(Viewport), true);
 
+			GUILayout.Space(EditorGUIUtility.singleLineHeight);
+
 			if (ElementBoundsEditorUtility.OnInspectorGUI(element, ref element.boundsSource, ref element.boundsProvider))
 			{
 				element.RefreshBounds();
 			}
-		}
 
-		protected override bool IsExcluded(Component[] components)
-		{
-			return false;
-		}
-
-		protected override bool IsNecessary(Component[] components)
-		{
-			foreach (var component in components)
-			{
-				if (component is SpriteRenderer)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		protected override void RemoveUnnecessaryComponents(Component[] components)
-		{
-			RemoveAll(components, (Component component) => { return !(component is SpriteRenderer || component is Transform); });
+			GUILayout.Space(EditorGUIUtility.singleLineHeight);
 		}
 	}
 }

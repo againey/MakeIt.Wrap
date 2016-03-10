@@ -35,7 +35,7 @@ namespace Experilous.WrapAround
 		public static ElementBounds CreateBounds(ElementBoundsSource boundsSource, ElementBoundsProvider boundsProvider, Transform transform, Func<Bounds> automaticAxisAlignedBox, Func<Sphere> automaticSphere)
 		{
 			var fixedScale = (boundsSource & ElementBoundsSource.FixedScale) != 0;
-			var fixedOrientation = (boundsSource & ElementBoundsSource.FixedOrientation) != 0;
+			var fixedRotation = (boundsSource & ElementBoundsSource.FixedRotation) != 0;
 
 			switch (boundsSource & ElementBoundsSource.Source)
 			{
@@ -46,17 +46,17 @@ namespace Experilous.WrapAround
 					return new LocalOriginBounds();
 
 				case ElementBoundsSource.Automatic:
-					if (fixedOrientation) goto case ElementBoundsSource.AutomaticAxisAlignedBox;
+					if (fixedRotation) goto case ElementBoundsSource.AutomaticAxisAlignedBox;
 					goto case ElementBoundsSource.AutomaticSphere;
 
 				case ElementBoundsSource.AutomaticAxisAlignedBox:
 					return AxisAlignedBoxBounds.Create(automaticAxisAlignedBox(), transform, fixedScale);
 
 				case ElementBoundsSource.AutomaticSphere:
-					return SphereBounds.Create(automaticSphere(), transform, fixedScale, fixedOrientation);
+					return SphereBounds.Create(automaticSphere(), transform, fixedScale, fixedRotation);
 
 				case ElementBoundsSource.Manual:
-					return (boundsProvider != null) ? boundsProvider.CreateBounds(fixedScale, fixedOrientation) : null;
+					return (boundsProvider != null) ? boundsProvider.CreateBounds(fixedScale, fixedRotation) : null;
 
 				default:
 					throw new NotImplementedException();
@@ -73,8 +73,8 @@ namespace Experilous.WrapAround
 	public enum ElementBoundsSource
 	{
 		FixedScale = 0x0001,
-		FixedOrientation = 0x0002,
-		FixedFlags = FixedScale | FixedOrientation,
+		FixedRotation = 0x0002,
+		FixedFlags = FixedScale | FixedRotation,
 
 		None = 0x0000,
 		LocalOrigin = 0x0010,
@@ -87,6 +87,6 @@ namespace Experilous.WrapAround
 
 	public abstract class ElementBoundsProvider : MonoBehaviour
 	{
-		public abstract ElementBounds CreateBounds(bool fixedScale, bool fixedOrientation);
+		public abstract ElementBounds CreateBounds(bool fixedScale, bool fixedRotation);
 	}
 }

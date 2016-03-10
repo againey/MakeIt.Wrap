@@ -84,7 +84,7 @@ namespace Experilous.WrapAround
 		{
 			var ghost = Instantiate(ghostPrefab);
 			ghost.transform.SetParent(transform.parent, false);
-			ghost.name = name + " (Ghost)";
+			ghost.name = name + " (Rigidbody2D Ghost)";
 			ghost.region = ghostRegion;
 			ghost.original = this;
 
@@ -94,6 +94,35 @@ namespace Experilous.WrapAround
 			ghostRegion.Transform(rigidbody, ghost.GetComponent<Rigidbody2D>());
 
 			Add(ghost);
+		}
+
+		protected override bool IsGameObjectExcludedFromGhost(Component[] components)
+		{
+			foreach (var component in components)
+			{
+				if (component is Rigidbody2D)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		protected override bool IsGameObjectNecessaryForGhost(Component[] components)
+		{
+			foreach (var component in components)
+			{
+				if (component is Collider2D)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		protected override void RemoveUnnecessaryComponentsFromGhost(Component[] components)
+		{
+			RemoveMatchingComponentsFromGhost(components, (Component component) => { return !(component is Rigidbody2D || component is Collider2D || component is Transform); });
 		}
 	}
 }

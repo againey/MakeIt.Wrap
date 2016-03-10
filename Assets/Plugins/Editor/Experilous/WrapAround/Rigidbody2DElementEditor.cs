@@ -18,39 +18,14 @@ namespace Experilous.WrapAround
 		{
 			element.world = (World)EditorGUILayout.ObjectField("World", element.world, typeof(World), true);
 
+			GUILayout.Space(EditorGUIUtility.singleLineHeight);
+
 			if (ElementBoundsEditorUtility.OnInspectorGUI(element, ref element.boundsSource, ref element.boundsProvider))
 			{
 				element.RefreshBounds();
 			}
-		}
 
-		protected override bool IsExcluded(Component[] components)
-		{
-			foreach (var component in components)
-			{
-				if (component is Rigidbody2D)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		protected override bool IsNecessary(Component[] components)
-		{
-			foreach (var component in components)
-			{
-				if (component is Collider2D)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		protected override void RemoveUnnecessaryComponents(Component[] components)
-		{
-			RemoveAll(components, (Component component) => { return !(component is Rigidbody2D || component is Collider2D || component is Transform); });
+			GUILayout.Space(EditorGUIUtility.singleLineHeight);
 		}
 	}
 }

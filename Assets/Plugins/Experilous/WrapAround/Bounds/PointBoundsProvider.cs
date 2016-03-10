@@ -14,9 +14,9 @@ namespace Experilous.WrapAround
 	{
 		public Vector3 position;
 
-		public override ElementBounds CreateBounds(bool fixedScale, bool fixedOrientation)
+		public override ElementBounds CreateBounds(bool fixedScale, bool fixedRotation)
 		{
-			return PointBounds.Create(position, fixedScale, fixedOrientation);
+			return PointBounds.Create(position, fixedScale, fixedRotation);
 		}
 	}
 }

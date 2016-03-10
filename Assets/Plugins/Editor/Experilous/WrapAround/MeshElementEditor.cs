@@ -24,6 +24,8 @@ namespace Experilous.WrapAround
 
 			element.viewport = (Viewport)EditorGUILayout.ObjectField("Viewport", element.viewport, typeof(Viewport), true);
 
+			GUILayout.Space(EditorGUIUtility.singleLineHeight);
+
 			if (ElementBoundsEditorUtility.OnInspectorGUI(element, ref element.boundsSource, ref element.boundsProvider))
 			{
 				element.RefreshBounds();

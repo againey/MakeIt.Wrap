@@ -19,11 +19,11 @@ namespace Experilous.WrapAround
 			this.position = position;
 		}
 
-		public static PointBounds Create(Vector3 position, bool fixedScale, bool fixedOrientation)
+		public static PointBounds Create(Vector3 position, bool fixedScale, bool fixedRotation)
 		{
 			if (fixedScale)
 			{
-				if (fixedOrientation)
+				if (fixedRotation)
 				{
 					return new FixedPointBounds(position);
 				}
@@ -34,7 +34,7 @@ namespace Experilous.WrapAround
 			}
 			else
 			{
-				if (fixedOrientation)
+				if (fixedRotation)
 				{
 					return new ScalablePointBounds(position);
 				}
@@ -45,11 +45,11 @@ namespace Experilous.WrapAround
 			}
 		}
 
-		public static PointBounds Create(Vector3 position, Transform transform, bool fixedScale, bool fixedOrientation)
+		public static PointBounds Create(Vector3 position, Transform transform, bool fixedScale, bool fixedRotation)
 		{
 			if (fixedScale)
 			{
-				if (fixedOrientation)
+				if (fixedRotation)
 				{
 					return new FixedPointBounds(position - transform.position);
 				}
@@ -61,7 +61,7 @@ namespace Experilous.WrapAround
 			else
 			{
 				var scale = transform.lossyScale;
-				if (fixedOrientation)
+				if (fixedRotation)
 				{
 					return new ScalablePointBounds((position - transform.position).DivideComponents(scale));
 				}
