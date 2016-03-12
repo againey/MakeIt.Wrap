@@ -33,7 +33,7 @@ namespace Experilous.Examples.WrapAround
 			var element = GetComponent<SpriteElement>();
 			boundingSphere.Encapsulate(((SphereBounds)element.bounds).sphere);
 			rock.transform.localPosition = transform.localPosition +
-				new Vector3(Mathf.Cos(movementAngle), Mathf.Sin(movementAngle), 0f) * boundingSphere.radius;
+				new Vector3(Mathf.Cos(movementAngle), Mathf.Sin(movementAngle), 0f) * boundingSphere.radius * 0.5f;
 
 			rock.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(movementAngle), Mathf.Sin(movementAngle)) * movementSpeed;
 		}
