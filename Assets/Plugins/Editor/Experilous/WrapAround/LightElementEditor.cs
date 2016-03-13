@@ -16,7 +16,7 @@ namespace Experilous.WrapAround
 	{
 		protected override void OnElementGUI(LightElement element)
 		{
-			element.viewport = (Viewport)EditorGUILayout.ObjectField("Viewport", element.viewport, typeof(Viewport), true);
+			element.viewport = (Viewport)EditorGUILayout.ObjectField(new GUIContent("Viewport", "The viewport component with wrap-around behavior with which this light interacts."), element.viewport, typeof(Viewport), true);
 
 			GUILayout.Space(EditorGUIUtility.singleLineHeight);
 

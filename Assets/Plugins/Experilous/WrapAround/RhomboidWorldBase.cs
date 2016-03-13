@@ -31,7 +31,10 @@ namespace Experilous.WrapAround
 		private Plane _axis2NegativePlane;
 		private Plane _axis2PositivePlane;
 
+		[Tooltip("The maximum bounding sphere radius of all possible visible elements that might occur within this wrap-around world.")]
 		public float maxVisibleObjectRadius;
+
+		[Tooltip("The maximum bounding sphere radius of all possible physically active elements that might occur within this wrap-around world.")]
 		public float maxPhysicsObjectRadius;
 
 		private List<GhostRegion> _physicsGhostRegions;

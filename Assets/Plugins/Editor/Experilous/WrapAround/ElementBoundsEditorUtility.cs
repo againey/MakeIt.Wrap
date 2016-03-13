@@ -14,14 +14,14 @@ namespace Experilous.WrapAround
 {
 	public static class ElementBoundsEditorUtility
 	{
-		private static string[] _sourceLabels = new string[]
+		private static GUIContent[] _sourceLabels = new GUIContent[]
 			{
-				"None",
-				"Local Origin",
-				"Automatic",
-				"Automatic (Axis Aligned Box)",
-				"Automatic (Sphere)",
-				"Manual (Provider Component)",
+				new GUIContent("None", "No bounding volume will be created for this wrap-around component."),
+				new GUIContent("Local Origin"),
+				new GUIContent("Automatic"),
+				new GUIContent("Automatic (Axis Aligned Box)"),
+				new GUIContent("Automatic (Sphere)"),
+				new GUIContent("Manual (Provider Component)"),
 			};
 
 		public static bool OnInspectorGUI(BoundedElement element, ref ElementBoundsSource source, ref ElementBoundsProvider provider)
@@ -40,7 +40,7 @@ namespace Experilous.WrapAround
 				default: throw new NotImplementedException();
 			}
 
-			sourceIndex = EditorGUILayout.Popup("Bounds", sourceIndex, _sourceLabels);
+			sourceIndex = EditorGUILayout.Popup(new GUIContent("Bounds", "The method by which a bounding volume is obtained for this wrap-around element, which will affect when the appropriate warp-around behavior is applied."), sourceIndex, _sourceLabels);
 
 			bool fixedScale = (source & ElementBoundsSource.FixedScale) != 0;
 			bool fixedRotation = (source & ElementBoundsSource.FixedRotation) != 0;
@@ -56,11 +56,11 @@ namespace Experilous.WrapAround
 				default: throw new NotImplementedException();
 			}
 
-			fixedScale = EditorGUILayout.Toggle("Fixed Scale", fixedScale);
+			fixedScale = EditorGUILayout.Toggle(new GUIContent("Fixed Scale", "This element's transform scale is never expected to change anywhere in its ancestry."), fixedScale);
 
 			if ((source & ElementBoundsSource.Source) != ElementBoundsSource.AutomaticAxisAlignedBox)
 			{
-				fixedRotation = EditorGUILayout.Toggle("Fixed Rotation", fixedRotation);
+				fixedRotation = EditorGUILayout.Toggle(new GUIContent("Fixed Rotation", "This element's transform rotation is never expected to change anywhere in its ancestry."), fixedRotation);
 			}
 
 			if (fixedScale) source |= ElementBoundsSource.FixedScale;
@@ -77,7 +77,7 @@ namespace Experilous.WrapAround
 					}
 				}
 
-				provider = (ElementBoundsProvider)EditorGUILayout.ObjectField("Bounds Provider", provider, typeof(ElementBoundsProvider), true);
+				provider = (ElementBoundsProvider)EditorGUILayout.ObjectField(new GUIContent("Bounds Provider", "The manually specified source for setting this wrap-around element's bounding volume."), provider, typeof(ElementBoundsProvider), true);
 			}
 			else
 			{
@@ -86,7 +86,7 @@ namespace Experilous.WrapAround
 
 			var changed = EditorGUI.EndChangeCheck();
 
-			return (GUILayout.Button("Refresh Bounds") || changed);
+			return (GUILayout.Button(new GUIContent("Refresh Bounds", "Recalculate this element's bounding volume based on the above settings and the configuration of all relevant game objects and components that may have changed.")) || changed);
 		}
 	}
 }

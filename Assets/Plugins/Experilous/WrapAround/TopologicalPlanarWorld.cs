@@ -13,6 +13,7 @@ namespace Experilous.WrapAround
 {
 	public class TopologicalPlanarWorld : RhomboidWorldBase
 	{
+		[Tooltip("The topological surface that defines the overall shape of this world.")]
 		public PlanarSurface surface;
 
 		protected new void Start()

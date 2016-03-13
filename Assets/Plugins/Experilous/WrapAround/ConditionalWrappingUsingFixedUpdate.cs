@@ -10,6 +10,21 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
+	/// <summary>
+	/// Enables a specified list of components only after the element is fully within the bounding volume of a wrap-around world.
+	/// </summary>
+	/// <remarks>
+	/// <para>This component is useful when wrapping behavior needs to start off disabled, but once the element has fully entered
+	/// within the world's bounding volume, by whatever means, that wrapping behavior ought to be enabled.  This is particularly
+	/// convenient for elements that are spawned offscreen, to avoid the possibility of them visibly popping into existence where
+	/// the offscreen area wraps back around to another area of the visible viewport.</para>
+	/// 
+	/// <para>Depending on the method of moving the element, it is possible that it will never fully entery the world's bounding
+	/// volume and have its wrapping behavior enabled.  Therefore, a second condition is available for destroying the game object
+	/// completely if it ever is completely out of the world's bounding volume and far enough away that it might never return,
+	/// given that no wrap-around behavior is enabled to force it to return.</para>
+	/// </remarks>
+	/// <seealso cref="ConditionalWrapping"/>
 	public class ConditionalWrappingUsingFixedUpdate : MonoBehaviour, IWorldConsumer
 	{
 		public World world;

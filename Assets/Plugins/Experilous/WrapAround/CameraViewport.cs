@@ -11,6 +11,9 @@ using System.Collections.Generic;
 
 namespace Experilous.WrapAround
 {
+	/// <summary>
+	/// A viewport whose visible area is derived directly from a camera's view frustum.
+	/// </summary>
 	[RequireComponent(typeof(Camera))]
 	public class CameraViewport : Viewport
 	{

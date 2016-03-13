@@ -28,6 +28,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="RigidbodyElementWrapper"/>
 	public class DynamicElementWrapper : MonoBehaviour, IWorldConsumer
 	{
+		[Tooltip("The world component with wrap-around behavior to which this dynamic element conforms.")]
 		public World world;
 
 		public bool hasWorld { get { return world != null ; } }

@@ -10,17 +10,33 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
+	/// <summary>
+	/// A world with wrap-around behavior whose shape is defined by a camera's view frustum at a specified depth.
+	/// </summary>
+	/// <remarks>This component is convenient when wrap-around behavior is expected to occur literally at the
+	/// screen or viewport edges.  It is most appropriate for a fixed camera, ideally one with an orthographic
+	/// projection.</remarks>
 	public class CameraWorld : RhomboidWorldBase
 	{
+		[Tooltip("The camera whose view frustum will define the shape of this world.")]
 		public Camera screenCamera;
 
+		[Tooltip("The depth at which the view frustum is used to define the shape of this world.  Irrelevant for a camera with an orthographic projection.")]
 		public float wrappingPlaneDistance = 0f;
 
+		[Tooltip("The near depth at which wrapping behavior will occur, if wrapping along the forward axis is enabled.")]
 		public float nearPlaneDistance = 0f;
+
+		[Tooltip("The far depth at which wrapping behavior will occur, if wrapping along the forward axis is enabled.")]
 		public float farPlaneDistance = 0f;
 
+		[Tooltip("Wrap across the left and right edges of the view.")]
 		public bool wrapHorizontalAxis = true;
+
+		[Tooltip("Wrap across the top and bottom edges of the view.")]
 		public bool wrapVerticalAxis = true;
+
+		[Tooltip("Wrap across the near and far of the view.")]
 		public bool wrapForwardAxis = false;
 
 		private Vector3 _untransformedOrigin;

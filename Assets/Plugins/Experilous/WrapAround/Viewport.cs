@@ -24,6 +24,7 @@ namespace Experilous.WrapAround
 		/// <summary>
 		/// The world that the viewport is observing.
 		/// </summary>
+		[Tooltip("The world component with wrap-around behavior which this viewport targets.")]
 		public World world;
 
 		/// <summary>

@@ -16,7 +16,7 @@ namespace Experilous.WrapAround
 	{
 		protected override void OnElementGUI(RigidbodyElement element)
 		{
-			element.world = (World)EditorGUILayout.ObjectField("World", element.world, typeof(World), true);
+			element.world = (World)EditorGUILayout.ObjectField(new GUIContent("World", "The world component with wrap-around behavior to which this rigidbody conforms."), element.world, typeof(World), true);
 
 			GUILayout.Space(EditorGUIUtility.singleLineHeight);
 

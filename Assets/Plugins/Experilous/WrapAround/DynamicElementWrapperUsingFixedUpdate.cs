@@ -29,6 +29,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="RigidbodyElementWrapper"/>
 	public class DynamicElementWrapperUsingFixedUpdate : MonoBehaviour, IWorldConsumer
 	{
+		[Tooltip("The world component with wrap-around behavior to which this dynamic element conforms.")]
 		public World world;
 
 		public bool hasWorld { get { return world != null ; } }
@@ -38,7 +39,7 @@ namespace Experilous.WrapAround
 		protected void Start()
 		{
 			if (world == null) world = WorldConsumerUtility.FindWorld(this);
-			this.DisableAndThrowOnUnassignedReference(world, "The DynamicElementFixedUpdateWrapper component requires a reference to a World component.");
+			this.DisableAndThrowOnUnassignedReference(world, "The DynamicElementWrapperUsingFixedUpdate component requires a reference to a World component.");
 		}
 
 		protected void FixedUpdate()

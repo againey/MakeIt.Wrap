@@ -21,7 +21,7 @@ namespace Experilous.WrapAround
 
 			World world = null;
 
-			world = (World)EditorGUILayout.ObjectField("World", provider.world, typeof(World), true);
+			world = (World)EditorGUILayout.ObjectField(new GUIContent("World", "The world component to be provided to any descendant world consumers."), provider.world, typeof(World), true);
 
 			GUI.enabled = (world != null);
 			if (GUILayout.Button(new GUIContent("Apply to Unset Children", "Search through all descendants for any components that implement IWorldConsumer, and assign it this provider's world if the component doesn't already have a world assigned.")))

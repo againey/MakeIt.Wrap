@@ -29,6 +29,7 @@ namespace Experilous.WrapAround
 	[RequireComponent(typeof(Rigidbody))]
 	public class RigidbodyElementWrapper : MonoBehaviour, IWorldConsumer
 	{
+		[Tooltip("The world component with wrap-around behavior to which this rigidbody conforms.")]
 		public World world;
 
 		protected Rigidbody _rigidbody;

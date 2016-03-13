@@ -38,7 +38,7 @@ namespace Experilous.WrapAround
 
 		protected void OnGhostPrefabGUI(TElement element)
 		{
-			element.ghostPrefab = (TGhost)EditorGUILayout.ObjectField("Ghost Prefab", element.ghostPrefab, typeof(TGhost), false);
+			element.ghostPrefab = (TGhost)EditorGUILayout.ObjectField(new GUIContent("Ghost Prefab", "The prefab that will be used to construct ghost instances as they are needed."), element.ghostPrefab, typeof(TGhost), false);
 
 			if (GUILayout.Button(new GUIContent("Create Ghost Prefab", "Automatically generate a prefab that mimics this game object, but strips out all unnecessary children and components.")))
 			{
