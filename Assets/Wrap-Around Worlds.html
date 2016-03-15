@@ -249,6 +249,11 @@
 				The element types supplied by the framework which need ghost prefabs include helper tools in their inspector panels to automatically generate ghost prefabs.
 				They do this by cloning the game object in its current state, and then stripping off all the components and descendants that are deemed irrelevant.
 				If for some reason you need to create your own ghost prefab manually or wish to adjust the auto-created prefab, you are free to do so.</p>
+			<p>If you do not set the ghost prefab from the editor, then one will automatically be constructed at runtime.
+				The cost for this is twofold:  For one, the startup time might be noticeably impacted if enough objects need to construct ghost prefabs, especially if they are deeply nested game objects.
+				Secondly, multiple game objects that are essentially identical and could otherwise shared a single ghost prefab will instead all create individual ghost object templates.
+				Such ghost templates are hidden within the hierarchy, but they will nonetheless take up additional memory.
+				However, they are marked inactive, so they should not result in additional any extra time for event processing.</p>
 		</section>
 		<section class="chapter" id="elements">
 			<h2 class="section-head">Elements</h2>
@@ -309,14 +314,21 @@
 				bounds in the wrap-around framework are abstract bounding volumes that could have a variety of shapes.
 				Their primary purpose is to enable a simple double-dispatch system for determining intersections between elements/ghosts and worlds/viewports,
 				for any combination of element/ghost shape and world/viewport shape.</p>
-			<p>The four implemented bounds currently are <code>PointBounds</code> which has no volume at all,
-				<code>SphereBounds</code> and <code>StaticSphereBounds</code> which both have a spherical volume defined by a radius,
-				and <code>AxisAlignedBoxBounds</code>, which is equivalent in purpose to <code>UnityEngine.Bounds</code>.</p>
-			<p>For the three non-point bounds, code within the <code>Start()</code> will check if the pre-configured volumes are completely empty,
-				and if so, will attempt to search for other components on the game object from which a proper bounds can be automatically computed.
-				The difference between <code>SphereBounds</code> and <code>StaticSphereBounds</code> is that the latter will calculate the scaled radius based on the object's transform during <code>Start()</code>,
-				and will use this cached radius directly for all future computations.
-				The former will recompute the scaled radius every time it is needed, which is appropriate for an object that has a scale that can change dynamically.</p>
+			<p>Bounds supplied by the Wrap-Around Worlds framework come in three main varieties.
+				Point bounds are zero-extent bounds at a particular location relative to the game object transform.
+				Sphere bounds are similar, but include a radius to define the size of a sphere centered at a particular location.
+				Axis aligned box bounds likewise are centered on a location, but use x, y, and z extents to define a box.
+				Local origin bounds are essentially a simplification of point bounds always located at a game objects local origin of (0, 0, 0).</p>
+			<p>In addition to the various shapes, bounds come in different forms depending on if an object's scale and/or rotation is guaranteed to be constant.
+				When one or both of these attributes is constant, optimizations can be made to make bounds-related calculations more efficient.</p>
+			<p>By default, bounded elements will auto-compute their bounds at runtime.
+				Each type of bounded element has its own method of doing so,
+				but this will usually involve inspecting the relevant components and descendant game objects.
+				For example, a rigidbody element will examine the collider components and create a bounding volume that encompasses all of the relevant collider bounding volumes.
+			<p>If an axis aligned box is requested, then a fixed rotation is required.
+				A fixed scale is optional for any type of bounding volume.</p>
+			<p>If the automatic calculation of a bounds is not ideal, a bounds provider component can be added to the game object and configured.
+				Then set the bounded element's bounds type to "Manual", and set the provided field to the bounds provider just configured.</p>
 		</section>
 		<section class="chapter" id="providers-consumers">
 			<h2 class="section-head">Providers &amp; Consumers</h2>
@@ -339,6 +351,19 @@
 		</section>
 		<section class="chapter" id="execution-order">
 			<h2 class="section-head">Execution Order</h2>
+			<p>Due to various transform dependencies between the miscellaneous wrap-around components,
+				certain script execution orders are necessary in order to avoid transient single frame glitches with rendering and physics.
+				Upon importing the framework, these execution orders will be automatically set,
+				but if they need to be adjusted, or additional scripts related to wrap-around behavior are written, here are the general rules and motivations:</p>
+			<p>World scripts should execute first.  This is predominately so that a world's <code>Start()</code> event is processed before any other wrap-around component,
+				since worlds are the basis upon which all other wrap-around behavior is defined.</p>
+			<p>Viewport scripts come second.  Initialization code is likely to reference a world, so must come after the world has been initialized.</p>
+			<p>Components that affect game object transforms, generally for the purpose of confining those objects to the bounds of the world, follow next.
+				The <code>DynamicViewport</code> component has a special place immediately after this group, recalculating the viewport bounds after it has potentially had its transform updated,
+				but before any later components evaluate their own transforms against the viewport's bounds.</p>
+			<p>After these canonical game objects have had their transforms processed and viewports have been update, ghosts can then execute,
+				updating their transforms to match those of their originating game objects.</p>
+			<p>Finally, the canonical objects can be processed, checking if they need to instantiate any new ghosts.</p>
 		</section>
 		<section class="chapter" id="tile-based">
 			<h2 class="section-head">Integration with Tile-Based Worlds</h2>

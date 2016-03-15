@@ -62,6 +62,13 @@ namespace Experilous.WrapAround
 			{
 				fixedRotation = EditorGUILayout.Toggle(new GUIContent("Fixed Rotation", "This element's transform rotation is never expected to change anywhere in its ancestry."), fixedRotation);
 			}
+			else
+			{
+				var priorEnabledState = GUI.enabled;
+				GUI.enabled = false;
+				EditorGUILayout.Toggle(new GUIContent("Fixed Rotation", "This element's transform rotation is never expected to change anywhere in its ancestry."), true);
+				GUI.enabled = priorEnabledState;
+			}
 
 			if (fixedScale) source |= ElementBoundsSource.FixedScale;
 			if (fixedRotation) source |= ElementBoundsSource.FixedRotation;
