@@ -4,7 +4,6 @@
 
 using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
 
 namespace Experilous.WrapAround
 {
@@ -22,48 +21,12 @@ namespace Experilous.WrapAround
 			GUI.enabled = (viewport != null);
 			if (GUILayout.Button(new GUIContent("Apply to Unset Children", "Search through all descendants for any components that implement IViewportConsumer, and assign it this provider's viewport if the component doesn't already have a viewport assigned.")))
 			{
-				var consumers = new List<Object>();
-				foreach (var element in provider.GetComponentsInChildren<IViewportConsumer>())
-				{
-					if (element.GetViewport() == null)
-					{
-						consumers.Add((Object)element);
-					}
-				}
-
-				if (consumers.Count > 0)
-				{
-					Undo.RecordObjects(consumers.ToArray(), "Apply Viewport To Children");
-
-					foreach (var element in consumers)
-					{
-						((IViewportConsumer)element).SetViewport(provider.viewport);
-						EditorUtility.SetDirty(element);
-					}
-				}
+				provider.ApplyToUnsetConsumers(provider.gameObject, true);
 			}
 
 			if (GUILayout.Button(new GUIContent("Apply to All Children", "Search through all descendants for any components that implement IViewportConsumer, and assign it this provider's viewport, overwriting any viewport it might have already been assigned.")))
 			{
-				var consumers = new List<Object>();
-				foreach (var element in provider.GetComponentsInChildren<IViewportConsumer>())
-				{
-					if (!ReferenceEquals(element.GetViewport(), viewport))
-					{
-						consumers.Add((Object)element);
-					}
-				}
-
-				if (consumers.Count > 0)
-				{
-					Undo.RecordObjects(consumers.ToArray(), "Apply Viewport To Children");
-
-					foreach (var element in consumers)
-					{
-						((IViewportConsumer)element).SetViewport(provider.viewport);
-						EditorUtility.SetDirty(element);
-					}
-				}
+				provider.ApplyToAllConsumers(provider.gameObject, true);
 			}
 			GUI.enabled = true;
 

@@ -30,5 +30,96 @@ namespace Experilous.WrapAround
 		{
 			if (viewport == null) viewport = GetComponent<Viewport>();
 		}
+
+		public void ApplyToUnsetConsumers(Component obj, bool recursive = false)
+		{
+			ApplyToUnsetConsumers(obj.gameObject, recursive);
+		}
+
+		public void ApplyToUnsetConsumers(GameObject obj, bool recursive = false)
+		{
+#if UNITY_EDITOR
+			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+			{
+				var consumers = recursive ? GetComponentsInChildren<IViewportConsumer>() : GetComponents<IViewportConsumer>();
+				var changedConsumers = new System.Collections.Generic.List<Object>();
+				foreach (var consumer in consumers)
+				{
+					if (consumer.GetViewport() == null)
+					{
+						changedConsumers.Add((Object)consumer);
+					}
+				}
+
+				if (changedConsumers.Count > 0)
+				{
+					UnityEditor.Undo.RecordObjects(changedConsumers.ToArray(), recursive ? "Apply Viewport to Components (Recursive)" : "Apply Viewport to Components");
+
+					foreach (var consumer in changedConsumers)
+					{
+						((IViewportConsumer)consumer).SetViewport(viewport);
+						UnityEditor.EditorUtility.SetDirty(consumer);
+					}
+				}
+			}
+			else
+			{
+#endif
+				var consumers = recursive ? GetComponentsInChildren<IViewportConsumer>() : GetComponents<IViewportConsumer>();
+				foreach (var consumer in consumers)
+				{
+					if (consumer.GetViewport() == null)
+					{
+						consumer.SetViewport(viewport);
+					}
+				}
+#if UNITY_EDITOR
+			}
+#endif
+		}
+
+		public void ApplyToAllConsumers(Component obj, bool recursive = false)
+		{
+			ApplyToAllConsumers(obj.gameObject, recursive);
+		}
+
+		public void ApplyToAllConsumers(GameObject obj, bool recursive = false)
+		{
+#if UNITY_EDITOR
+			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+			{
+				var consumers = recursive ? GetComponentsInChildren<IViewportConsumer>() : GetComponents<IViewportConsumer>();
+				var changedConsumers = new System.Collections.Generic.List<Object>();
+				foreach (var consumer in consumers)
+				{
+					if (!ReferenceEquals(consumer.GetViewport(), viewport))
+					{
+						changedConsumers.Add((Object)consumer);
+					}
+				}
+
+				if (changedConsumers.Count > 0)
+				{
+					UnityEditor.Undo.RecordObjects(changedConsumers.ToArray(), recursive ? "Apply Viewport to Components (Recursive)" : "Apply Viewport to Components");
+
+					foreach (var consumer in changedConsumers)
+					{
+						((IViewportConsumer)consumer).SetViewport(viewport);
+						UnityEditor.EditorUtility.SetDirty(consumer);
+					}
+				}
+			}
+			else
+			{
+#endif
+				var consumers = recursive ? GetComponentsInChildren<IViewportConsumer>() : GetComponents<IViewportConsumer>();
+				foreach (var consumer in consumers)
+				{
+					consumer.SetViewport(viewport);
+				}
+#if UNITY_EDITOR
+			}
+#endif
+		}
 	}
 }
