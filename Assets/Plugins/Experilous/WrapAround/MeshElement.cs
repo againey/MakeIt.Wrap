@@ -23,6 +23,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="IViewportConsumer"/>
 	/// <seealso cref="MeshFilter"/>
 	/// <seealso cref="MeshRenderer"/>
+	[AddComponentMenu("Wrap-Around Worlds/Elements/Mesh")]
 	public class MeshElement : BoundedElement, IViewportConsumer
 	{
 		public Viewport viewport;

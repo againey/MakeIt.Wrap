@@ -7,6 +7,7 @@ using Experilous.Topological;
 
 namespace Experilous.WrapAround
 {
+	[AddComponentMenu("Wrap-Around Worlds/Worlds/Topological Planar World")]
 	public class TopologicalPlanarWorld : RhomboidWorldBase
 	{
 		[Tooltip("The topological surface that defines the overall shape of this world.")]

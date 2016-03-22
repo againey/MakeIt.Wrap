@@ -38,6 +38,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
 	/// <seealso cref="LightElementGhost"/>
 	/// <seealso cref="Light"/>
+	[AddComponentMenu("Wrap-Around Worlds/Elements/Light")]
 	public class LightElement : GhostableElement<LightElement, LightElementGhost>, IViewportConsumer
 	{
 		public Viewport viewport;

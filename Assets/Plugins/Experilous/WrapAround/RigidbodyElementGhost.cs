@@ -7,6 +7,7 @@ using UnityEngine;
 namespace Experilous.WrapAround
 {
 	[RequireComponent(typeof(Rigidbody))]
+	[AddComponentMenu("Wrap-Around Worlds/Elements/Ghosts/Rigidbody")]
 	public class RigidbodyElementGhost : Ghost<RigidbodyElement, RigidbodyElementGhost>
 	{
 		protected Rigidbody _rigidbody;

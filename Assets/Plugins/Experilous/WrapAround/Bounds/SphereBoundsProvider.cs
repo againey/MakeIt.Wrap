@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
+	[AddComponentMenu("Wrap-Around Worlds/Bounds/Sphere Bounds Provider")]
 	public class SphereBoundsProvider : ElementBoundsProvider
 	{
 		public Vector3 center;

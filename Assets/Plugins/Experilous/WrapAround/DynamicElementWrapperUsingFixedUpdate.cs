@@ -23,6 +23,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="IWorldConsumer"/>
 	/// <seealso cref="DynamicElementWrapper"/>
 	/// <seealso cref="RigidbodyElementWrapper"/>
+	[AddComponentMenu("Wrap-Around Worlds/Dynamic Element Wrapper (Fixed Update)")]
 	public class DynamicElementWrapperUsingFixedUpdate : MonoBehaviour, IWorldConsumer
 	{
 		[Tooltip("The world component with wrap-around behavior to which this dynamic element conforms.")]

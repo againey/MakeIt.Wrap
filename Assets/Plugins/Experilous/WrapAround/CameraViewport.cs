@@ -11,6 +11,7 @@ namespace Experilous.WrapAround
 	/// A viewport whose visible area is derived directly from a camera's view frustum.
 	/// </summary>
 	[RequireComponent(typeof(Camera))]
+	[AddComponentMenu("Wrap-Around Worlds/Viewports/Camera Viewport")]
 	public class CameraViewport : Viewport
 	{
 		private Camera _camera;

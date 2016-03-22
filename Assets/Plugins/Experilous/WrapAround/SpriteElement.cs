@@ -34,6 +34,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
 	/// <seealso cref="SpriteElementGhost"/>
 	/// <seealso cref="SpriteRenderer"/>
+	[AddComponentMenu("Wrap-Around Worlds/Elements/Sprite")]
 	public class SpriteElement : GhostableElement<SpriteElement, SpriteElementGhost>, IViewportConsumer
 	{
 		public Viewport viewport;

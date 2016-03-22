@@ -21,6 +21,7 @@ namespace Experilous.WrapAround
 	/// given that no wrap-around behavior is enabled to force it to return.</para>
 	/// </remarks>
 	/// <seealso cref="ConditionalWrapping"/>
+	[AddComponentMenu("Wrap-Around Worlds/Conditional Wrapping (Fixed Update)")]
 	public class ConditionalWrappingUsingFixedUpdate : MonoBehaviour, IWorldConsumer
 	{
 		public World world;

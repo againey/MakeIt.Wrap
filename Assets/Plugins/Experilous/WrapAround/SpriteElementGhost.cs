@@ -2,8 +2,11 @@
 * Copyright Andy Gainey                                                        *
 \******************************************************************************/
 
+using UnityEngine;
+
 namespace Experilous.WrapAround
 {
+	[AddComponentMenu("Wrap-Around Worlds/Elements/Ghosts/Sprite")]
 	public class SpriteElementGhost : Ghost<SpriteElement, SpriteElementGhost>
 	{
 		protected void LateUpdate()

@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
+	[AddComponentMenu("Wrap-Around Worlds/Worlds/Rhomboid World")]
 	public class RhomboidWorld : RhomboidWorldBase
 	{
 		public Vector3 origin;

@@ -2,8 +2,11 @@
 * Copyright Andy Gainey                                                        *
 \******************************************************************************/
 
+using UnityEngine;
+
 namespace Experilous.WrapAround
 {
+	[AddComponentMenu("Wrap-Around Worlds/Elements/Ghosts/Light")]
 	public class LightElementGhost : Ghost<LightElement, LightElementGhost>
 	{
 		protected void LateUpdate()

@@ -17,6 +17,7 @@ namespace Experilous.WrapAround
 	/// configuration (such as a mesh element or light element).
 	/// </remarks>
 	[RequireComponent(typeof(Viewport))]
+	[AddComponentMenu("Wrap-Around Worlds/Dynamic Viewport")]
 	public class DynamicViewport : MonoBehaviour
 	{
 		private Viewport _viewport;

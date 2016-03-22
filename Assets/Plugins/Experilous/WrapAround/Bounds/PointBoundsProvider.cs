@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
+	[AddComponentMenu("Wrap-Around Worlds/Bounds/Point Bounds Provider")]
 	public class PointBoundsProvider : ElementBoundsProvider
 	{
 		public Vector3 position;

@@ -3,7 +3,6 @@
 \******************************************************************************/
 
 using UnityEngine;
-using System;
 
 namespace Experilous.WrapAround
 {
@@ -33,6 +32,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="Collider"/>
 	/// <seealso cref="Collider2DElement"/>
 	[RequireComponent(typeof(Collider))]
+	[AddComponentMenu("Wrap-Around Worlds/Elements/Collider")]
 	public class ColliderElement : GhostableElement<ColliderElement, ColliderElementGhost>, IWorldConsumer
 	{
 		public World world;

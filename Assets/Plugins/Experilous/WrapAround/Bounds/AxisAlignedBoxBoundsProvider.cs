@@ -7,6 +7,7 @@ using System;
 
 namespace Experilous.WrapAround
 {
+	[AddComponentMenu("Wrap-Around Worlds/Bounds/Axis Aligned Box Bounds Provider")]
 	public class AxisAlignedBoxBoundsProvider : ElementBoundsProvider
 	{
 		public Vector3 center;

@@ -22,6 +22,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="Viewport"/>
 	/// <seealso cref="IViewportConsumer"/>
 	[ExecuteInEditMode]
+	[AddComponentMenu("Wrap-Around Worlds/Viewport Provider")]
 	public class ViewportProvider : MonoBehaviour
 	{
 		public Viewport viewport;

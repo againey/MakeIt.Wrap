@@ -22,6 +22,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="World"/>
 	/// <seealso cref="IWorldConsumer"/>
 	[ExecuteInEditMode]
+	[AddComponentMenu("Wrap-Around Worlds/World Provider")]
 	public class WorldProvider : MonoBehaviour
 	{
 		public World world;

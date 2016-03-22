@@ -24,6 +24,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="DynamicElementWrapperUsingFixedUpdate"/>
 	/// <seealso cref="RigidbodyElementWrapper"/>
 	[RequireComponent(typeof(Rigidbody2D))]
+	[AddComponentMenu("Wrap-Around Worlds/Rigidbody 2D Element Wrapper")]
 	public class Rigidbody2DElementWrapper : MonoBehaviour, IWorldConsumer
 	{
 		public World world;

@@ -12,6 +12,7 @@ namespace Experilous.WrapAround
 	/// <remarks>This component is convenient when wrap-around behavior is expected to occur literally at the
 	/// screen or viewport edges.  It is most appropriate for a fixed camera, ideally one with an orthographic
 	/// projection.</remarks>
+	[AddComponentMenu("Wrap-Around Worlds/Worlds/Camera World")]
 	public class CameraWorld : RhomboidWorldBase
 	{
 		[Tooltip("The camera whose view frustum will define the shape of this world.")]

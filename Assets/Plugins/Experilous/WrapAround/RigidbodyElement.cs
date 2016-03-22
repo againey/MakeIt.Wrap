@@ -35,6 +35,7 @@ namespace Experilous.WrapAround
 	/// <seealso cref="Collider"/>
 	/// <seealso cref="Rigidbody2DElement"/>
 	[RequireComponent(typeof(Rigidbody))]
+	[AddComponentMenu("Wrap-Around Worlds/Elements/Rigidbody")]
 	public class RigidbodyElement : GhostableElement<RigidbodyElement, RigidbodyElementGhost>, IWorldConsumer
 	{
 		public World world;

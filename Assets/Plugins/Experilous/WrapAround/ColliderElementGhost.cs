@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
+	[AddComponentMenu("Wrap-Around Worlds/Elements/Ghosts/Collider")]
 	public class ColliderElementGhost : Ghost<ColliderElement, ColliderElementGhost>
 	{
 		protected void FixedUpdate()
