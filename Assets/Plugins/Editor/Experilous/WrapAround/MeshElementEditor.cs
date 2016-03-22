@@ -22,14 +22,36 @@ namespace Experilous.WrapAround
 
 			GUILayout.Space(EditorGUIUtility.singleLineHeight);
 
-			if (ElementBoundsEditorUtility.OnInspectorGUI(element, ref element.boundsSource, ref element.boundsProvider))
+			if (ElementBoundsEditorUtility.OnInspectorGUI(element))
 			{
-				element.RefreshBounds();
+				SceneView.RepaintAll();
 			}
 
 			if (EditorGUI.EndChangeCheck())
 			{
 				EditorUtility.SetDirty(element);
+			}
+		}
+
+		[DrawGizmo(GizmoType.Active)]
+		private static void DrawGizmoSelected(MeshElement element, GizmoType gizmoType)
+		{
+			if (element.bounds == null) return;
+
+			var bounds = element.bounds;
+			var originalColor = new Color(0f, 0.5f, 1f, 0.5f);
+			ElementBoundsEditorUtility.DrawGizmosSelected(bounds, originalColor);
+
+			if (element.viewport == null) return;
+			var viewport = element.viewport;
+			var ghostColor = new Color(0.25f, 0.5f, 1f, 0.25f);
+
+			foreach (var ghostRegion in viewport.visibleGhostRegions)
+			{
+				if (bounds.IsVisible(viewport, ghostRegion))
+				{
+					ElementBoundsEditorUtility.DrawGizmosSelected(bounds, ghostRegion, ghostColor);
+				}
 			}
 		}
 	}

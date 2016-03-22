@@ -19,10 +19,6 @@ namespace Experilous.WrapAround
 	/// <seealso cref="GhostBase"/>
 	public abstract class GhostableElementBase : BoundedElement
 	{
-		[NonSerialized] protected ElementBounds _bounds;
-
-		public override ElementBounds bounds { get { return _bounds; } }
-
 		/// <summary>
 		/// Checks whether or not the element's list of ghosts contains the specified ghost object.
 		/// </summary>
@@ -174,8 +170,6 @@ namespace Experilous.WrapAround
 
 		protected void Start()
 		{
-			if (_bounds == null) RefreshBounds();
-
 			if (ghostPrefab == null)
 			{
 				var ghostTemplate = Instantiate(this).gameObject;
@@ -272,31 +266,6 @@ namespace Experilous.WrapAround
 			}
 			firstGhost = null;
 		}
-
-#if UNITY_EDITOR
-		protected virtual Color GetGizmoColor() { return Color.white; }
-		protected virtual Color GetGhostGizmoColor() { return Color.gray; }
-
-		protected override void OnDrawGizmosSelected()
-		{
-			if (bounds == null) RefreshBounds();
-			if (bounds != null)
-			{
-				bounds.DrawGizmosSelected(transform, GetGizmoColor());
-				DrawGhostGizmosSelected(GetGhostGizmoColor());
-			}
-		}
-
-		protected void DrawGhostGizmosSelected(Color color)
-		{
-			var ghost = firstGhost;
-			while (ghost != null)
-			{
-				bounds.DrawGizmosSelected(ghost.transform, color);
-				ghost = ghost.nextGhost;
-			}
-		}
-#endif
 	}
 
 	public static class GhostableElementUtility

@@ -60,22 +60,21 @@ namespace Experilous.WrapAround
 		{
 			foreach (var ghostRegion in viewport.visibleGhostRegions)
 			{
-				if (FindGhost(ghostRegion) == null && _bounds.IsVisible(viewport, transform, ghostRegion))
+				if (FindGhost(ghostRegion) == null && bounds.IsVisible(viewport, transform, ghostRegion))
 				{
 					InstantiateGhost(ghostRegion);
 				}
 			}
 		}
 
-		public override void RefreshBounds()
+		public override Sphere ComputeSphereBounds()
 		{
-			_bounds = ElementBounds.CreateBounds(boundsSource, boundsProvider, transform,
-				() => { return HierarchyUtility.GetLightGroupAxisAlignedBoxBounds(transform); },
-				() => { return HierarchyUtility.GetLightGroupSphereBounds(transform); });
+			return HierarchyUtility.GetLightGroupSphereBounds(transform);
+		}
 
-#if UNITY_EDITOR
-			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UnityEditor.SceneView.RepaintAll();
-#endif
+		public override Bounds ComputeAxisAlignedBoxBounds()
+		{
+			return HierarchyUtility.GetLightGroupAxisAlignedBoxBounds(transform);
 		}
 
 		protected void InstantiateGhost(GhostRegion ghostRegion)

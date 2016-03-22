@@ -15,7 +15,7 @@ namespace Experilous.WrapAround
 		public override ElementBounds CreateBounds(bool fixedScale, bool fixedRotation)
 		{
 			if (fixedRotation == false) throw new ArgumentException("Axis aligned box bounds cannot be used with dynamic rotation.");
-			return AxisAlignedBoxBounds.Create(new Bounds(center, size), fixedScale);
+			return null;//AxisAlignedBoxBounds.Create(new Bounds(center, size), fixedScale);
 		}
 	}
 }

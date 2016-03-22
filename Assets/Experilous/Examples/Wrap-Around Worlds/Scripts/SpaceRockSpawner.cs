@@ -58,9 +58,6 @@ namespace Experilous.Examples.WrapAround
 			var movementSpeed = Random.Range(spaceRockType.minSpeed, spaceRockType.maxSpeed);
 			rock.GetComponent<Rigidbody2D>().angularVelocity = rotationSpeed;
 
-			rock.GetComponent<Rigidbody2DElement>().RefreshBounds();
-			rock.GetComponent<SpriteElement>().RefreshBounds();
-
 			SetPositionAndMovement(rock, movementSpeed);
 
 			return rock;

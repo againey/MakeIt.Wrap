@@ -10,62 +10,137 @@ namespace Experilous.WrapAround
 	{
 		public Vector3 position;
 
-		public PointBounds(Vector3 position)
+		protected static TBounds CreateDerived<TBounds>(GameObject gameObject, Vector3 position) where TBounds : PointBounds
 		{
-			this.position = position;
+			var bounds = gameObject.AddComponent<TBounds>();
+			bounds.position = position;
+			bounds.hideFlags = HideFlags.HideInInspector;
+			return bounds;
 		}
 
-		public static PointBounds Create(Vector3 position, bool fixedScale, bool fixedRotation)
+		public static PointBounds Create(GameObject gameObject, Vector3 position, bool fixedScale, bool fixedRotation)
 		{
 			if (fixedScale)
 			{
 				if (fixedRotation)
 				{
-					return new FixedPointBounds(position);
+					return FixedPointBounds.Create(gameObject, position);
 				}
 				else
 				{
-					return new RotatablePointBounds(position);
+					return RotatablePointBounds.Create(gameObject, position);
 				}
 			}
 			else
 			{
 				if (fixedRotation)
 				{
-					return new ScalablePointBounds(position);
+					return ScalablePointBounds.Create(gameObject, position);
 				}
 				else
 				{
-					return new DynamicPointBounds(position);
+					return DynamicPointBounds.Create(gameObject, position);
 				}
 			}
 		}
 
-		public static PointBounds Create(Vector3 position, Transform transform, bool fixedScale, bool fixedRotation)
+		#region Transform() & InverseTransform()
+
+		public static Vector3 InverseTransform(Transform transform, Vector3 position, bool fixedScale, bool fixedRotation)
 		{
 			if (fixedScale)
 			{
 				if (fixedRotation)
 				{
-					return new FixedPointBounds(position - transform.position);
+					return FixedPointBounds.InverseTransform(transform, position);
 				}
 				else
 				{
-					return new RotatablePointBounds(transform.InverseTransformDirection(position - transform.position));
+					return RotatablePointBounds.InverseTransform(transform, position);
 				}
 			}
 			else
 			{
-				var scale = transform.lossyScale;
 				if (fixedRotation)
 				{
-					return new ScalablePointBounds((position - transform.position).DivideComponents(scale));
+					return ScalablePointBounds.InverseTransform(transform, position);
 				}
 				else
 				{
-					return new DynamicPointBounds(transform.InverseTransformVector(position - transform.position));
+					return DynamicPointBounds.InverseTransform(transform, position);
 				}
 			}
 		}
+
+		public abstract Vector3 Transform(Transform transform);
+		public abstract Vector3 Transform(Transform transform, GhostRegion ghostRegion);
+
+		public Vector3 Transform()
+		{
+			return Transform(transform);
+		}
+
+		public Vector3 Transform(GhostRegion ghostRegion)
+		{
+			return Transform(transform, ghostRegion);
+		}
+
+		#endregion
+
+		#region IsVisible()
+
+		public override bool IsVisible(Viewport viewport, Transform transform)
+		{
+			return viewport.IsVisible(Transform(transform));
+		}
+
+		public override bool IsVisible(Viewport viewport, Transform transform, GhostRegion ghostRegion)
+		{
+			return viewport.IsVisible(Transform(transform, ghostRegion));
+		}
+
+		#endregion
+
+		#region IsCollidable()
+
+		public override bool IsCollidable(World world, Transform transform)
+		{
+			return world.IsCollidable(Transform(transform));
+		}
+
+		public override bool IsCollidable(World world, Transform transform, GhostRegion ghostRegion)
+		{
+			return world.IsCollidable(Transform(transform, ghostRegion));
+		}
+
+		#endregion
+
+		#region Intersects()
+
+		public override bool Intersects(World world, Transform transform, float buffer = 0f)
+		{
+			return world.Intersects(Transform(transform), buffer);
+		}
+
+		public override bool Intersects(World world, Transform transform, GhostRegion ghostRegion, float buffer = 0f)
+		{
+			return world.Intersects(Transform(transform, ghostRegion), buffer);
+		}
+
+		#endregion
+
+		#region ContainedBy()
+
+		public override bool ContainedBy(World world, Transform transform, float buffer = 0f)
+		{
+			return world.Contains(Transform(transform), buffer);
+		}
+
+		public override bool ContainedBy(World world, Transform transform, GhostRegion ghostRegion, float buffer = 0f)
+		{
+			return world.Contains(Transform(transform, ghostRegion), buffer);
+		}
+
+		#endregion
 	}
 }

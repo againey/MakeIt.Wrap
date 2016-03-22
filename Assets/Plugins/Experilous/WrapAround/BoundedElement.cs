@@ -6,23 +6,52 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
-	public interface IBoundedElement
+	public abstract class BoundedElement : MonoBehaviour
 	{
-		ElementBounds bounds { get; }
-		void RefreshBounds();
-	}
+		[SerializeField] private ElementBounds _bounds;
+		public abstract Sphere ComputeSphereBounds();
+		public abstract Bounds ComputeAxisAlignedBoxBounds();
 
-	public abstract class BoundedElement : MonoBehaviour, IBoundedElement
-	{
-		public abstract ElementBounds bounds { get; }
-		public virtual void RefreshBounds() { }
-
-#if UNITY_EDITOR
-		protected virtual void OnDrawGizmosSelected()
+		public ElementBounds bounds
 		{
-			if (bounds == null) RefreshBounds();
-			if (bounds != null) bounds.DrawGizmosSelected(transform, Color.white);
+			get
+			{
+				return _bounds;
+			}
+			set
+			{
+				if (value == null) throw new System.ArgumentNullException("value");
+				if (!ReferenceEquals(gameObject, value.gameObject)) throw new System.ArgumentException("Bounds component must belong to the same game object as the bounded element to which it is being assigned.", "value");
+				if (ReferenceEquals(_bounds, value)) return;
+
+				DestroyBounds();
+
+				_bounds = value;
+				_bounds.hideFlags = HideFlags.HideInInspector;
+			}
 		}
+
+		protected void Reset()
+		{
+			DestroyBounds();
+			_bounds = LocalOriginBounds.Create(gameObject);
+		}
+
+		private void DestroyBounds()
+		{
+			if (_bounds == null) return;
+#if UNITY_EDITOR
+			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+			{
+				DestroyImmediate(_bounds);
+			}
+			else
+			{
 #endif
+				Destroy(_bounds);
+#if UNITY_EDITOR
+			}
+#endif
+		}
 	}
 }

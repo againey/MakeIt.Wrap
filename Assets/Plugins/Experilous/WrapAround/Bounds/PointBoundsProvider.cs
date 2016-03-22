@@ -12,7 +12,7 @@ namespace Experilous.WrapAround
 
 		public override ElementBounds CreateBounds(bool fixedScale, bool fixedRotation)
 		{
-			return PointBounds.Create(position, fixedScale, fixedRotation);
+			return null;//PointBounds.Create(position, fixedScale, fixedRotation);
 		}
 	}
 }

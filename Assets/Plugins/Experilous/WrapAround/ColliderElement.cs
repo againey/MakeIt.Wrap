@@ -55,22 +55,21 @@ namespace Experilous.WrapAround
 		{
 			foreach (var ghostRegion in world.physicsGhostRegions)
 			{
-				if (FindGhost(ghostRegion) == null && _bounds.IsCollidable(world, transform, ghostRegion))
+				if (FindGhost(ghostRegion) == null && bounds.IsCollidable(world, ghostRegion))
 				{
 					InstantiateGhost(ghostRegion);
 				}
 			}
 		}
 
-		public override void RefreshBounds()
+		public override Sphere ComputeSphereBounds()
 		{
-			_bounds = ElementBounds.CreateBounds(boundsSource, boundsProvider, transform,
-				() => { return HierarchyUtility.GetColliderGroupAxisAlignedBoxBounds(transform); },
-				() => { return HierarchyUtility.GetColliderGroupSphereBounds(transform); });
+			return HierarchyUtility.GetColliderGroupSphereBounds(transform);
+		}
 
-#if UNITY_EDITOR
-			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UnityEditor.SceneView.RepaintAll();
-#endif
+		public override Bounds ComputeAxisAlignedBoxBounds()
+		{
+			return HierarchyUtility.GetColliderGroupAxisAlignedBoxBounds(transform);
 		}
 
 		protected void InstantiateGhost(GhostRegion ghostRegion)

@@ -86,5 +86,20 @@ namespace Experilous.WrapAround
 			ghostTemplate.AddComponent<TGhost>();
 			return ghostTemplate;
 		}
+
+		protected static void DrawGizmoSelected(GhostableElement<TElement, TGhost> element, GizmoType gizmoType, Color originalColor, Color ghostColor)
+		{
+			if (element.bounds == null) return;
+
+			var bounds = element.bounds;
+			ElementBoundsEditorUtility.DrawGizmosSelected(bounds, originalColor);
+
+			var ghost = element.firstGhost;
+			while (ghost != null)
+			{
+				ElementBoundsEditorUtility.DrawGizmosSelected(bounds, ghost.region, ghostColor);
+				ghost = ghost.nextGhost;
+			}
+		}
 	}
 }

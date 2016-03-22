@@ -26,18 +26,12 @@ namespace Experilous.WrapAround
 	public class MeshElement : BoundedElement, IViewportConsumer
 	{
 		public Viewport viewport;
-		public ElementBoundsSource boundsSource = ElementBoundsSource.FixedScale | ElementBoundsSource.Automatic;
-		public ElementBoundsProvider boundsProvider;
 
 		protected MeshFilter[] _meshFilters;
 
 		public bool hasViewport { get { return viewport != null ; } }
 		public Viewport GetViewport() { return viewport; }
 		public void SetViewport(Viewport viewport) { this.viewport = viewport; }
-
-		[NonSerialized] protected ElementBounds _bounds;
-
-		public override ElementBounds bounds { get { return _bounds; } }
 
 		protected void Awake()
 		{
@@ -48,8 +42,6 @@ namespace Experilous.WrapAround
 		{
 			if (viewport == null) viewport = ViewportConsumerUtility.FindViewport(this);
 			this.DisableAndThrowOnUnassignedReference(viewport, "The MeshElement component requires a reference to a Viewport component.");
-
-			if (_bounds == null) RefreshBounds();
 		}
 
 		protected void LateUpdate()
@@ -63,15 +55,14 @@ namespace Experilous.WrapAround
 			}
 		}
 
-		public override void RefreshBounds()
+		public override Sphere ComputeSphereBounds()
 		{
-			_bounds = ElementBounds.CreateBounds(boundsSource, boundsProvider, transform,
-				() => { return HierarchyUtility.GetMeshGroupAxisAlignedBoxBounds(transform); },
-				() => { return HierarchyUtility.GetMeshGroupSphereBounds(transform); });
+			return HierarchyUtility.GetMeshGroupSphereBounds(transform);
+		}
 
-#if UNITY_EDITOR
-			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UnityEditor.SceneView.RepaintAll();
-#endif
+		public override Bounds ComputeAxisAlignedBoxBounds()
+		{
+			return HierarchyUtility.GetMeshGroupAxisAlignedBoxBounds(transform);
 		}
 
 		protected void RenderGhosts(Matrix4x4 regionTransformation)
@@ -93,30 +84,5 @@ namespace Experilous.WrapAround
 				}
 			}
 		}
-
-#if UNITY_EDITOR
-		protected override void OnDrawGizmosSelected()
-		{
-			if (bounds == null) RefreshBounds();
-			if (bounds != null)
-			{
-				bounds.DrawGizmosSelected(transform, new Color(0f, 0.5f, 1f, 0.5f));
-				DrawGhostGizmosSelected(new Color(0.25f, 0.5f, 1f, 0.25f));
-			}
-		}
-
-		protected void DrawGhostGizmosSelected(Color color)
-		{
-			if (viewport == null) return;
-
-			foreach (var ghostRegion in viewport.visibleGhostRegions)
-			{
-				if (bounds.IsVisible(viewport, transform, ghostRegion))
-				{
-					bounds.DrawGizmosSelected(transform, ghostRegion, color);
-				}
-			}
-		}
-#endif
 	}
 }

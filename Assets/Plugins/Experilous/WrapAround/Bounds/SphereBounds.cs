@@ -10,68 +10,137 @@ namespace Experilous.WrapAround
 	{
 		public Sphere sphere;
 
-		public SphereBounds(Sphere sphere)
+		protected static TBounds CreateDerived<TBounds>(GameObject gameObject, Sphere sphere) where TBounds : SphereBounds
 		{
-			this.sphere = sphere;
+			var bounds = gameObject.AddComponent<TBounds>();
+			bounds.sphere = sphere;
+			bounds.hideFlags = HideFlags.HideInInspector;
+			return bounds;
 		}
 
-		public static SphereBounds Create(Sphere sphere, bool fixedScale, bool fixedRotation)
+		public static SphereBounds Create(GameObject gameObject, Sphere sphere, bool fixedScale, bool fixedRotation)
 		{
 			if (fixedScale)
 			{
 				if (fixedRotation)
 				{
-					return new FixedSphereBounds(sphere);
+					return FixedSphereBounds.Create(gameObject, sphere);
 				}
 				else
 				{
-					return new RotatableSphereBounds(sphere);
+					return RotatableSphereBounds.Create(gameObject, sphere);
 				}
 			}
 			else
 			{
 				if (fixedRotation)
 				{
-					return new ScalableSphereBounds(sphere);
+					return ScalableSphereBounds.Create(gameObject, sphere);
 				}
 				else
 				{
-					return new DynamicSphereBounds(sphere);
+					return DynamicSphereBounds.Create(gameObject, sphere);
 				}
 			}
 		}
 
-		public static SphereBounds Create(Sphere sphere, Transform transform, bool fixedScale, bool fixedRotation)
+		#region Transform() & InverseTransform()
+
+		public static Sphere InverseTransform(Transform transform, Sphere sphere, bool fixedScale, bool fixedRotation)
 		{
 			if (fixedScale)
 			{
-				var radius = sphere.radius;
 				if (fixedRotation)
 				{
-					var center = sphere.center - transform.position;
-					return new FixedSphereBounds(new Sphere(center, radius));
+					return FixedSphereBounds.InverseTransform(transform, sphere);
 				}
 				else
 				{
-					var center = transform.InverseTransformDirection(sphere.center - transform.position);
-					return new RotatableSphereBounds(new Sphere(center, radius));
+					return RotatableSphereBounds.InverseTransform(transform, sphere);
 				}
 			}
 			else
 			{
-				var scale = transform.lossyScale;
-				var radius = sphere.radius / scale.MaxAbsComponent();
 				if (fixedRotation)
 				{
-					var center = (sphere.center - transform.position).DivideComponents(scale);
-					return new ScalableSphereBounds(new Sphere(center, radius));
+					return ScalableSphereBounds.InverseTransform(transform, sphere);
 				}
 				else
 				{
-					var center = transform.InverseTransformVector(sphere.center - transform.position);
-					return new DynamicSphereBounds(new Sphere(center, radius));
+					return DynamicSphereBounds.InverseTransform(transform, sphere);
 				}
 			}
 		}
+
+		public abstract Sphere Transform(Transform transform);
+		public abstract Sphere Transform(Transform transform, GhostRegion ghostRegion);
+
+		public Sphere Transform()
+		{
+			return Transform(transform);
+		}
+
+		public Sphere Transform(GhostRegion ghostRegion)
+		{
+			return Transform(transform, ghostRegion);
+		}
+
+		#endregion
+
+		#region IsVisible()
+
+		public override bool IsVisible(Viewport viewport, Transform transform)
+		{
+			return viewport.IsVisible(Transform(transform));
+		}
+
+		public override bool IsVisible(Viewport viewport, Transform transform, GhostRegion ghostRegion)
+		{
+			return viewport.IsVisible(Transform(transform, ghostRegion));
+		}
+
+		#endregion
+
+		#region IsCollidable()
+
+		public override bool IsCollidable(World world, Transform transform)
+		{
+			return world.IsCollidable(Transform(transform));
+		}
+
+		public override bool IsCollidable(World world, Transform transform, GhostRegion ghostRegion)
+		{
+			return world.IsCollidable(Transform(transform, ghostRegion));
+		}
+
+		#endregion
+
+		#region Intersects()
+
+		public override bool Intersects(World world, Transform transform, float buffer = 0f)
+		{
+			return world.Intersects(Transform(transform), buffer);
+		}
+
+		public override bool Intersects(World world, Transform transform, GhostRegion ghostRegion, float buffer = 0f)
+		{
+			return world.Intersects(Transform(transform, ghostRegion), buffer);
+		}
+
+		#endregion
+
+		#region ContainedBy()
+
+		public override bool ContainedBy(World world, Transform transform, float buffer = 0f)
+		{
+			return world.Contains(Transform(transform), buffer);
+		}
+
+		public override bool ContainedBy(World world, Transform transform, GhostRegion ghostRegion, float buffer = 0f)
+		{
+			return world.Contains(Transform(transform, ghostRegion), buffer);
+		}
+
+		#endregion
 	}
 }

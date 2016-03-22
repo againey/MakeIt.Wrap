@@ -16,12 +16,18 @@ namespace Experilous.WrapAround
 
 			GUILayout.Space(EditorGUIUtility.singleLineHeight);
 
-			if (ElementBoundsEditorUtility.OnInspectorGUI(element, ref element.boundsSource, ref element.boundsProvider))
+			if (ElementBoundsEditorUtility.OnInspectorGUI(element))
 			{
-				element.RefreshBounds();
+				SceneView.RepaintAll();
 			}
 
 			GUILayout.Space(EditorGUIUtility.singleLineHeight);
+		}
+
+		[DrawGizmo(GizmoType.Active)]
+		private static void DrawGizmoSelected(Collider2DElement element, GizmoType gizmoType)
+		{
+			DrawGizmoSelected(element, gizmoType, new Color(1f, 1f, 1f, 0.5f), new Color(1f, 1f, 1f, 0.25f));
 		}
 	}
 }

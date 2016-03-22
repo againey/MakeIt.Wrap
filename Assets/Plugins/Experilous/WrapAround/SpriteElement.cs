@@ -56,22 +56,21 @@ namespace Experilous.WrapAround
 		{
 			foreach (var ghostRegion in viewport.visibleGhostRegions)
 			{
-				if (FindGhost(ghostRegion) == null && _bounds.IsVisible(viewport, transform, ghostRegion))
+				if (FindGhost(ghostRegion) == null && bounds.IsVisible(viewport, transform, ghostRegion))
 				{
 					InstantiateGhost(ghostRegion);
 				}
 			}
 		}
 
-		public override void RefreshBounds()
+		public override Sphere ComputeSphereBounds()
 		{
-			_bounds = ElementBounds.CreateBounds(boundsSource, boundsProvider, transform,
-				() => { return HierarchyUtility.GetSpriteGroupAxisAlignedBoxBounds(transform); },
-				() => { return HierarchyUtility.GetSpriteGroupSphereBounds(transform); });
+			return HierarchyUtility.GetSpriteGroupSphereBounds(transform);
+		}
 
-#if UNITY_EDITOR
-			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UnityEditor.SceneView.RepaintAll();
-#endif
+		public override Bounds ComputeAxisAlignedBoxBounds()
+		{
+			return HierarchyUtility.GetSpriteGroupAxisAlignedBoxBounds(transform);
 		}
 
 		protected void InstantiateGhost(GhostRegion ghostRegion)
@@ -108,10 +107,5 @@ namespace Experilous.WrapAround
 		{
 			RemoveMatchingComponentsFromGhost(components, (Component component) => { return !(component is SpriteRenderer || component is Transform); });
 		}
-
-#if UNITY_EDITOR
-		protected override Color GetGizmoColor() { return new Color(0f, 0.5f, 1f, 0.5f); }
-		protected override Color GetGhostGizmoColor() { return new Color(0.25f, 0.5f, 1f, 0.25f); }
-#endif
 	}
 }
