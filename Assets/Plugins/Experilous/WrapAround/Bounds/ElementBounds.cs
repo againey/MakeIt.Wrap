@@ -19,6 +19,10 @@ namespace Experilous.WrapAround
 		public abstract bool IsVisible(Viewport viewport, Transform transform);
 		public abstract bool IsVisible(Viewport viewport, Transform transform, GhostRegion ghostRegion);
 
+		//TODO
+		public bool IsVisible(World world, LayerMask layers, Transform transform) { return false; }
+		public bool IsVisible(World world, LayerMask layers, Transform transform, GhostRegion ghostRegion) { return false; }
+
 		public abstract bool IsCollidable(World world, Transform transform);
 		public abstract bool IsCollidable(World world, Transform transform, GhostRegion ghostRegion);
 

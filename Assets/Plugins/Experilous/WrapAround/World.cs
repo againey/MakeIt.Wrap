@@ -40,6 +40,11 @@ namespace Experilous.WrapAround
 		/// </summary>
 		public abstract IEnumerable<GhostRegion> physicsGhostRegions { get; }
 
+		/// <summary>
+		/// TODO
+		/// </summary>
+		public IEnumerable<GhostRegion> GetVisibleGhostRegions(LayerMask layers) { yield break; }
+
 		#region IsCollidable
 
 		// Various overloads for testing if an object is potentially collidable with other objects.

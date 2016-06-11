@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
-	public class ScalablePointBounds : PointBounds
+	public sealed class ScalablePointBounds : PointBounds
 	{
 		public ScalablePointBounds(Vector3 position) : base(position)
 		{

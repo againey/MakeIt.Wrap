@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
-	public class FixedPointBounds : PointBounds
+	public sealed class FixedPointBounds : PointBounds
 	{
 		public FixedPointBounds(Vector3 position) : base(position)
 		{

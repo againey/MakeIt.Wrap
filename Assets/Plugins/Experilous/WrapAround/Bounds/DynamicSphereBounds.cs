@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
-	public class DynamicSphereBounds : SphereBounds
+	public sealed class DynamicSphereBounds : SphereBounds
 	{
 		public DynamicSphereBounds(Sphere sphere) : base(sphere)
 		{

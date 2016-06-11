@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
-	public class ScalableAxisAlignedBoxBounds : AxisAlignedBoxBounds
+	public sealed class ScalableAxisAlignedBoxBounds : AxisAlignedBoxBounds
 	{
 		public ScalableAxisAlignedBoxBounds(Bounds box) : base(box)
 		{

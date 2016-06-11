@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Experilous.WrapAround
 {
-	public class LocalOriginBounds : ElementBounds
+	public sealed class LocalOriginBounds : ElementBounds
 	{
 		public LocalOriginBounds()
 		{
