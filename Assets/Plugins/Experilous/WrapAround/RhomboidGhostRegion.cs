@@ -7,13 +7,13 @@ using System;
 
 namespace Experilous.WrapAround
 {
-	public class RhomboidGhostRegion : GhostRegion, IEquatable<RhomboidGhostRegion>, IEquatable<Index3D>, IComparable<RhomboidGhostRegion>, IComparable<Index3D>
+	public class RhomboidGhostRegion : GhostRegion, IEquatable<RhomboidGhostRegion>, IEquatable<IntVector3>, IComparable<RhomboidGhostRegion>, IComparable<IntVector3>
 	{
-		private Index3D _index;
+		private IntVector3 _index;
 		private Vector3 _offset;
 		private bool _isActive = true;
 
-		public RhomboidGhostRegion(Index3D index, Vector3 offset)
+		public RhomboidGhostRegion(IntVector3 index, Vector3 offset)
 		{
 			_index = index;
 			_offset = offset;
@@ -86,14 +86,14 @@ namespace Experilous.WrapAround
 			return this == other;
 		}
 
-		public bool Equals(Index3D index)
+		public bool Equals(IntVector3 index)
 		{
 			return this == index;
 		}
 
 		public override bool Equals(object obj)
 		{
-			return obj is RhomboidGhostRegion && this == (RhomboidGhostRegion)obj || obj is Index3D && this == (Index3D)obj;
+			return obj is RhomboidGhostRegion && this == (RhomboidGhostRegion)obj || obj is IntVector3 && this == (IntVector3)obj;
 		}
 
 		public override int GetHashCode()
@@ -106,7 +106,7 @@ namespace Experilous.WrapAround
 			return _index.CompareTo(other._index);
 		}
 
-		public int CompareTo(Index3D index)
+		public int CompareTo(IntVector3 index)
 		{
 			return _index.CompareTo(index);
 		}
@@ -118,18 +118,18 @@ namespace Experilous.WrapAround
 		public static bool operator > (RhomboidGhostRegion lhs, RhomboidGhostRegion rhs) { return lhs._index >  rhs._index; }
 		public static bool operator >=(RhomboidGhostRegion lhs, RhomboidGhostRegion rhs) { return lhs._index >= rhs._index; }
 
-		public static bool operator ==(RhomboidGhostRegion lhs, Index3D rhs) { return lhs._index == rhs; }
-		public static bool operator !=(RhomboidGhostRegion lhs, Index3D rhs) { return lhs._index != rhs; }
-		public static bool operator < (RhomboidGhostRegion lhs, Index3D rhs) { return lhs._index <  rhs; }
-		public static bool operator <=(RhomboidGhostRegion lhs, Index3D rhs) { return lhs._index <= rhs; }
-		public static bool operator > (RhomboidGhostRegion lhs, Index3D rhs) { return lhs._index >  rhs; }
-		public static bool operator >=(RhomboidGhostRegion lhs, Index3D rhs) { return lhs._index >= rhs; }
+		public static bool operator ==(RhomboidGhostRegion lhs, IntVector3 rhs) { return lhs._index == rhs; }
+		public static bool operator !=(RhomboidGhostRegion lhs, IntVector3 rhs) { return lhs._index != rhs; }
+		public static bool operator < (RhomboidGhostRegion lhs, IntVector3 rhs) { return lhs._index <  rhs; }
+		public static bool operator <=(RhomboidGhostRegion lhs, IntVector3 rhs) { return lhs._index <= rhs; }
+		public static bool operator > (RhomboidGhostRegion lhs, IntVector3 rhs) { return lhs._index >  rhs; }
+		public static bool operator >=(RhomboidGhostRegion lhs, IntVector3 rhs) { return lhs._index >= rhs; }
 
-		public static bool operator ==(Index3D lhs, RhomboidGhostRegion rhs) { return lhs == rhs._index; }
-		public static bool operator !=(Index3D lhs, RhomboidGhostRegion rhs) { return lhs != rhs._index; }
-		public static bool operator < (Index3D lhs, RhomboidGhostRegion rhs) { return lhs <  rhs._index; }
-		public static bool operator <=(Index3D lhs, RhomboidGhostRegion rhs) { return lhs <= rhs._index; }
-		public static bool operator > (Index3D lhs, RhomboidGhostRegion rhs) { return lhs >  rhs._index; }
-		public static bool operator >=(Index3D lhs, RhomboidGhostRegion rhs) { return lhs >= rhs._index; }
+		public static bool operator ==(IntVector3 lhs, RhomboidGhostRegion rhs) { return lhs == rhs._index; }
+		public static bool operator !=(IntVector3 lhs, RhomboidGhostRegion rhs) { return lhs != rhs._index; }
+		public static bool operator < (IntVector3 lhs, RhomboidGhostRegion rhs) { return lhs <  rhs._index; }
+		public static bool operator <=(IntVector3 lhs, RhomboidGhostRegion rhs) { return lhs <= rhs._index; }
+		public static bool operator > (IntVector3 lhs, RhomboidGhostRegion rhs) { return lhs >  rhs._index; }
+		public static bool operator >=(IntVector3 lhs, RhomboidGhostRegion rhs) { return lhs >= rhs._index; }
 	}
 }

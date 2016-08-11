@@ -95,7 +95,7 @@ namespace Experilous.WrapAround
 					for (int x = -axis0RegionBufferCount; x <= axis0RegionBufferCount; ++x)
 					{
 						if (x == 0 && y == 0 && z == 0) continue; // The 0,0 region is the real region, not a ghost region, so skip it.
-						InsertGhostRegion(new Index3D(x, y, z), ghostRegions, ref startIndex);
+						InsertGhostRegion(new IntVector3(x, y, z), ghostRegions, ref startIndex);
 					}
 				}
 			}
@@ -116,11 +116,11 @@ namespace Experilous.WrapAround
 			}
 
 			// Find the eight corners of the camera view frustum.
-			var corners = GeometryUtility.FindFrustumCorners(camera, frustumPlanes);
+			var corners = GeometryTools.FindFrustumCorners(camera, frustumPlanes);
 
 			// Find the maximum ghost region index extents based on these eight corners.
-			Index3D min = new Index3D(int.MaxValue, int.MaxValue, int.MaxValue);
-			Index3D max = new Index3D(int.MinValue, int.MinValue, int.MinValue);
+			IntVector3 min = new IntVector3(int.MaxValue, int.MaxValue, int.MaxValue);
+			IntVector3 max = new IntVector3(int.MinValue, int.MinValue, int.MinValue);
 
 			for (int i = 0; i < corners.Length; ++i)
 			{
@@ -134,7 +134,7 @@ namespace Experilous.WrapAround
 				for (int x = min.x; x <= max.x; ++x)
 				{
 					if (x == 0 && min.y == 0 && min.z == 0) continue; // The 0,0,0 region is the real region, not a ghost region, so skip it.
-					InsertGhostRegion(new Index3D(x, min.y, min.z), ghostRegions, ref startIndex);
+					InsertGhostRegion(new IntVector3(x, min.y, min.z), ghostRegions, ref startIndex);
 				}
 				return;
 			}
@@ -144,7 +144,7 @@ namespace Experilous.WrapAround
 				for (int y = min.y; y <= max.y; ++y)
 				{
 					if (min.x == 0 && y == 0 && min.z == 0) continue; // The 0,0,0 region is the real region, not a ghost region, so skip it.
-					InsertGhostRegion(new Index3D(min.x, y, min.z), ghostRegions, ref startIndex);
+					InsertGhostRegion(new IntVector3(min.x, y, min.z), ghostRegions, ref startIndex);
 				}
 				return;
 			}
@@ -154,7 +154,7 @@ namespace Experilous.WrapAround
 				for (int z = min.z; z <= max.z; ++z)
 				{
 					if (min.x == 0 && min.y == 0 && z == 0) continue; // The 0,0,0 region is the real region, not a ghost region, so skip it.
-					InsertGhostRegion(new Index3D(min.x, min.y, z), ghostRegions, ref startIndex);
+					InsertGhostRegion(new IntVector3(min.x, min.y, z), ghostRegions, ref startIndex);
 				}
 				return;
 			}
@@ -196,7 +196,7 @@ namespace Experilous.WrapAround
 							bool exclude = false;
 							foreach (var plane in frustumPlanes)
 							{
-								if (GeometryUtility.AllAreBelow(regionCorners, plane))
+								if (GeometryTools.AllAreBelow(regionCorners, plane))
 								{
 									exclude = true;
 									break;
@@ -205,7 +205,7 @@ namespace Experilous.WrapAround
 
 							if (!exclude)
 							{
-								InsertGhostRegion(new Index3D(x, y, z), ghostRegions, ref startIndex);
+								InsertGhostRegion(new IntVector3(x, y, z), ghostRegions, ref startIndex);
 							}
 						}
 					}
@@ -251,10 +251,10 @@ namespace Experilous.WrapAround
 							{
 								var minT = float.NegativeInfinity;
 								var maxT = float.PositiveInfinity;
-								if (GeometryUtility.TruncateLineSegment(regionLines[0], plane, ref minT, ref maxT) <= 0f) continue;
-								if (GeometryUtility.TruncateLineSegment(regionLines[1], plane, ref minT, ref maxT) <= 0f) continue;
-								if (GeometryUtility.TruncateLineSegment(regionLines[2], plane, ref minT, ref maxT) <= 0f) continue;
-								if (GeometryUtility.TruncateLineSegment(regionLines[3], plane, ref minT, ref maxT) <= 0f) continue;
+								if (GeometryTools.TruncateLineSegment(regionLines[0], plane, ref minT, ref maxT) <= 0f) continue;
+								if (GeometryTools.TruncateLineSegment(regionLines[1], plane, ref minT, ref maxT) <= 0f) continue;
+								if (GeometryTools.TruncateLineSegment(regionLines[2], plane, ref minT, ref maxT) <= 0f) continue;
+								if (GeometryTools.TruncateLineSegment(regionLines[3], plane, ref minT, ref maxT) <= 0f) continue;
 
 								exclude = false;
 								break;
@@ -262,7 +262,7 @@ namespace Experilous.WrapAround
 
 							if (!exclude)
 							{
-								InsertGhostRegion(new Index3D(x, y, z), ghostRegions, ref startIndex);
+								InsertGhostRegion(new IntVector3(x, y, z), ghostRegions, ref startIndex);
 							}
 						}
 					}
@@ -270,7 +270,7 @@ namespace Experilous.WrapAround
 			}
 		}
 
-		private bool FindGhostRegion(Index3D regionIndex3D, List<GhostRegion> ghostRegions, out int index, int startIndex = 0)
+		private bool FindGhostRegion(IntVector3 regionIndex3D, List<GhostRegion> ghostRegions, out int index, int startIndex = 0)
 		{
 			index = startIndex;
 			if (index >= ghostRegions.Count) return false;
@@ -302,7 +302,7 @@ namespace Experilous.WrapAround
 			return false;
 		}
 
-		private void InsertGhostRegion(Index3D regionIndex3D, List<GhostRegion> ghostRegions, ref int startIndex)
+		private void InsertGhostRegion(IntVector3 regionIndex3D, List<GhostRegion> ghostRegions, ref int startIndex)
 		{
 			int insertionIndex;
 			if (FindGhostRegion(regionIndex3D, ghostRegions, out insertionIndex, startIndex))
@@ -331,17 +331,17 @@ namespace Experilous.WrapAround
 			++startIndex;
 		}
 
-		private Index3D GetGhostRegionIndex(Vector3 position)
+		private IntVector3 GetGhostRegionIndex(Vector3 position)
 		{
 			position = transform.InverseTransformPoint(position);
 
-			return new Index3D(
-				axis0IsWrapped ? Mathf.FloorToInt(-GeometryUtility.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) : 0,
-				axis1IsWrapped ? Mathf.FloorToInt(-GeometryUtility.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) : 0,
-				axis2IsWrapped ? Mathf.FloorToInt(-GeometryUtility.GetIntersectionParameter(_axis2NegativePlane, new ScaledRay(position, _transformedAxis2Vector))) : 0);
+			return new IntVector3(
+				axis0IsWrapped ? Mathf.FloorToInt(-GeometryTools.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) : 0,
+				axis1IsWrapped ? Mathf.FloorToInt(-GeometryTools.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) : 0,
+				axis2IsWrapped ? Mathf.FloorToInt(-GeometryTools.GetIntersectionParameter(_axis2NegativePlane, new ScaledRay(position, _transformedAxis2Vector))) : 0);
 		}
 
-		private void ExpandIndexBounds(Index3D index, ref Index3D min, ref Index3D max)
+		private void ExpandIndexBounds(IntVector3 index, ref IntVector3 min, ref IntVector3 max)
 		{
 			min.x = Mathf.Min(min.x, index.x);
 			min.y = Mathf.Min(min.y, index.y);
@@ -500,15 +500,15 @@ namespace Experilous.WrapAround
 
 		public void Confine(ref Vector3 position)
 		{
-			if (axis0IsWrapped) position -= Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) * _transformedAxis0Vector;
-			if (axis1IsWrapped) position -= Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) * _transformedAxis1Vector;
-			if (axis2IsWrapped) position -= Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis2NegativePlane, new ScaledRay(position, _transformedAxis2Vector))) * _transformedAxis2Vector;
+			if (axis0IsWrapped) position -= Mathf.Floor(-GeometryTools.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) * _transformedAxis0Vector;
+			if (axis1IsWrapped) position -= Mathf.Floor(-GeometryTools.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) * _transformedAxis1Vector;
+			if (axis2IsWrapped) position -= Mathf.Floor(-GeometryTools.GetIntersectionParameter(_axis2NegativePlane, new ScaledRay(position, _transformedAxis2Vector))) * _transformedAxis2Vector;
 		}
 
 		public void Confine(ref Vector2 position)
 		{
-			if (axis0IsWrapped) position -= (Vector2)(Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) * _transformedAxis0Vector);
-			if (axis1IsWrapped) position -= (Vector2)(Mathf.Floor(-GeometryUtility.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) * _transformedAxis1Vector);
+			if (axis0IsWrapped) position -= (Vector2)(Mathf.Floor(-GeometryTools.GetIntersectionParameter(_axis0NegativePlane, new ScaledRay(position, _transformedAxis0Vector))) * _transformedAxis0Vector);
+			if (axis1IsWrapped) position -= (Vector2)(Mathf.Floor(-GeometryTools.GetIntersectionParameter(_axis1NegativePlane, new ScaledRay(position, _transformedAxis1Vector))) * _transformedAxis1Vector);
 		}
 
 		#endregion

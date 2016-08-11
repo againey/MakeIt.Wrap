@@ -58,15 +58,15 @@ namespace Experilous.WrapAround
 			}
 
 			var frustumPlanes = UnityEngine.GeometryUtility.CalculateFrustumPlanes(screenCamera);
-			var leftPlaneIndex = GeometryUtility.FindMatchingPlane(screenCamera.transform.right, frustumPlanes);
-			var rightPlaneIndex = GeometryUtility.FindMatchingPlane(-screenCamera.transform.right, frustumPlanes);
-			var lowerPlaneIndex = GeometryUtility.FindMatchingPlane(screenCamera.transform.up, frustumPlanes);
-			var upperPlaneIndex = GeometryUtility.FindMatchingPlane(-screenCamera.transform.up, frustumPlanes);
+			var leftPlaneIndex = GeometryTools.FindMatchingPlane(screenCamera.transform.right, frustumPlanes);
+			var rightPlaneIndex = GeometryTools.FindMatchingPlane(-screenCamera.transform.right, frustumPlanes);
+			var lowerPlaneIndex = GeometryTools.FindMatchingPlane(screenCamera.transform.up, frustumPlanes);
+			var upperPlaneIndex = GeometryTools.FindMatchingPlane(-screenCamera.transform.up, frustumPlanes);
 			var wrappingPlane = new Plane(screenCamera.transform.forward, screenCamera.transform.position + screenCamera.transform.forward * nearPlaneDistance);
 
-			var origin = GeometryUtility.Intersect(frustumPlanes[leftPlaneIndex], frustumPlanes[lowerPlaneIndex], wrappingPlane);
-			var rightPosition = GeometryUtility.Intersect(frustumPlanes[rightPlaneIndex], frustumPlanes[lowerPlaneIndex], wrappingPlane);
-			var upperPosition = GeometryUtility.Intersect(frustumPlanes[leftPlaneIndex], frustumPlanes[upperPlaneIndex], wrappingPlane);
+			var origin = GeometryTools.Intersect(frustumPlanes[leftPlaneIndex], frustumPlanes[lowerPlaneIndex], wrappingPlane);
+			var rightPosition = GeometryTools.Intersect(frustumPlanes[rightPlaneIndex], frustumPlanes[lowerPlaneIndex], wrappingPlane);
+			var upperPosition = GeometryTools.Intersect(frustumPlanes[leftPlaneIndex], frustumPlanes[upperPlaneIndex], wrappingPlane);
 
 			_untransformedOrigin = transform.InverseTransformPoint(origin);
 			_untransformedAxis0Vector = transform.InverseTransformVector(rightPosition - origin);
