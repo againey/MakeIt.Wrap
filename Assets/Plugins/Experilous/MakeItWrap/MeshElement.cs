@@ -68,8 +68,8 @@ namespace Experilous.MakeIt.Wrap
 		public override void RefreshBounds()
 		{
 			_bounds = ElementBounds.CreateBounds(boundsSource, boundsProvider, transform,
-				() => { return HierarchyTools.GetMeshGroupAxisAlignedBoxBounds(transform); },
-				() => { return HierarchyTools.GetMeshGroupSphereBounds(transform); });
+				() => { return MIGameObjectHierarchy.GetMeshGroupAxisAlignedBoxBounds(transform); },
+				() => { return MIGameObjectHierarchy.GetMeshGroupSphereBounds(transform); });
 
 #if UNITY_EDITOR
 			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UnityEditor.SceneView.RepaintAll();

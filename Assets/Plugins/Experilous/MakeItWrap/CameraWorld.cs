@@ -59,15 +59,15 @@ namespace Experilous.MakeIt.Wrap
 			}
 
 			var frustumPlanes = UnityEngine.GeometryUtility.CalculateFrustumPlanes(screenCamera);
-			var leftPlaneIndex = GeometryTools.FindMatchingPlane(screenCamera.transform.right, frustumPlanes);
-			var rightPlaneIndex = GeometryTools.FindMatchingPlane(-screenCamera.transform.right, frustumPlanes);
-			var lowerPlaneIndex = GeometryTools.FindMatchingPlane(screenCamera.transform.up, frustumPlanes);
-			var upperPlaneIndex = GeometryTools.FindMatchingPlane(-screenCamera.transform.up, frustumPlanes);
+			var leftPlaneIndex = MIGeometry.FindMatchingPlane(screenCamera.transform.right, frustumPlanes);
+			var rightPlaneIndex = MIGeometry.FindMatchingPlane(-screenCamera.transform.right, frustumPlanes);
+			var lowerPlaneIndex = MIGeometry.FindMatchingPlane(screenCamera.transform.up, frustumPlanes);
+			var upperPlaneIndex = MIGeometry.FindMatchingPlane(-screenCamera.transform.up, frustumPlanes);
 			var wrappingPlane = new Plane(screenCamera.transform.forward, screenCamera.transform.position + screenCamera.transform.forward * nearPlaneDistance);
 
-			var origin = GeometryTools.Intersect(frustumPlanes[leftPlaneIndex], frustumPlanes[lowerPlaneIndex], wrappingPlane);
-			var rightPosition = GeometryTools.Intersect(frustumPlanes[rightPlaneIndex], frustumPlanes[lowerPlaneIndex], wrappingPlane);
-			var upperPosition = GeometryTools.Intersect(frustumPlanes[leftPlaneIndex], frustumPlanes[upperPlaneIndex], wrappingPlane);
+			var origin = MIGeometry.Intersect(frustumPlanes[leftPlaneIndex], frustumPlanes[lowerPlaneIndex], wrappingPlane);
+			var rightPosition = MIGeometry.Intersect(frustumPlanes[rightPlaneIndex], frustumPlanes[lowerPlaneIndex], wrappingPlane);
+			var upperPosition = MIGeometry.Intersect(frustumPlanes[leftPlaneIndex], frustumPlanes[upperPlaneIndex], wrappingPlane);
 
 			_untransformedOrigin = transform.InverseTransformPoint(origin);
 			_untransformedAxis0Vector = transform.InverseTransformVector(rightPosition - origin);

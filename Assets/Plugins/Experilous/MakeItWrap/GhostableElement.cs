@@ -132,7 +132,7 @@ namespace Experilous.MakeIt.Wrap
 			{
 				if (otherComponent != null)
 				{
-					var requirements = MiscTools.GetAttributes<RequireComponent>(otherComponent.GetType());
+					var requirements = MIUtilities.GetAttributes<RequireComponent>(otherComponent.GetType());
 					foreach (var requirement in requirements)
 					{
 						if (requirement.m_Type0 != null && requirement.m_Type0.IsInstanceOfType(component)) return false;
