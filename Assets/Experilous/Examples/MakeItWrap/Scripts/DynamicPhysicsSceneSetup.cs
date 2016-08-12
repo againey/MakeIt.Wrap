@@ -5,7 +5,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Experilous.MakeIt.Wrap;
-using Experilous.MakeIt.Utilities;
+using Experilous.Core;
 
 namespace Experilous.Examples.WrapAround
 {

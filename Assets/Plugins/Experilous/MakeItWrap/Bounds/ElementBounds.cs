@@ -4,7 +4,7 @@
 
 using UnityEngine;
 using System;
-using Experilous.MakeIt.Utilities;
+using Experilous.Numerics;
 
 namespace Experilous.MakeIt.Wrap
 {

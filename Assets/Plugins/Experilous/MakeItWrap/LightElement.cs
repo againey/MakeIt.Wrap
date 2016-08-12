@@ -3,7 +3,7 @@
 \******************************************************************************/
 
 using UnityEngine;
-using Experilous.MakeIt.Utilities;
+using Experilous.Core;
 
 namespace Experilous.MakeIt.Wrap
 {
@@ -72,8 +72,8 @@ namespace Experilous.MakeIt.Wrap
 		public override void RefreshBounds()
 		{
 			_bounds = ElementBounds.CreateBounds(boundsSource, boundsProvider, transform,
-				() => { return MIGameObjectHierarchy.GetLightGroupAxisAlignedBoxBounds(transform); },
-				() => { return MIGameObjectHierarchy.GetLightGroupSphereBounds(transform); });
+				() => { return GameObjectHierarchy.GetLightGroupAxisAlignedBoxBounds(transform); },
+				() => { return GameObjectHierarchy.GetLightGroupSphereBounds(transform); });
 
 #if UNITY_EDITOR
 			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UnityEditor.SceneView.RepaintAll();

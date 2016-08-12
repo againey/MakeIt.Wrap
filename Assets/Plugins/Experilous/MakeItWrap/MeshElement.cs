@@ -4,7 +4,7 @@
 
 using UnityEngine;
 using System;
-using Experilous.MakeIt.Utilities;
+using Experilous.Core;
 
 namespace Experilous.MakeIt.Wrap
 {
@@ -68,8 +68,8 @@ namespace Experilous.MakeIt.Wrap
 		public override void RefreshBounds()
 		{
 			_bounds = ElementBounds.CreateBounds(boundsSource, boundsProvider, transform,
-				() => { return MIGameObjectHierarchy.GetMeshGroupAxisAlignedBoxBounds(transform); },
-				() => { return MIGameObjectHierarchy.GetMeshGroupSphereBounds(transform); });
+				() => { return GameObjectHierarchy.GetMeshGroupAxisAlignedBoxBounds(transform); },
+				() => { return GameObjectHierarchy.GetMeshGroupSphereBounds(transform); });
 
 #if UNITY_EDITOR
 			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UnityEditor.SceneView.RepaintAll();
