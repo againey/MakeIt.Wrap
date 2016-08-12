@@ -3,8 +3,9 @@
 \******************************************************************************/
 
 using UnityEngine;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// Forces the attached dynamic object to always remain confined to the canonical world bounds,

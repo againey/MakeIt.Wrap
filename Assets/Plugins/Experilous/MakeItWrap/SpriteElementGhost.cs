@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	[AddComponentMenu("Wrap-Around Worlds/Elements/Ghosts/Sprite")]
 	public class SpriteElementGhost : Ghost<SpriteElement, SpriteElementGhost>

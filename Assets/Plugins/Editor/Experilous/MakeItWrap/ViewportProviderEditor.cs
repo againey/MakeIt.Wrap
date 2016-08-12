@@ -5,7 +5,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	[CustomEditor(typeof(ViewportProvider))]
 	public class ViewportProviderEditor : Editor

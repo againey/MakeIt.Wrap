@@ -4,8 +4,9 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// A viewport whose visible area is derived directly from a camera's view frustum.

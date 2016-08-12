@@ -3,8 +3,9 @@
 \******************************************************************************/
 
 using UnityEngine;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// Enables a specified list of components only after the element is fully within the bounding volume of a wrap-around world.

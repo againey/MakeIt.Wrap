@@ -5,7 +5,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	[CustomEditor(typeof(ColliderElement))]
 	public class ColliderElementEditor : GhostableElementEditor<ColliderElement, ColliderElementGhost>

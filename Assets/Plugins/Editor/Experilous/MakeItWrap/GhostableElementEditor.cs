@@ -4,8 +4,9 @@
 
 using UnityEngine;
 using UnityEditor;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	public abstract class GhostableElementEditor<TElement, TGhost> : Editor
 		where TElement : GhostableElement<TElement, TGhost>

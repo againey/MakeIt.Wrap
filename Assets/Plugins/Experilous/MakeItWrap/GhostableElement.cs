@@ -4,8 +4,9 @@
 
 using UnityEngine;
 using System;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// A base class for any element in a world with wrap-around behavior which in some circumstances needs

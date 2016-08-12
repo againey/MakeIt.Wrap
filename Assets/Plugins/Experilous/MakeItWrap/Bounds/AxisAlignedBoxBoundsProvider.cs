@@ -5,7 +5,7 @@
 using UnityEngine;
 using System;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	[AddComponentMenu("Wrap-Around Worlds/Bounds/Axis Aligned Box Bounds Provider")]
 	public class AxisAlignedBoxBoundsProvider : ElementBoundsProvider

@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// A component that stores a reference to a world and can provide it to any other

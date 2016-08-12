@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// Forces a recalculation of the attached viewport's visible ghost regions every render frame.

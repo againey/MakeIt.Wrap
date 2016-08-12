@@ -3,8 +3,9 @@
 \******************************************************************************/
 
 using UnityEngine;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// A wrap-around world element with a sprite that ought to be rendered in visible ghost regions.

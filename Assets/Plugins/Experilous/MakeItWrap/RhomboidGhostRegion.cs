@@ -4,8 +4,9 @@
 
 using UnityEngine;
 using System;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	public class RhomboidGhostRegion : GhostRegion, IEquatable<RhomboidGhostRegion>, IEquatable<IntVector3>, IComparable<RhomboidGhostRegion>, IComparable<IntVector3>
 	{

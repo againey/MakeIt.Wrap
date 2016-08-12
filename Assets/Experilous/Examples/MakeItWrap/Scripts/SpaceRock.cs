@@ -3,7 +3,7 @@
 \******************************************************************************/
 
 using UnityEngine;
-using Experilous.WrapAround;
+using Experilous.MakeIt.Wrap;
 using System;
 
 namespace Experilous.Examples.WrapAround

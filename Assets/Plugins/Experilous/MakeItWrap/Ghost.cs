@@ -3,8 +3,9 @@
 \******************************************************************************/
 
 using UnityEngine;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// A base class for the ghost of any element in a world with wrap-around behavior

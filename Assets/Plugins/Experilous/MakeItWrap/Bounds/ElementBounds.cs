@@ -4,8 +4,9 @@
 
 using UnityEngine;
 using System;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// Abstract representation of a bounding volume that can perform the first phase of

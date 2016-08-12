@@ -3,8 +3,9 @@
 \******************************************************************************/
 
 using UnityEngine;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	/// <summary>
 	/// A wrap-around world element that is a light source which might illuminate objects

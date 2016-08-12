@@ -4,7 +4,8 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using Experilous.WrapAround;
+using Experilous.MakeIt.Wrap;
+using Experilous.MakeIt.Utilities;
 
 namespace Experilous.Examples.WrapAround
 {

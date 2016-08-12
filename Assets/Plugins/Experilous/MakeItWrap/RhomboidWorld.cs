@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	[AddComponentMenu("Wrap-Around Worlds/Worlds/Rhomboid World")]
 	public class RhomboidWorld : RhomboidWorldBase

@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	[RequireComponent(typeof(Rigidbody))]
 	[AddComponentMenu("Wrap-Around Worlds/Elements/Ghosts/Rigidbody")]

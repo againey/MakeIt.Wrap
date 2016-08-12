@@ -4,8 +4,9 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	public abstract class RhomboidWorldBase : World
 	{

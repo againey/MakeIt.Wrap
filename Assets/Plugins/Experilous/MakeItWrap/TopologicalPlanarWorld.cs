@@ -3,9 +3,10 @@
 \******************************************************************************/
 
 using UnityEngine;
-using Experilous.Topological;
+using Experilous.MakeIt.Tile;
+using Experilous.MakeIt.Utilities;
 
-namespace Experilous.WrapAround
+namespace Experilous.MakeIt.Wrap
 {
 	[AddComponentMenu("Wrap-Around Worlds/Worlds/Topological Planar World")]
 	public class TopologicalPlanarWorld : RhomboidWorldBase
