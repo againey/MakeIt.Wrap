@@ -5,7 +5,7 @@
 using UnityEngine;
 using Experilous.Numerics;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// An abstract representation of a volume of space that is a clone of a world with wrap-around

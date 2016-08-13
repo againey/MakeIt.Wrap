@@ -6,7 +6,7 @@ using UnityEngine;
 using System;
 using Experilous.Core;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A base class for any element in a world with wrap-around behavior which in some circumstances needs

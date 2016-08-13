@@ -4,10 +4,10 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	[RequireComponent(typeof(Rigidbody))]
-	[AddComponentMenu("Wrap-Around Worlds/Elements/Ghosts/Rigidbody")]
+	[AddComponentMenu("Make It Wrap/Elements/Ghosts/Rigidbody")]
 	public class RigidbodyElementGhost : Ghost<RigidbodyElement, RigidbodyElementGhost>
 	{
 		protected Rigidbody _rigidbody;

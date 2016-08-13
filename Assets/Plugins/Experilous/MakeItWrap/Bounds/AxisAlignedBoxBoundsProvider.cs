@@ -5,9 +5,9 @@
 using UnityEngine;
 using System;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
-	[AddComponentMenu("Wrap-Around Worlds/Bounds/Axis Aligned Box Bounds Provider")]
+	[AddComponentMenu("Make It Wrap/Bounds/Axis Aligned Box Bounds Provider")]
 	public class AxisAlignedBoxBoundsProvider : ElementBoundsProvider
 	{
 		public Vector3 center;

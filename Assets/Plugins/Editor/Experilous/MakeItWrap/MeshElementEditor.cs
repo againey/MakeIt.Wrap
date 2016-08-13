@@ -5,7 +5,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	[CustomEditor(typeof(MeshElement))]
 	public class MeshElementEditor : Editor

@@ -5,9 +5,9 @@
 using UnityEngine;
 using Experilous.Numerics;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
-	[AddComponentMenu("Wrap-Around Worlds/Bounds/Sphere Bounds Provider")]
+	[AddComponentMenu("Make It Wrap/Bounds/Sphere Bounds Provider")]
 	public class SphereBoundsProvider : ElementBoundsProvider
 	{
 		public Vector3 center;

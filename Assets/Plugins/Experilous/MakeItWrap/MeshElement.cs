@@ -6,7 +6,7 @@ using UnityEngine;
 using System;
 using Experilous.Core;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A wrap-around world element with a mesh that ought to be rendered in visible ghost regions.
@@ -24,7 +24,7 @@ namespace Experilous.MakeIt.Wrap
 	/// <seealso cref="IViewportConsumer"/>
 	/// <seealso cref="MeshFilter"/>
 	/// <seealso cref="MeshRenderer"/>
-	[AddComponentMenu("Wrap-Around Worlds/Elements/Mesh")]
+	[AddComponentMenu("Make It Wrap/Elements/Mesh")]
 	public class MeshElement : BoundedElement, IViewportConsumer
 	{
 		public Viewport viewport;

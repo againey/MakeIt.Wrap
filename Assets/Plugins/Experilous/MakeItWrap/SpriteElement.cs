@@ -5,7 +5,7 @@
 using UnityEngine;
 using Experilous.Core;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A wrap-around world element with a sprite that ought to be rendered in visible ghost regions.
@@ -35,7 +35,7 @@ namespace Experilous.MakeIt.Wrap
 	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
 	/// <seealso cref="SpriteElementGhost"/>
 	/// <seealso cref="SpriteRenderer"/>
-	[AddComponentMenu("Wrap-Around Worlds/Elements/Sprite")]
+	[AddComponentMenu("Make It Wrap/Elements/Sprite")]
 	public class SpriteElement : GhostableElement<SpriteElement, SpriteElementGhost>, IViewportConsumer
 	{
 		public Viewport viewport;

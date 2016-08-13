@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// Forces a recalculation of the attached viewport's visible ghost regions every render frame.
@@ -17,7 +17,7 @@ namespace Experilous.MakeIt.Wrap
 	/// configuration (such as a mesh element or light element).
 	/// </remarks>
 	[RequireComponent(typeof(Viewport))]
-	[AddComponentMenu("Wrap-Around Worlds/Dynamic Viewport")]
+	[AddComponentMenu("Make It Wrap/Dynamic Viewport")]
 	public class DynamicViewport : MonoBehaviour
 	{
 		private Viewport _viewport;

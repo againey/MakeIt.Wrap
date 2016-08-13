@@ -3,10 +3,10 @@
 \******************************************************************************/
 
 using UnityEngine;
-using Experilous.MakeIt.Wrap;
+using Experilous.MakeItWrap;
 using Experilous.Numerics;
 
-namespace Experilous.Examples.WrapAround
+namespace Experilous.Examples.MakeItWrap
 {
 	public class WorldSpaceRockSpawner : SpaceRockSpawner
 	{

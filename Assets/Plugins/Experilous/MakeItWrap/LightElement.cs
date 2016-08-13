@@ -5,7 +5,7 @@
 using UnityEngine;
 using Experilous.Core;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A wrap-around world element that is a light source which might illuminate objects
@@ -39,7 +39,7 @@ namespace Experilous.MakeIt.Wrap
 	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
 	/// <seealso cref="LightElementGhost"/>
 	/// <seealso cref="Light"/>
-	[AddComponentMenu("Wrap-Around Worlds/Elements/Light")]
+	[AddComponentMenu("Make It Wrap/Elements/Light")]
 	public class LightElement : GhostableElement<LightElement, LightElementGhost>, IViewportConsumer
 	{
 		public Viewport viewport;

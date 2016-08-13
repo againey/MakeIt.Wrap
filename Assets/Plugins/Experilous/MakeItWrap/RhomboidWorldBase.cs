@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Experilous.Numerics;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	public abstract class RhomboidWorldBase : World
 	{

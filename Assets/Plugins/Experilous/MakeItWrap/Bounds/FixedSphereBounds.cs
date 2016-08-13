@@ -5,7 +5,7 @@
 using UnityEngine;
 using Experilous.Numerics;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	public class FixedSphereBounds : SphereBounds
 	{

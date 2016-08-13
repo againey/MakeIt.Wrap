@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	public class FixedAxisAlignedBoxBounds : AxisAlignedBoxBounds
 	{

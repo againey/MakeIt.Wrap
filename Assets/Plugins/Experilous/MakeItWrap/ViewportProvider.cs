@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A component that stores a reference to a viewport and can provide it to any other
@@ -22,7 +22,7 @@ namespace Experilous.MakeIt.Wrap
 	/// <seealso cref="Viewport"/>
 	/// <seealso cref="IViewportConsumer"/>
 	[ExecuteInEditMode]
-	[AddComponentMenu("Wrap-Around Worlds/Viewport Provider")]
+	[AddComponentMenu("Make It Wrap/Viewport Provider")]
 	public class ViewportProvider : MonoBehaviour
 	{
 		public Viewport viewport;

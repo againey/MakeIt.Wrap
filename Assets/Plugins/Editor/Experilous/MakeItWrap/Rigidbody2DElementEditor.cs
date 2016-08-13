@@ -5,7 +5,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	[CustomEditor(typeof(Rigidbody2DElement))]
 	public class Rigidbody2DElementEditor : GhostableElementEditor<Rigidbody2DElement, Rigidbody2DElementGhost>

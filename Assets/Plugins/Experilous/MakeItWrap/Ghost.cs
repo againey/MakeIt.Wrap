@@ -5,7 +5,7 @@
 using UnityEngine;
 using Experilous.Core;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A base class for the ghost of any element in a world with wrap-around behavior

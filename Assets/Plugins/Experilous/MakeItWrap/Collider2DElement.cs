@@ -5,7 +5,7 @@
 using UnityEngine;
 using Experilous.Core;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A wrap-around world element that is has static colliders which might collide with
@@ -33,7 +33,7 @@ namespace Experilous.MakeIt.Wrap
 	/// <seealso cref="Collider2D"/>
 	/// <seealso cref="ColliderElement"/>
 	[RequireComponent(typeof(Collider2D))]
-	[AddComponentMenu("Wrap-Around Worlds/Elements/Collider 2D")]
+	[AddComponentMenu("Make It Wrap/Elements/Collider 2D")]
 	public class Collider2DElement : GhostableElement<Collider2DElement, Collider2DElementGhost>, IWorldConsumer
 	{
 		public World world;

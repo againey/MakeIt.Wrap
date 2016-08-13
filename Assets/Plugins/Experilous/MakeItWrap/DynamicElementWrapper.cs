@@ -5,7 +5,7 @@
 using UnityEngine;
 using Experilous.Core;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// Forces the attached dynamic object to always remain confined to the canonical world bounds,
@@ -23,7 +23,7 @@ namespace Experilous.MakeIt.Wrap
 	/// <seealso cref="IWorldConsumer"/>
 	/// <seealso cref="DynamicElementWrapperUsingFixedUpdate"/>
 	/// <seealso cref="RigidbodyElementWrapper"/>
-	[AddComponentMenu("Wrap-Around Worlds/Dynamic Element Wrapper")]
+	[AddComponentMenu("Make It Wrap/Dynamic Element Wrapper")]
 	public class DynamicElementWrapper : MonoBehaviour, IWorldConsumer
 	{
 		[Tooltip("The world component with wrap-around behavior to which this dynamic element conforms.")]

@@ -3,9 +3,9 @@
 \******************************************************************************/
 
 using UnityEngine;
-using Experilous.MakeIt.Wrap;
+using Experilous.MakeItWrap;
 
-namespace Experilous.Examples.WrapAround
+namespace Experilous.Examples.MakeItWrap
 {
 	public abstract class SpaceRockSpawner : MonoBehaviour
 	{

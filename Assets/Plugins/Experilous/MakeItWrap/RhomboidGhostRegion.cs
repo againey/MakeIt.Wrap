@@ -6,7 +6,7 @@ using UnityEngine;
 using System;
 using Experilous.Numerics;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	public class RhomboidGhostRegion : GhostRegion, IEquatable<RhomboidGhostRegion>, IEquatable<IntVector3>, IComparable<RhomboidGhostRegion>, IComparable<IntVector3>
 	{

@@ -5,7 +5,7 @@
 using UnityEngine;
 using Experilous.Core;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A wrap-around world element that is physically active and could potentially collide
@@ -36,7 +36,7 @@ namespace Experilous.MakeIt.Wrap
 	/// <seealso cref="Collider"/>
 	/// <seealso cref="Rigidbody2DElement"/>
 	[RequireComponent(typeof(Rigidbody))]
-	[AddComponentMenu("Wrap-Around Worlds/Elements/Rigidbody")]
+	[AddComponentMenu("Make It Wrap/Elements/Rigidbody")]
 	public class RigidbodyElement : GhostableElement<RigidbodyElement, RigidbodyElementGhost>, IWorldConsumer
 	{
 		public World world;

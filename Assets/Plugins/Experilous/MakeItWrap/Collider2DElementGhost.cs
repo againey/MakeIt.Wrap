@@ -4,9 +4,9 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
-	[AddComponentMenu("Wrap-Around Worlds/Elements/Ghosts/Collider 2D")]
+	[AddComponentMenu("Make It Wrap/Elements/Ghosts/Collider 2D")]
 	public class Collider2DElementGhost : Ghost<Collider2DElement, Collider2DElementGhost>
 	{
 		protected void FixedUpdate()

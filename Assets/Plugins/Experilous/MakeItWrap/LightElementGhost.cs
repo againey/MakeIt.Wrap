@@ -4,9 +4,9 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
-	[AddComponentMenu("Wrap-Around Worlds/Elements/Ghosts/Light")]
+	[AddComponentMenu("Make It Wrap/Elements/Ghosts/Light")]
 	public class LightElementGhost : Ghost<LightElement, LightElementGhost>
 	{
 		protected void LateUpdate()

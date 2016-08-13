@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Experilous.Numerics;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// An abstract representation of a world that has wrap-around behavior on one or more pairs of world edges.

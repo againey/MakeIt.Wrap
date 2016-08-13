@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	public static class ElementBoundsEditorUtility
 	{

@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// An interface for any component which needs to have a world reference in order to function.

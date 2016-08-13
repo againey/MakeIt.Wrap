@@ -4,10 +4,10 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using Experilous.MakeIt.Wrap;
+using Experilous.MakeItWrap;
 using Experilous.Core;
 
-namespace Experilous.Examples.WrapAround
+namespace Experilous.Examples.MakeItWrap
 {
 	public class DynamicPhysicsSceneSetup : MonoBehaviour
 	{

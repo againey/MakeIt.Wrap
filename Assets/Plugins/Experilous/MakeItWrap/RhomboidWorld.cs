@@ -4,9 +4,9 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
-	[AddComponentMenu("Wrap-Around Worlds/Worlds/Rhomboid World")]
+	[AddComponentMenu("Make It Wrap/Worlds/Rhomboid World")]
 	public class RhomboidWorld : RhomboidWorldBase
 	{
 		public Vector3 origin;

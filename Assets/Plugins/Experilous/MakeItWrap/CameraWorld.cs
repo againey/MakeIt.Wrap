@@ -6,7 +6,7 @@ using UnityEngine;
 using Experilous.Core;
 using Geometry = Experilous.Numerics.Geometry;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A world with wrap-around behavior whose shape is defined by a camera's view frustum at a specified depth.
@@ -14,7 +14,7 @@ namespace Experilous.MakeIt.Wrap
 	/// <remarks>This component is convenient when wrap-around behavior is expected to occur literally at the
 	/// screen or viewport edges.  It is most appropriate for a fixed camera, ideally one with an orthographic
 	/// projection.</remarks>
-	[AddComponentMenu("Wrap-Around Worlds/Worlds/Camera World")]
+	[AddComponentMenu("Make It Wrap/Worlds/Camera World")]
 	public class CameraWorld : RhomboidWorldBase
 	{
 		[Tooltip("The camera whose view frustum will define the shape of this world.")]

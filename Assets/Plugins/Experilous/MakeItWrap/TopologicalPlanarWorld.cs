@@ -3,20 +3,20 @@
 \******************************************************************************/
 
 using UnityEngine;
-using Experilous.MakeIt.Tile;
+using Experilous.MakeItTile;
 using Experilous.Core;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
-	[AddComponentMenu("Wrap-Around Worlds/Worlds/Topological Planar World")]
-	public class TopologicalPlanarWorld : RhomboidWorldBase
+	[AddComponentMenu("Make It Wrap/Worlds/Tiled Planar World")]
+	public class TiledPlanarWorld : RhomboidWorldBase
 	{
-		[Tooltip("The topological surface that defines the overall shape of this world.")]
+		[Tooltip("The tiled surface that defines the overall shape of this world.")]
 		public PlanarSurface surface;
 
 		protected new void Start()
 		{
-			this.DisableAndThrowOnUnassignedReference(surface, "The TopologicalPlanarWorld component requires a reference to a PlanarSurface component.");
+			this.DisableAndThrowOnUnassignedReference(surface, "The TiledPlanarWorld component requires a reference to a PlanarSurface component.");
 
 			base.Start();
 		}

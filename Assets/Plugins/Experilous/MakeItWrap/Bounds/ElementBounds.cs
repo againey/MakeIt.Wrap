@@ -6,7 +6,7 @@ using UnityEngine;
 using System;
 using Experilous.Numerics;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// Abstract representation of a bounding volume that can perform the first phase of

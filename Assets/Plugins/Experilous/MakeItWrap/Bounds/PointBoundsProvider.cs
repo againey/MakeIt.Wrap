@@ -4,9 +4,9 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
-	[AddComponentMenu("Wrap-Around Worlds/Bounds/Point Bounds Provider")]
+	[AddComponentMenu("Make It Wrap/Bounds/Point Bounds Provider")]
 	public class PointBoundsProvider : ElementBoundsProvider
 	{
 		public Vector3 position;

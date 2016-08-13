@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A component that stores a reference to a world and can provide it to any other
@@ -22,7 +22,7 @@ namespace Experilous.MakeIt.Wrap
 	/// <seealso cref="World"/>
 	/// <seealso cref="IWorldConsumer"/>
 	[ExecuteInEditMode]
-	[AddComponentMenu("Wrap-Around Worlds/World Provider")]
+	[AddComponentMenu("Make It Wrap/World Provider")]
 	public class WorldProvider : MonoBehaviour
 	{
 		public World world;

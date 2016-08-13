@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous.Examples.WrapAround
+namespace Experilous.Examples.MakeItWrap
 {
 	[RequireComponent(typeof(Rigidbody))]
 	public class SimpleCharacterController : MonoBehaviour

@@ -6,13 +6,13 @@ using UnityEngine;
 using System.Collections.Generic;
 using Experilous.Numerics;
 
-namespace Experilous.MakeIt.Wrap
+namespace Experilous.MakeItWrap
 {
 	/// <summary>
 	/// A viewport whose visible area is derived directly from a camera's view frustum.
 	/// </summary>
 	[RequireComponent(typeof(Camera))]
-	[AddComponentMenu("Wrap-Around Worlds/Viewports/Camera Viewport")]
+	[AddComponentMenu("Make It Wrap/Viewports/Camera Viewport")]
 	public class CameraViewport : Viewport
 	{
 		private Camera _camera;
