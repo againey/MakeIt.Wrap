@@ -11,7 +11,7 @@ namespace Experilous.MakeItWrap
 	/// A base class for the ghost of any element in a world with wrap-around behavior
 	/// which mimics the original object in some way, but at a wrapped position.
 	/// </summary>
-	/// <seealso cref="Ghost`2{TElement,TDerivedGhost}"/>
+	/// <seealso cref="Ghost{TElement,TDerivedGhost}"/>
 	public class GhostBase : MonoBehaviour
 	{
 	}
@@ -24,7 +24,7 @@ namespace Experilous.MakeItWrap
 	/// <typeparam name="TDerivedGhost">The fully derived type inheriting from this class, a use of the curiously recurring template pattern (CRTP).</typeparam>
 	/// <seealso cref="GhostBase"/>
 	/// <seealso cref="GhostableElementBase"/>
-	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
+	/// <seealso cref="GhostableElement{TDerivedElement,TGhost}"/>
 	public class Ghost<TElement, TDerivedGhost> : GhostBase where TElement : GhostableElementBase where TDerivedGhost : GhostBase
 	{
 		/// <summary>

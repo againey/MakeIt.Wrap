@@ -30,7 +30,7 @@ namespace Experilous.MakeItWrap
 	/// <seealso cref="GhostRegion"/>
 	/// <seealso cref="WorldProvider"/>
 	/// <seealso cref="IWorldConsumer"/>
-	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
+	/// <seealso cref="GhostableElement{TDerivedElement,TGhost}"/>
 	/// <seealso cref="Rigidbody2DElementGhost"/>
 	/// <seealso cref="Rigidbody2D"/>
 	/// <seealso cref="Collider2D"/>

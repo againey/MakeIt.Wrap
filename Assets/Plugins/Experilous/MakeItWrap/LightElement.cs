@@ -36,7 +36,7 @@ namespace Experilous.MakeItWrap
 	/// <seealso cref="GhostRegion"/>
 	/// <seealso cref="ViewportProvider"/>
 	/// <seealso cref="IViewportConsumer"/>
-	/// <seealso cref="GhostableElement`2{TDerivedElement,TGhost}"/>
+	/// <seealso cref="GhostableElement{TDerivedElement,TGhost}"/>
 	/// <seealso cref="LightElementGhost"/>
 	/// <seealso cref="Light"/>
 	[AddComponentMenu("Make It Wrap/Elements/Light")]
