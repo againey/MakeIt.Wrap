@@ -16,7 +16,7 @@ namespace Experilous.MakeItWrap
 	/// <c>GhostElement&lt;TDerivedElement, TGhost&gt;</c> is the real base class with the meat of
 	/// functionality, but this simple base class is required due to the way C# handles generics.
 	/// </remarks>
-	/// <seealso cref="GhostableElement{TDerivedElement,TGhost};"/>
+	/// <seealso cref="GhostableElement{TDerivedElement, TGhost}"/>
 	/// <seealso cref="GhostBase"/>
 	public abstract class GhostableElementBase : BoundedElement
 	{
@@ -155,7 +155,7 @@ namespace Experilous.MakeItWrap
 	/// <typeparam name="TGhost">The type of ghost that the derived element type will create and store within its list of ghosts.</typeparam>
 	/// <seealso cref="GhostableElementBase"/>
 	/// <seealso cref="GhostBase"/>
-	/// <seealso cref="Ghost{TElement,TDerivedGhost};"/>
+	/// <seealso cref="Ghost{TElement, TDerivedGhost}"/>
 	/// <seealso cref="GhostRegion"/>
 	public abstract class GhostableElement<TDerivedElement, TGhost> : GhostableElementBase
 		where TDerivedElement : GhostableElement<TDerivedElement, TGhost>
