@@ -9,10 +9,10 @@ using Experilous.Core;
 namespace Experilous.MakeItWrap
 {
 	[AddComponentMenu("Make It Wrap/Worlds/Tiled Planar World")]
-	public class TiledPlanarWorld : RhomboidWorldBase
+	public class TiledQuadrilateralWorld : RhomboidWorldBase
 	{
 		[Tooltip("The tiled surface that defines the overall shape of this world.")]
-		public PlanarSurface surface;
+		public QuadrilateralSurface surface;
 
 		protected new void Start()
 		{
@@ -22,9 +22,9 @@ namespace Experilous.MakeItWrap
 		}
 
 		public override Vector3 untransformedOrigin { get { return surface.origin; } }
-		public override Vector3 untransformedAxis0Vector { get { return surface.axis0.vector; } }
-		public override Vector3 untransformedAxis1Vector { get { return surface.axis1.vector; } }
-		public override Vector3 untransformedAxis2Vector { get { return surface.surfaceNormal; } }
+		public override Vector3 untransformedAxis0Vector { get { return surface.axis0; } }
+		public override Vector3 untransformedAxis1Vector { get { return surface.axis1; } }
+		public override Vector3 untransformedAxis2Vector { get { return surface.normal; } }
 
 		public override bool axis0IsWrapped { get { return surface.axis0.isWrapped; } }
 		public override bool axis1IsWrapped { get { return surface.axis1.isWrapped; } }
