@@ -1,0 +1,19 @@
+{
+    "name": "MakeIt.Wrap.Editor",
+    "references": [
+        "GUID:b29e5b94a73ad954ca922da4c1587b97",
+        "GUID:3b39f206c84b1444fb3a781d5f6c4411",
+        "GUID:3c6467f2f26546ff9514ce6665896f6d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
