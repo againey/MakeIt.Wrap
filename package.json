@@ -15,9 +15,10 @@
     "infinite"
   ],
   "author": {
-    "name": "Andy Gainey"
+    "name": "Andy Gainey",
+    "url": "https://github.com/againey"
   },
   "dependencies": {
-    "com.andygainey.makeit.core": "1.0.0"
+    "com.andygainey.makeit.core": "git://github.com/againey/MakeIt.Core#release-v1.0.0"
   }
 }
