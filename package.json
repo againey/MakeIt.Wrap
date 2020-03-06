@@ -19,6 +19,6 @@
     "url": "https://github.com/againey"
   },
   "dependencies": {
-    "com.andygainey.makeit.core": "git://github.com/againey/MakeIt.Core#release-v1.0.0"
+    "com.andygainey.makeit.core": "git://github.com/againey/MakeIt.Core#v1.0.0"
   }
 }
