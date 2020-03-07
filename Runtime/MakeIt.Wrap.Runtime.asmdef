@@ -1,0 +1,22 @@
+{
+    "name": "MakeIt.Wrap",
+    "references": [
+        "GUID:b29e5b94a73ad954ca922da4c1587b97",
+        "GUID:659c8ec4af284da2bfdd95161cea6a98"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.andygainey.makeit.tile",
+            "expression": "3.0.0",
+            "define": "MAKEIT_TILE_3_0_OR_NEWER"
+        }
+    ],
+    "noEngineReferences": false
+}
